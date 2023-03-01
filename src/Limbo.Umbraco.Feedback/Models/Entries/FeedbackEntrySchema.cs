@@ -6,7 +6,7 @@ using Umbraco.Cms.Infrastructure.Persistence.DatabaseAnnotations;
 
 namespace Limbo.Umbraco.Feedback.Models.Entries {
 
-    [TableName("SkybrudFeedback")]
+    [TableName("LimboFeedback")]
     [PrimaryKey("Id", AutoIncrement = true)]
     [ExplicitColumns]
     public class FeedbackEntrySchema {
