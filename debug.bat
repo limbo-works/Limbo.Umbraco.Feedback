@@ -1,2 +1,2 @@
 @echo off
-dotnet build src/Skybrud.Umbraco.Feedback --configuration Debug /t:rebuild /t:pack -p:PackageOutputPath=c:/nuget
+dotnet build src/Limbo.Umbraco.Feedback --configuration Debug /t:rebuild /t:pack -p:PackageOutputPath=c:/nuget

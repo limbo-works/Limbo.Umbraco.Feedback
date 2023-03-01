@@ -1,0 +1,163 @@
+﻿.limbo-feedback .rating,
+.limbo-feedback .status {
+  display: flex;
+}
+.limbo-feedback .rating span,
+.limbo-feedback .status span {
+  position: relative;
+  padding-left: 24px;
+  line-height: 16px;
+}
+.limbo-feedback .rating span:before,
+.limbo-feedback .status span:before {
+  background: #ccc;
+  display: block;
+  content: ' ';
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  left: 0;
+  border-radius: 50%;
+}
+.limbo-feedback .rating.rating-positive span:before,
+.limbo-feedback .status.status-closed span:before {
+  background: #6BA114;
+}
+.limbo-feedback .rating.rating-negative span:before,
+.limbo-feedback .status.status-new span:before {
+  background: #A41F03;
+}
+.limbo-feedback .status.status-inprogress span:before {
+  background: #D3A839;
+}
+.limbo-feedback .user.user-avatar {
+  display: block;
+  width: 24px;
+  height: 24px;
+  background-color: #f5c1bc;
+  color: #1b264f;
+  border-radius: 50%;
+  font-size: 11px;
+  text-align: center;
+  line-height: 24px;
+  margin-right: 20px;
+}
+.limbo-feedback .status-item {
+  padding: 10px;
+  cursor: pointer;
+}
+.limbo-feedback .status-item:hover {
+  background: #F9F9FA;
+}
+.limbo-feedback .status-item.selected {
+  background: #FEE4E1;
+}
+.limbo-feedback .status-item.selected:hover {
+  background: #fedbd7;
+}
+.limbo-feedback .user-item {
+  padding: 10px;
+  cursor: pointer;
+}
+.limbo-feedback .user-item:hover {
+  background: #F9F9FA;
+}
+.limbo-feedback .user-item.selected {
+  background: #FEE4E1;
+}
+.limbo-feedback .user-item.selected:hover {
+  background: #fedbd7;
+}
+.limbo-feedback .user-item > div {
+  display: flex;
+}
+.limbo-feedback .user-item .user-avatar {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+.limbo-feedback .col.col-rating,
+.limbo-feedback .col.col-status,
+.limbo-feedback .col.col-responsible,
+.limbo-feedback .col.col-createDate {
+  white-space: nowrap;
+}
+.limbo-feedback .col.col-name {
+  width: 100%;
+}
+.limbo-feedback tbody.expanded > tr:first-child > td {
+  border-bottom: 1px solid white;
+}
+.limbo-feedback table.table.details {
+  border-top: 1px solid #e9e9eb;
+  box-shadow: none;
+}
+.limbo-feedback table.table.details th {
+  width: 150px;
+  vertical-align: top;
+}
+.limbo-feedback table.table.details tr:first-child th,
+.limbo-feedback table.table.details tr:first-child td {
+  padding-top: 20px;
+}
+.limbo-feedback table.table.details th,
+.limbo-feedback table.table.details td {
+  background: white;
+  padding: 5px 0;
+  border-top: none;
+}
+.limbo-feedback table.table.list.loading {
+  opacity: 0.55;
+}
+.limbo-feedback table.table.list > thead > tr > th {
+  padding: 10px 20px;
+  white-space: nowrap;
+}
+.limbo-feedback table.table.list > tbody > tr:first-child > td {
+  cursor: pointer;
+}
+.limbo-feedback table.table.list > tbody + tbody {
+  border-top: 1px solid #e9e9eb;
+}
+.limbo-feedback-options {
+  display: flex;
+  margin-bottom: 20px;
+}
+.limbo-feedback-filters {
+  flex-grow: 1;
+}
+.limbo-feedback-filters select {
+  width: initial;
+}
+.limbo-feedback .pagination.pagination-left {
+  margin: 0;
+  padding: 0;
+  font-size: 12px;
+  font-weight: normal;
+  line-height: 35px;
+}
+.limbo-feedback .pagination ul {
+  background: 0;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0);
+  -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0);
+}
+.limbo-feedback .pagination ul > li > a,
+.limbo-feedback .pagination ul > li > span {
+  padding: 8px 4px 2px 4px;
+  font-size: 11px;
+  color: #b0b0b0;
+  background: 0;
+  border: 0;
+}
+.limbo-feedback .pagination ul > li.active > a,
+.limbo-feedback .pagination ul > li > a:hover {
+  color: #000;
+}
+.limbo-feedback .pagination ul > li.disabled > a,
+.limbo-feedback .pagination ul > li.disabled > a:hover {
+  color: #d9d9d9;
+}

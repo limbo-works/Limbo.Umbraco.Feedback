@@ -1,0 +1,26 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <LimboUmbracoFeedbackContentFilesPath>$(MSBuildThisFileDirectory)..\content\App_Plugins\Limbo.Umbraco.Feedback\**\*.*</LimboUmbracoFeedbackContentFilesPath>
+  </PropertyGroup>
+
+  <Target Name="CopyLimboUmbracoFeedbackAssets" BeforeTargets="Build">
+    <ItemGroup>
+      <LimboUmbracoFeedbackContentFiles Include="$(LimboUmbracoFeedbackContentFilesPath)" />
+    </ItemGroup>
+    <Message Text="Copying Limbo.Umbraco.Feedback files: $(LimboUmbracoFeedbackContentFilesPath) - #@(LimboUmbracoFeedbackContentFiles->Count()) files"  Importance="high" />
+    <Copy
+      SourceFiles="@(LimboUmbracoFeedbackContentFiles)"
+      DestinationFiles="@(LimboUmbracoFeedbackContentFiles->'$(MSBuildProjectDirectory)\App_Plugins\Limbo.Umbraco.Feedback\%(RecursiveDir)%(Filename)%(Extension)')"
+      SkipUnchangedFiles="true" />
+  </Target>
+
+  <Target Name="ClearLimboUmbracoFeedbackAssets" BeforeTargets="Clean">
+    <ItemGroup>
+      <LimboUmbracoFeedbackDir Include="$(MSBuildProjectDirectory)\App_Plugins\Limbo.Umbraco.Feedback\" />
+    </ItemGroup>
+    <Message Text="Clear old Limbo.Umbraco.Feedback files"  Importance="high" />
+    <RemoveDir Directories="@(LimboUmbracoFeedbackDir)"  />
+  </Target>
+
+</Project>
