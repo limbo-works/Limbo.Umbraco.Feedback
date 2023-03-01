@@ -1,52 +1,40 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<?xml version="1.0" encoding="utf-8"?>
+
+<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <LangVersion>9.0</LangVersion>
-    <TargetFramework>net5.0</TargetFramework>
-    <ContentTargetFolders>content</ContentTargetFolders>
-    <CheckEolTargetFramework>false</CheckEolTargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
+    <StaticWebAssetBasePath>App_Plugins/$(AssemblyName)</StaticWebAssetBasePath>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>4.0.0-alpha002</VersionPrefix>
+    <VersionPrefix>1.0.0-alpha001</VersionPrefix>
     <VersionSuffix Condition="'$(Configuration)'=='Debug'">build$([System.DateTime]::UtcNow.ToString(`yyyyMMddHHmm`))</VersionSuffix>
     <Company>Limbo</Company>
     <Authors>Anders Bjerner</Authors>
     <Copyright>Copyright © $([System.DateTime]::UtcNow.ToString(`yyyy`))</Copyright>
-    <Title>Skybrud Feedback</Title>
-    <Description>Feedback module for Umbraco 9.</Description>
+    <Title>Limbo Feedback</Title>
+    <Description>Feedback module for Umbraco 10+.</Description>
   </PropertyGroup>
 
   <!-- Information for the NuGet package -->
   <PropertyGroup>
-    <PackageId>Skybrud.Umbraco.Feedback</PackageId>
+    <PackageId>Limbo.Umbraco.Feedback</PackageId>
     <PackageTags>Skybrud, Limbo, Umbraco, Feedback</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/skybrud/Skybrud.Umbraco.Feedback</PackageProjectUrl>
+    <PackageProjectUrl>https://packages.limbo.works/limbo.umbraco.feedback/v1/</PackageProjectUrl>
     <PackageIcon>Limbo.png</PackageIcon>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/skybrud/Skybrud.Umbraco.Feedback</RepositoryUrl>
+    <RepositoryUrl>https://github.com/limbo-works/Limbo.Umbraco.Feedback</RepositoryUrl>
   </PropertyGroup>
 
   <!-- Include NuGet dependencies -->
   <ItemGroup>
     <PackageReference Include="Skybrud.Essentials" Version="1.1.47" />
-    <PackageReference Include="Umbraco.Cms.Core" Version="[9.0.0,10.0)" />
-    <PackageReference Include="Umbraco.Cms.Web.Website" Version="[9.0.0,10.0)" />
-    <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="[9.0.0,10.0)" />
-  </ItemGroup>
-
-  <!-- Include backoffice assets -->
-  <ItemGroup>
-    <Content Include="App_Plugins\Limbo.Umbraco.Feedback\**\*.css" />
-    <Content Include="App_Plugins\Limbo.Umbraco.Feedback\**\*.html" />
-    <Content Include="App_Plugins\Limbo.Umbraco.Feedback\**\*.js" />
-    <Content Include="App_Plugins\Limbo.Umbraco.Feedback\Lang\*.xml" />
-  </ItemGroup>
-
-  <!-- Include the targets file -->
-  <ItemGroup>
-    <Content Include="../build/$(AssemblyName).targets" PackagePath="build\$(AssemblyName).targets" />
+    <PackageReference Include="Umbraco.Cms.Core" Version="[10.0.0,12.0)" />
+    <PackageReference Include="Umbraco.Cms.Web.Website" Version="[10.0.0,12.0)" />
+    <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="[10.0.0,12.0)" />
   </ItemGroup>
 
   <!-- Include package icon for NuGet -->
