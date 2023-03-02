@@ -1,4 +1,5 @@
 ﻿using System;
+using Limbo.Umbraco.Feedback.Constants;
 using NPoco;
 using Umbraco.Cms.Infrastructure.Persistence.DatabaseAnnotations;
 
@@ -6,7 +7,7 @@ using Umbraco.Cms.Infrastructure.Persistence.DatabaseAnnotations;
 
 namespace Limbo.Umbraco.Feedback.Models.Entries {
 
-    [TableName("LimboFeedback")]
+    [TableName(FeedbackConstants.TableName)]
     [PrimaryKey("Id", AutoIncrement = true)]
     [ExplicitColumns]
     public class FeedbackEntryDto {
