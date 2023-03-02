@@ -46,6 +46,8 @@
   <ItemGroup>
     <Content Remove="compilerconfig.json" />
     <None Include="compilerconfig.json" />
+    <Content Remove="wwwroot\Styles\Default.less" />
+    <None Include="wwwroot\Styles\Default.less" />
   </ItemGroup>
 
   <!-- Generate XML documentation -->
