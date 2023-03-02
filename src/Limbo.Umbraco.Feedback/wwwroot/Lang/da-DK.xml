@@ -6,8 +6,10 @@
     <key alias="statusInprogress">Igangværende</key>
     <key alias="statusInProgress">Igangværende</key>
     <key alias="statusClosed">Lukket</key>
+    <key alias="statusNotFound">Status ikke fundet</key>
     <key alias="ratingPositive">Positiv</key>
     <key alias="ratingNegative">Negativ</key>
+    <key alias="ratingNotFound">Bedømmelse ikke fundet</key>
   </area>
   <area alias="feedback">
     <key alias="labelId">ID</key>
