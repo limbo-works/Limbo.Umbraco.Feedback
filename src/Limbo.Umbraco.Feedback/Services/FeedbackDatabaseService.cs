@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Limbo.Umbraco.Feedback.Constants;
 using Limbo.Umbraco.Feedback.Extensions;
 using Limbo.Umbraco.Feedback.Models.Entries;
@@ -40,7 +41,7 @@ namespace Limbo.Umbraco.Feedback.Services {
         /// Gets an unpaginated array of all feedback entries.
         /// </summary>
         /// <returns>An array of <see cref="FeedbackEntryDto"/>.</returns>
-        public FeedbackEntryDto[] GetAllEntries() {
+        public IReadOnlyList<FeedbackEntryDto> GetAllEntries() {
 
             using (var scope = _scopeProvider.CreateScope()) {
 
@@ -61,7 +62,7 @@ namespace Limbo.Umbraco.Feedback.Services {
         /// </summary>
         /// <param name="siteId">The ID of the site.</param>
         /// <returns>An array of <see cref="FeedbackEntry"/>.</returns>
-        public FeedbackEntryDto[] GetAllEntriesForSite(int siteId) {
+        public IReadOnlyList<FeedbackEntryDto> GetAllEntriesForSite(int siteId) {
 
             using (var scope = _scopeProvider.CreateScope()) {
 
@@ -70,14 +71,13 @@ namespace Limbo.Umbraco.Feedback.Services {
 
                 // Make the call to the database
                 return scope.Database
-                    .Fetch<FeedbackEntryDto>(sql)
-                    .ToArray();
+                    .Fetch<FeedbackEntryDto>(sql);
 
             }
 
         }
 
-        public FeedbackEntryDto[] GetEntries(FeedbackGetEntriesOptions options, out int total) {
+        public IReadOnlyList<FeedbackEntryDto> GetEntries(FeedbackGetEntriesOptions options, out int total) {
 
             using (var scope = _scopeProvider.CreateScope()) {
 
@@ -137,13 +137,12 @@ namespace Limbo.Umbraco.Feedback.Services {
 
             }
 
-
         }
 
 
 
 
-        public FeedbackEntryDto[] GetEntriesForSite(Guid siteKey, int limit, int page, out int total) {
+        public IReadOnlyList<FeedbackEntryDto> GetEntriesForSite(Guid siteKey, int limit, int page, out int total) {
 
             using (var scope = _scopeProvider.CreateScope()) {
 

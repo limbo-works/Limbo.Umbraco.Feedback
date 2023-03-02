@@ -155,7 +155,7 @@ namespace Limbo.Umbraco.Feedback.Plugins {
         /// Returns an array of all feedback users.
         /// </summary>
         /// <returns>An array of <see cref="IFeedbackUser"/>.</returns>
-        public virtual IFeedbackUser[] GetUsers() {
+        public virtual IReadOnlyList<IFeedbackUser> GetUsers() {
             return Array.Empty<IFeedbackUser>();
         }
 

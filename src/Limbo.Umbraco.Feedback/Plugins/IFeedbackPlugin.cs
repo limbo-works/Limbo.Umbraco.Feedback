@@ -133,7 +133,7 @@ namespace Limbo.Umbraco.Feedback.Plugins {
         /// Returns an array of all feedback users.
         /// </summary>
         /// <returns>An array of <see cref="IFeedbackUser"/>.</returns>
-        IFeedbackUser[] GetUsers();
+        IReadOnlyList<IFeedbackUser> GetUsers();
 
         /// <summary>
         /// Gets the content app for the specified <paramref name="content"/> item, or <c>null</c> if no feedback

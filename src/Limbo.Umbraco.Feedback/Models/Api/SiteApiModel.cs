@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Limbo.Umbraco.Feedback.Models.Sites;
@@ -21,10 +22,10 @@ namespace Limbo.Umbraco.Feedback.Models.Api {
         public string Name { get; }
 
         [JsonProperty("ratings")]
-        public RatingApiModel[] Ratings { get; }
+        public IReadOnlyList<RatingApiModel> Ratings { get; }
 
         [JsonProperty("statuses")]
-        public StatusApiModel[] Statuses { get; }
+        public IReadOnlyList<StatusApiModel> Statuses { get; }
 
         public SiteApiModel(FeedbackSiteSettings site, ILocalizedTextService localizedTextService, CultureInfo culture) {
             Id = site.Id;

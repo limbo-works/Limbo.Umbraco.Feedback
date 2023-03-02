@@ -1,4 +1,6 @@
-﻿namespace Limbo.Umbraco.Feedback.Models.Entries {
+﻿using System.Collections.Generic;
+
+namespace Limbo.Umbraco.Feedback.Models.Entries {
 
     /// <summary>
     /// Class representing a paginated list of feedback entries.
@@ -23,7 +25,7 @@
         /// <summary>
         /// Gets the entries that was returned for the current page.
         /// </summary>
-        public FeedbackEntry[] Entries { get; }
+        public IReadOnlyList<FeedbackEntry> Entries { get; }
 
         /// <summary>
         /// Initializes a new instance based on the specified <paramref name="page"/>, <paramref name="perPage"/>, <paramref name="total"/> and <paramref name="entries"/>.
@@ -32,7 +34,7 @@
         /// <param name="perPage">The maxmimum amount of items that was returned per page.</param>
         /// <param name="total">The total amount of entries that matched the search.</param>
         /// <param name="entries">The entries that was returned for the current page.</param>
-        public FeedbackEntryList(int page, int perPage, int total, FeedbackEntry[] entries) {
+        public FeedbackEntryList(int page, int perPage, int total, IReadOnlyList<FeedbackEntry> entries) {
             Page = page;
             PerPage = perPage;
             Total = total;

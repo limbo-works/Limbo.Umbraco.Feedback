@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using Limbo.Umbraco.Feedback.Services;
 using NPoco;
@@ -23,13 +24,13 @@ namespace Limbo.Umbraco.Feedback.Extensions {
         /// <param name="sql">The SQL command to be executed.</param>
         /// <param name="total">When this method returns, holds the total amount of rows matching the SQL command.</param>
         /// <returns>An array of <typeparamref name="T"/> with the paginated results.</returns>
-        public static T[] Page<T>(this IUmbracoDatabase database, int page, int itemsPerPage, Sql sql, out int total) {
+        public static IReadOnlyList<T> Page<T>(this IUmbracoDatabase database, int page, int itemsPerPage, Sql sql, out int total) {
 
             Page<T> result = database.Page<T>(page, itemsPerPage, sql);
 
             total = (int) result.TotalItems;
 
-            return result.Items.ToArray();
+            return result.Items;
 
         }
 

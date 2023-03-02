@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Limbo.Umbraco.Feedback.Constants;
@@ -34,12 +35,12 @@ namespace Limbo.Umbraco.Feedback.Models.Sites {
         /// <summary>
         /// Gets the available ratings for this site.
         /// </summary>
-        public FeedbackRating[] Ratings { get; }
+        public IReadOnlyList<FeedbackRating> Ratings { get; }
 
         /// <summary>
         /// Gets the available statuses for this site.
         /// </summary>
-        public FeedbackStatus[] Statuses { get; }
+        public IReadOnlyList<FeedbackStatus> Statuses { get; }
 
         /// <summary>
         /// Gets the configuration for the fields in the feedback form.

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Limbo.Umbraco.Feedback.Exceptions;
@@ -90,7 +91,7 @@ namespace Limbo.Umbraco.Feedback.Services {
         /// Returns an array of all feedback users.
         /// </summary>
         /// <returns>An array of <see cref="IFeedbackUser"/>.</returns>
-        public IFeedbackUser[] GetUsers() {
+        public IReadOnlyList<IFeedbackUser> GetUsers() {
             return Plugins.SelectMany(x => x.GetUsers()).Distinct().OrderBy(x => x.Name).ToArray();
         }
 
@@ -188,7 +189,7 @@ namespace Limbo.Umbraco.Feedback.Services {
         /// <returns>An instance of <see cref="AddRatingResult"/>.</returns>
         public AddRatingResult AddRating(FeedbackSiteSettings site, IPublishedContent page, FeedbackRating rating) {
 
-            if (site.Statuses.Length == 0) throw new FeedbackException($"Site with key {site.Key} does not specify any statuses.");
+            if (site.Statuses.Count == 0) throw new FeedbackException($"Site with key {site.Key} does not specify any statuses.");
 
             // Initialize a new entry
             FeedbackEntry entry = new() {
@@ -301,7 +302,7 @@ namespace Limbo.Umbraco.Feedback.Services {
         /// <returns>An instance of <see cref="AddCommentResult"/>.</returns>
         public AddCommentResult AddComment(FeedbackSiteSettings site, IPublishedContent page, FeedbackRating rating, string? name, string? email, string? comment) {
 
-            if (site.Statuses.Length == 0) throw new FeedbackException($"Site with key {site.Key} does not specify any statuses.");
+            if (site.Statuses.Count == 0) throw new FeedbackException($"Site with key {site.Key} does not specify any statuses.");
 
             FeedbackEntry entry = new() {
                 Key = Guid.NewGuid(),
