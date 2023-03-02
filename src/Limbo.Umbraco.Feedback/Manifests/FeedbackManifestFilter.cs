@@ -11,6 +11,7 @@ namespace Limbo.Umbraco.Feedback.Manifests {
 
             // Initialize a new manifest filter for this package
             PackageManifest manifest = new() {
+                AllowPackageTelemetry = true,
                 PackageName = FeedbackPackage.Name,
                 Version = FeedbackPackage.InformationalVersion,
                 BundleOptions = BundleOptions.Independent,
