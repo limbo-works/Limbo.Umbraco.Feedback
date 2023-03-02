@@ -154,12 +154,6 @@
                         </umb-button-group>
                         <button type="button" class="btn" ng-click="openSelectStatus(entry)"><localize key="feedback_btnSelectStatus">Select status</localize></button>
                         <button type="button" class="btn" ng-click="openSelectResponsible(entry)"><localize key="feedback_btnSelectResponsible">Select responsible</localize></button>
-                        <a ng-show="entry.page" href="/umbraco/#/content/content/edit/{{entry.page.id}}" class="btn">
-                            <localize key="feedback_btnShowInUmbraco">Show in Umbraco</localize>
-                        </a>
-                        <a ng-show="entry.page" href="{{entry.page.url}}" target="_blank" class="btn">
-                            <localize key="feedback_btnShowAtWebsite">Show at website</localize>
-                        </a>
                     </div>
                 </td>
             </tr>
