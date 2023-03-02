@@ -5,7 +5,7 @@ using Limbo.Umbraco.Feedback.Models.Entries;
 using Limbo.Umbraco.Feedback.Plugins;
 using Microsoft.Extensions.Logging;
 using NPoco;
-using Umbraco.Cms.Core.Scoping;
+using Umbraco.Cms.Infrastructure.Scoping;
 using Umbraco.Extensions;
 
 #pragma warning disable 1591
@@ -166,7 +166,7 @@ namespace Limbo.Umbraco.Feedback.Services {
         /// </summary>
         /// <param name="entryId">The ID of the entry.</param>
         /// <returns>An instance of <see cref="FeedbackEntryDto"/> or <c>null</c> if not found.</returns>
-        public FeedbackEntryDto GetEntryById(int entryId) {
+        public FeedbackEntryDto? GetEntryById(int entryId) {
 
             using (var scope = _scopeProvider.CreateScope()) {
 
@@ -183,7 +183,7 @@ namespace Limbo.Umbraco.Feedback.Services {
 
         }
 
-        public FeedbackEntryDto GetEntryByKey(Guid key) {
+        public FeedbackEntryDto? GetEntryByKey(Guid key) {
 
             using (var scope = _scopeProvider.CreateScope()) {
 

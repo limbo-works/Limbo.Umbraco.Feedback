@@ -23,12 +23,12 @@ namespace Limbo.Umbraco.Feedback.Models.Api {
         public bool IsPublished { get; }
 
         [JsonProperty("url")]
-        public string Url { get; }
+        public string? Url { get; }
 
         public PageApiModel(IPublishedContent content) {
             Id = content.Id;
             Key = content.Key;
-            Name = content.Name;
+            Name = content.Name!;
             IsPublished = true;
             Url = content.Url();
         }
@@ -36,7 +36,7 @@ namespace Limbo.Umbraco.Feedback.Models.Api {
         public PageApiModel(IContent content) {
             Id = content.Id;
             Key = content.Key;
-            Name = content.Name;
+            Name = content.Name!;
             IsPublished = content.Published;
         }
 

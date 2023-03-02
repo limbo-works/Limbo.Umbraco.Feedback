@@ -46,6 +46,7 @@ namespace Limbo.Umbraco.Feedback.Models.Statuses {
         public FeedbackStatus(Guid key, string alias) {
             Key = key;
             Alias = alias;
+            Name = alias;
             IsActive = true;
         }
 

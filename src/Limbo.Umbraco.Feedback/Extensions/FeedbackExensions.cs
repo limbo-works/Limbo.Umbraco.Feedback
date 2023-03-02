@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Limbo.Umbraco.Feedback.Models.Sites;
 using Limbo.Umbraco.Feedback.Plugins;
 using Umbraco.Cms.Core.Models;
@@ -25,7 +26,7 @@ namespace Limbo.Umbraco.Feedback.Extensions {
         /// <param name="site">When this method returns, holds the information about the site if successful; otherwise,
         /// <c>null</c>.</param>
         /// <returns><c>true</c> if a site was found; otherwise, <c>false</c>.</returns>
-        public static bool TryGetSite(this FeedbackPluginCollection collection, Guid key, out FeedbackSiteSettings site) {
+        public static bool TryGetSite(this FeedbackPluginCollection collection, Guid key, [NotNullWhen(true)] out FeedbackSiteSettings? site) {
 
             foreach (IFeedbackPlugin plugin in collection) {
                 if (plugin.TryGetSite(key, out site)) {
@@ -45,7 +46,7 @@ namespace Limbo.Umbraco.Feedback.Extensions {
         /// <param name="content">The content representing a page under the site.</param>
         /// <param name="site">When this method returns, holds an instance of <see cref="FeedbackSiteSettings"/> representing the parent site if successful; otherwise, <see langword="null"/>.</param>
         /// <returns><see langword="true"/> if successful; otherwise, <see langword="false"/>.</returns>
-        public static bool TryGetSite(this FeedbackPluginCollection collection, IContent content, out FeedbackSiteSettings site) {
+        public static bool TryGetSite(this FeedbackPluginCollection collection, IContent content, [NotNullWhen(true)] out FeedbackSiteSettings? site) {
 
             foreach (IFeedbackPlugin plugin in collection) {
                 if (plugin.TryGetSite(content, out site)) {
@@ -71,7 +72,7 @@ namespace Limbo.Umbraco.Feedback.Extensions {
         /// <param name="userGroups">A list of user groups.</param>
         /// <param name="result">When this method returns, holds the content app if successful; otherwise, <c>null</c>.</param>
         /// <returns><c>true</c> if a content app was found; otherwise, <c>false</c>.</returns>
-        public static bool TryGetContentApp(this FeedbackPluginCollection collection, IContent content, IEnumerable<IReadOnlyUserGroup> userGroups, out ContentApp result) {
+        public static bool TryGetContentApp(this FeedbackPluginCollection collection, IContent content, IEnumerable<IReadOnlyUserGroup> userGroups, out ContentApp? result) {
 
             foreach (IFeedbackPlugin plugin in collection) {
                 if (plugin.TryGetContentApp(content, userGroups, out result)) {

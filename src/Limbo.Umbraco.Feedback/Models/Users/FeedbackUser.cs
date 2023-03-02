@@ -38,13 +38,13 @@ namespace Limbo.Umbraco.Feedback.Models.Users {
         /// Gets or sets the description of the user.
         /// </summary>
         [JsonProperty("description")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         /// <summary>
         /// Gets or sets the avatar of the user.
         /// </summary>
         [JsonProperty("avatar")]
-        public string Avatar { get; set; }
+        public string? Avatar { get; set; }
 
         /// <summary>
         /// Gets or sets the language of the user.
@@ -63,11 +63,6 @@ namespace Limbo.Umbraco.Feedback.Models.Users {
         #region Constructors
 
         /// <summary>
-        /// Initializes a new user with default values.
-        /// </summary>
-        public FeedbackUser() { }
-
-        /// <summary>
         /// Initializes a new instance based on the specified Umbraco <paramref name="user"/>.
         /// </summary>
         /// <param name="user">The Umbraco user the instance should be based on.</param>
@@ -75,10 +70,10 @@ namespace Limbo.Umbraco.Feedback.Models.Users {
 
             Id = user.Id;
             Key = user.Key;
-            Name = user.Name;
+            Name = user.Name!;
             Email = user.Email;
             Description = user.Email;
-            Language = user.Language;
+            Language = user.Language ?? "da-DK";
 
             if (string.IsNullOrWhiteSpace(user.Avatar)) {
                 return;

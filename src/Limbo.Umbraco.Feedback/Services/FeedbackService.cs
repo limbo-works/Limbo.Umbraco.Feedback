@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Limbo.Umbraco.Feedback.Exceptions;
 using Limbo.Umbraco.Feedback.Extensions;
 using Limbo.Umbraco.Feedback.Models.Entries;
 using Limbo.Umbraco.Feedback.Models.Ratings;
@@ -9,6 +11,7 @@ using Limbo.Umbraco.Feedback.Models.Statuses;
 using Limbo.Umbraco.Feedback.Models.Users;
 using Limbo.Umbraco.Feedback.Plugins;
 using Microsoft.Extensions.Logging;
+using Skybrud.Essentials.Strings.Extensions;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
 
@@ -53,7 +56,7 @@ namespace Limbo.Umbraco.Feedback.Services {
         /// <param name="key">The key (GUID) of the site.</param>
         /// <param name="site">When this method returns, holds the information about the site if successful; otherwise, <c>null</c>.</param>
         /// <returns><c>true</c> if a site was found; otherwise, <c>false</c>.</returns>
-        public bool TryGetSite(Guid key, out FeedbackSiteSettings site) {
+        public bool TryGetSite(Guid key, [NotNullWhen(true)] out FeedbackSiteSettings? site) {
             return Plugins.TryGetSite(key, out site);
         }
 
@@ -63,7 +66,7 @@ namespace Limbo.Umbraco.Feedback.Services {
         /// <param name="content">The content representing a page under the site.</param>
         /// <param name="site">When this method returns, holds an instance of <see cref="FeedbackSiteSettings"/> representing the parent site if successful; otherwise, <see langword="null"/>.</param>
         /// <returns><see langword="true"/> if successful; otherwise, <see langword="false"/>.</returns>
-        public bool TryGetSite(IContent content, out FeedbackSiteSettings site) {
+        public bool TryGetSite(IContent content, [NotNullWhen(true)] out FeedbackSiteSettings? site) {
             return Plugins.TryGetSite(content, out site);
         }
 
@@ -71,9 +74,9 @@ namespace Limbo.Umbraco.Feedback.Services {
         /// Gets the user with the specified <paramref name="key"/>.
         /// </summary>
         /// <param name="key">The key (GUID) of the user.</param>
-        /// <param name="user">When this method returns, holds an instance of <see cref="IFeedbackUser"/> if successful; otherwise <c>false</c>.</param>
+        /// <param name="user">When this method returns, holds an instance of <see cref="IFeedbackUser"/> if successful; otherwise <c>null</c>.</param>
         /// <returns><c>true</c> if a user was found; otherwise, <c>false</c>.</returns>
-        public bool TryGetUser(Guid key, out IFeedbackUser user) {
+        public bool TryGetUser(Guid key, [NotNullWhen(true)] out IFeedbackUser? user) {
             foreach (var plugin in Plugins) {
                 if (plugin.TryGetUser(key, out user)) {
                     return true;
@@ -131,21 +134,27 @@ namespace Limbo.Umbraco.Feedback.Services {
         /// Returns the entry with the specified <paramref name="key"/>, or <c>null</c> if not found.
         /// </summary>
         /// <param name="key">The key (GUID) of the entry to be returned.</param>
-        /// <returns>An instance of <see cref="FeedbackEntry"/> if successfull; otherwise, <c>false</c>.</returns>
-        public FeedbackEntry GetEntryByKey(Guid key) {
+        /// <returns>An instance of <see cref="FeedbackEntry"/> if successfull; otherwise, <c>null</c>.</returns>
+        public FeedbackEntry? GetEntryByKey(Guid key) {
 
-            FeedbackEntryDto dto = _databaseService.GetEntryByKey(key);
+            FeedbackEntryDto? dto = _databaseService.GetEntryByKey(key);
             if (dto == null) return null;
 
             TryGetSite(dto.SiteKey, out var site);
 
-            FeedbackRating rating = null;
+            FeedbackRating? rating = null;
             site?.TryGetRating(dto.Rating, out rating);
 
-            FeedbackStatus status = null;
+            FeedbackStatus? status = null;
             site?.TryGetStatus(dto.Status, out status);
 
-            TryGetUser(dto.AssignedTo, out IFeedbackUser user);
+            // Normally "rating" and "status" will never be null, but if a configured rating or status is removed with
+            // existing feedback still referencing them, we have a null reference, so we ensure to set some fallback
+            // values should this be the case
+            rating ??= new FeedbackRating(dto.Rating, dto.Rating.ToString(), "Rating not found");
+            status ??= new FeedbackStatus(dto.Status, dto.Status.ToString(), "Status not found");
+
+            TryGetUser(dto.AssignedTo, out IFeedbackUser? user);
 
             return new FeedbackEntry(dto, rating, status, user);
 
@@ -179,13 +188,15 @@ namespace Limbo.Umbraco.Feedback.Services {
         /// <returns>An instance of <see cref="AddRatingResult"/>.</returns>
         public AddRatingResult AddRating(FeedbackSiteSettings site, IPublishedContent page, FeedbackRating rating) {
 
+            if (site.Statuses.Length == 0) throw new FeedbackException($"Site with key {site.Key} does not specify any statuses.");
+
             // Initialize a new entry
             FeedbackEntry entry = new() {
                 Key = Guid.NewGuid(),
                 SiteKey = site.Key,
                 PageKey = page.Key,
                 Rating = rating,
-                Status = site.Statuses.FirstOrDefault(),
+                Status = site.Statuses.First(),
                 CreateDate = DateTime.UtcNow,
                 UpdateDate = DateTime.UtcNow
             };
@@ -236,9 +247,9 @@ namespace Limbo.Umbraco.Feedback.Services {
         public UpdateEntryResult UpdateEntry(FeedbackEntry entry) {
 
             // Ensure the string values are NULL (opposed to empty or white space)
-            entry.Name = FeedbackUtils.TrimToNull(entry.Name);
-            entry.Email = FeedbackUtils.TrimToNull(entry.Email);
-            entry.Comment = FeedbackUtils.TrimToNull(entry.Comment);
+            entry.Name = entry.Name.NullIfWhiteSpace();
+            entry.Email = entry.Email.NullIfWhiteSpace();
+            entry.Comment = entry.Comment.NullIfWhiteSpace();
 
             // Attempt to add the entry to the database
             try {
@@ -288,17 +299,19 @@ namespace Limbo.Umbraco.Feedback.Services {
         /// <param name="email">The email address of the user.</param>
         /// <param name="comment">The comment of the user.</param>
         /// <returns>An instance of <see cref="AddCommentResult"/>.</returns>
-        public AddCommentResult AddComment(FeedbackSiteSettings site, IPublishedContent page, FeedbackRating rating, string name, string email, string comment) {
+        public AddCommentResult AddComment(FeedbackSiteSettings site, IPublishedContent page, FeedbackRating rating, string? name, string? email, string? comment) {
+
+            if (site.Statuses.Length == 0) throw new FeedbackException($"Site with key {site.Key} does not specify any statuses.");
 
             FeedbackEntry entry = new() {
                 Key = Guid.NewGuid(),
                 SiteKey = site.Key,
                 PageKey = page.Key,
                 Rating = rating,
-                Status = site.Statuses.FirstOrDefault(),
-                Name = FeedbackUtils.TrimToNull(name),
-                Email = FeedbackUtils.TrimToNull(email),
-                Comment = FeedbackUtils.TrimToNull(comment),
+                Status = site.Statuses.First(),
+                Name = name.NullIfWhiteSpace(),
+                Email = email.NullIfWhiteSpace(),
+                Comment = comment.NullIfWhiteSpace(),
                 CreateDate = DateTime.UtcNow,
                 UpdateDate = DateTime.UtcNow
             };
@@ -347,14 +360,14 @@ namespace Limbo.Umbraco.Feedback.Services {
         /// <param name="entry">The entry.</param>
         /// <param name="user">The user.</param>
         /// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
-        public bool SetAssignedTo(FeedbackEntry entry, IFeedbackUser user) {
+        public bool SetAssignedTo(FeedbackEntry entry, IFeedbackUser? user) {
 
             // Some input validation
             if (entry == null) throw new ArgumentNullException(nameof(entry));
 
             // Get the current (old) user
-            IFeedbackUser oldUser = entry.AssignedTo;
-            IFeedbackUser newUser = user;
+            IFeedbackUser? oldUser = entry.AssignedTo;
+            IFeedbackUser? newUser = user;
 
             // Trigger the "OnUserAssigning" before assigning the user
             foreach (IFeedbackPlugin plugin in Plugins) {

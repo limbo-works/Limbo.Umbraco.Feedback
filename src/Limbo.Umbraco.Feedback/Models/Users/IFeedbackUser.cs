@@ -36,13 +36,13 @@ namespace Limbo.Umbraco.Feedback.Models.Users {
         /// Gets the description of the user.
         /// </summary>
         [JsonProperty("description")]
-        string Description { get; }
+        string? Description { get; }
 
         /// <summary>
         /// Gets the avatar of the user.
         /// </summary>
         [JsonProperty("avatar")]
-        string Avatar { get; }
+        string? Avatar { get; }
 
         /// <summary>
         /// Gets the language of the user.

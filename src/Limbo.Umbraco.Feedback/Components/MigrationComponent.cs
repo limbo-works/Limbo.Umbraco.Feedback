@@ -1,10 +1,10 @@
 ﻿using Limbo.Umbraco.Feedback.Migrations;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.Migrations;
-using Umbraco.Cms.Core.Scoping;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Infrastructure.Migrations;
 using Umbraco.Cms.Infrastructure.Migrations.Upgrade;
+using Umbraco.Cms.Infrastructure.Scoping;
 
 #pragma warning disable 1591
 
@@ -24,11 +24,11 @@ namespace Limbo.Umbraco.Feedback.Components {
 
         public void Initialize() {
 
-            var plan = new MigrationPlan("Skybrud.Umbraco.Feedback");
+            var plan = new MigrationPlan("Limbo.Umbraco.Feedback");
 
             plan.From(string.Empty)
-                .To<CreateTableMigration>("3.0.0-alpha001")
-                .To<FixEmptyStringValuesMigration>("3.0.0-alpha004");
+                .To<CreateTableMigration>("1.0.0-alpha001")
+                .To<FixEmptyStringValuesMigration>("1.0.0-alpha004");
 
             var upgrader = new Upgrader(plan);
 

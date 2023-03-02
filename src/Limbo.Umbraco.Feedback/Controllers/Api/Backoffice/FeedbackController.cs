@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using Limbo.Umbraco.Feedback.Models.Api;
 using Limbo.Umbraco.Feedback.Models.Entries;
@@ -77,15 +78,15 @@ namespace Limbo.Umbraco.Feedback.Controllers.Api.Backoffice {
 
         }
 
-        public object GetEntriesForSite(Guid key, int page = 1, string sort = null, string order = null, string rating = null, string responsible = null, string status = null, string type = null) {
+        public object GetEntriesForSite(Guid key, int page = 1, string? sort = null, string? order = null, string? rating = null, string? responsible = null, string? status = null, string? type = null) {
 
-            CultureInfo culture = new CultureInfo(_backOfficeSecurityAccessor.BackOfficeSecurity.CurrentUser.Language);
+            CultureInfo culture = new(_backOfficeSecurityAccessor.BackOfficeSecurity!.CurrentUser!.Language!);
 
-            if (_feedbackService.TryGetSite(key, out FeedbackSiteSettings site) == false) {
+            if (_feedbackService.TryGetSite(key, out FeedbackSiteSettings? site) == false) {
                 return NotFound();
             }
 
-            FeedbackGetEntriesOptions options = new FeedbackGetEntriesOptions {
+            FeedbackGetEntriesOptions options = new() {
                 Page = page,
                 PerPage = 10,
                 SiteKey = key
@@ -143,9 +144,9 @@ namespace Limbo.Umbraco.Feedback.Controllers.Api.Backoffice {
 
             var siteModel = new SiteApiModel(site, _localizedTextService, culture);
 
-            List<EntryApiModel> entries = new List<EntryApiModel>();
+            List<EntryApiModel> entries = new();
 
-            Dictionary<Guid, PageApiModel> pages = new Dictionary<Guid, PageApiModel>();
+            Dictionary<Guid, PageApiModel> pages = new();
 
             foreach (var entry in result.Entries) {
 
@@ -157,8 +158,8 @@ namespace Limbo.Umbraco.Feedback.Controllers.Api.Backoffice {
                     es = new FeedbackStatus(entry.Dto.Status, "not-found");
                 }
 
-                if (!pages.TryGetValue(entry.PageKey, out PageApiModel pageModel) && _umbracoContextAccessor.TryGetUmbracoContext(out var umbracoContext)) {
-                    var c1 = umbracoContext.Content.GetById(entry.PageKey);
+                if (!pages.TryGetValue(entry.PageKey, out PageApiModel? pageModel) && _umbracoContextAccessor.TryGetUmbracoContext(out var umbracoContext)) {
+                    var c1 = umbracoContext?.Content?.GetById(entry.PageKey);
                     if (c1 != null) {
                         pages.Add(entry.PageKey, pageModel = new PageApiModel(c1));
                     } else {
@@ -170,7 +171,7 @@ namespace Limbo.Umbraco.Feedback.Controllers.Api.Backoffice {
                     }
                 }
 
-                IFeedbackUser user = null;
+                IFeedbackUser? user = null;
                 if (entry.Dto.AssignedTo != Guid.Empty) {
                     _feedbackService.TryGetUser(entry.Dto.AssignedTo, out user);
                 }
@@ -199,16 +200,16 @@ namespace Limbo.Umbraco.Feedback.Controllers.Api.Backoffice {
 
         }
 
-        public object GetEntriesForPage(Guid key, int page = 1, string sort = null, string order = null, string rating = null, string responsible = null, string status = null, string type = null) {
+        public object GetEntriesForPage(Guid key, int page = 1, string? sort = null, string? order = null, string? rating = null, string? responsible = null, string? status = null, string? type = null) {
 
-            CultureInfo culture = new(_backOfficeSecurityAccessor.BackOfficeSecurity.CurrentUser.Language);
+            CultureInfo culture = new(_backOfficeSecurityAccessor.BackOfficeSecurity!.CurrentUser!.Language!);
 
             // Get a reference to the current page
-            IContent content = _contentService.GetById(key);
+            IContent? content = _contentService.GetById(key);
             if (content is null) return NotFound("Page not found.");
 
             // Attempt to find the parent site
-            if (!_feedbackService.TryGetSite(content, out FeedbackSiteSettings site)) return NotFound("Site not found.");
+            if (!_feedbackService.TryGetSite(content, out FeedbackSiteSettings? site)) return NotFound("Site not found.");
 
             FeedbackGetEntriesOptions options = new() {
                 Page = page,
@@ -267,9 +268,9 @@ namespace Limbo.Umbraco.Feedback.Controllers.Api.Backoffice {
 
             var siteModel = new SiteApiModel(site, _localizedTextService, culture);
 
-            List<EntryApiModel> entries = new List<EntryApiModel>();
+            List<EntryApiModel> entries = new();
 
-            Dictionary<Guid, PageApiModel> pages = new Dictionary<Guid, PageApiModel>();
+            Dictionary<Guid, PageApiModel> pages = new();
 
             foreach (var entry in result.Entries) {
 
@@ -281,8 +282,8 @@ namespace Limbo.Umbraco.Feedback.Controllers.Api.Backoffice {
                     es = new FeedbackStatus(entry.Dto.Status, "not-found");
                 }
 
-                if (!pages.TryGetValue(entry.PageKey, out PageApiModel pageModel) && _umbracoContextAccessor.TryGetUmbracoContext(out var umbracoContext)) {
-                    var c1 = umbracoContext.Content.GetById(entry.PageKey);
+                if (!pages.TryGetValue(entry.PageKey, out PageApiModel? pageModel) && _umbracoContextAccessor.TryGetUmbracoContext(out var umbracoContext)) {
+                    var c1 = umbracoContext.Content?.GetById(entry.PageKey);
                     if (c1 != null) {
                         pages.Add(entry.PageKey, pageModel = new PageApiModel(c1));
                     } else {
@@ -294,7 +295,7 @@ namespace Limbo.Umbraco.Feedback.Controllers.Api.Backoffice {
                     }
                 }
 
-                IFeedbackUser user = null;
+                IFeedbackUser? user = null;
                 if (entry.Dto.AssignedTo != Guid.Empty) {
                     _feedbackService.TryGetUser(entry.Dto.AssignedTo, out user);
                 }
@@ -331,7 +332,7 @@ namespace Limbo.Umbraco.Feedback.Controllers.Api.Backoffice {
         [HttpPost]
         public object SetStatus([FromBody] JObject model) {
 
-            CultureInfo culture = new CultureInfo(_backOfficeSecurityAccessor.BackOfficeSecurity.CurrentUser.Language);
+            CultureInfo culture = new(_backOfficeSecurityAccessor.BackOfficeSecurity!.CurrentUser!.Language!);
 
             Guid entryKey = model.GetGuid("entry");
             Guid statusKey = model.GetGuid("status");
@@ -345,21 +346,21 @@ namespace Limbo.Umbraco.Feedback.Controllers.Api.Backoffice {
             }
 
             // Get the entry
-            FeedbackEntry entry = _feedbackService.GetEntryByKey(entryKey);
+            FeedbackEntry? entry = _feedbackService.GetEntryByKey(entryKey);
             if (entry == null) {
                 return NotFound();
             }
 
             // Get the site of the entry
-            if (_feedbackService.TryGetSite(entry.SiteKey, out FeedbackSiteSettings site) == false) {
+            if (_feedbackService.TryGetSite(entry.SiteKey, out FeedbackSiteSettings? site) == false) {
                 throw new Exception();
             }
 
 
-            site.TryGetRating(entry.Dto.Rating, out FeedbackRating rating);
+            site.TryGetRating(entry.Dto.Rating, out FeedbackRating? rating);
 
             // Get the status
-            if (site.TryGetStatus(statusKey, out FeedbackStatus status) == false) {
+            if (site.TryGetStatus(statusKey, out FeedbackStatus? status) == false) {
                 throw new Exception();
             }
 
@@ -370,7 +371,7 @@ namespace Limbo.Umbraco.Feedback.Controllers.Api.Backoffice {
 
             var siteModel = new SiteApiModel(site, _localizedTextService, culture);
 
-            IFeedbackUser user = null;
+            IFeedbackUser? user = null;
             if (entry.Dto.AssignedTo != Guid.Empty) {
                 _feedbackService.TryGetUser(entry.Dto.AssignedTo, out user);
             }
@@ -382,7 +383,7 @@ namespace Limbo.Umbraco.Feedback.Controllers.Api.Backoffice {
         [HttpPost]
         public object SetResponsible([FromBody] JObject model) {
 
-            CultureInfo culture = new CultureInfo(_backOfficeSecurityAccessor.BackOfficeSecurity.CurrentUser.Language);
+            CultureInfo culture = new(_backOfficeSecurityAccessor.BackOfficeSecurity!.CurrentUser!.Language!);
 
             Guid entryKey = model.GetGuid("entry");
             Guid responsibleKey = model.GetGuid("responsible");
@@ -392,17 +393,17 @@ namespace Limbo.Umbraco.Feedback.Controllers.Api.Backoffice {
             }
 
             // Get the entry
-            FeedbackEntry entry = _feedbackService.GetEntryByKey(entryKey);
+            FeedbackEntry? entry = _feedbackService.GetEntryByKey(entryKey);
             if (entry == null) {
                 return NotFound();
             }
 
             // Get the site of the entry
-            if (_feedbackService.TryGetSite(entry.SiteKey, out FeedbackSiteSettings site) == false) {
+            if (_feedbackService.TryGetSite(entry.SiteKey, out FeedbackSiteSettings? site) == false) {
                 throw new Exception();
             }
 
-            IFeedbackUser user = null;
+            IFeedbackUser? user = null;
             if (responsibleKey == Guid.Empty) {
                 _feedbackService.SetAssignedTo(entry, null);
             } else {
@@ -412,8 +413,8 @@ namespace Limbo.Umbraco.Feedback.Controllers.Api.Backoffice {
                 _feedbackService.SetAssignedTo(entry, user);
             }
 
-            var r = entry.Rating == null ? null : new RatingApiModel(entry.Rating, _localizedTextService, culture);
-            var s = entry.Status == null ? null : new StatusApiModel(entry.Status, _localizedTextService, culture);
+            var r = entry.Rating is null ? null : new RatingApiModel(entry.Rating, _localizedTextService, culture);
+            var s = entry.Status is null ? null : new StatusApiModel(entry.Status, _localizedTextService, culture);
 
             var siteModel = new SiteApiModel(site, _localizedTextService, culture);
 
@@ -425,16 +426,16 @@ namespace Limbo.Umbraco.Feedback.Controllers.Api.Backoffice {
 
         #region Private helper methods
 
-        private bool TryGetPage(Guid key, out PageApiModel result) {
+        private bool TryGetPage(Guid key, [NotNullWhen(true)] out PageApiModel? result) {
 
             _umbracoContextAccessor.TryGetUmbracoContext(out var umbracoContext);
-            IPublishedContent publishedContent = umbracoContext.Content.GetById(key);
+            IPublishedContent? publishedContent = umbracoContext?.Content?.GetById(key);
             if (publishedContent != null) {
                 result = new PageApiModel(publishedContent);
                 return true;
             }
 
-            IContent content = _contentService.GetById(key);
+            IContent? content = _contentService.GetById(key);
             if (content != null) {
                 result = new PageApiModel(content);
                 return true;

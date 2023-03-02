@@ -4,6 +4,8 @@ using Limbo.Umbraco.Feedback.Models.Statuses;
 using Limbo.Umbraco.Feedback.Models.Users;
 using Newtonsoft.Json;
 
+// ReSharper disable ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
+
 namespace Limbo.Umbraco.Feedback.Models.Entries {
 
     /// <summary>
@@ -16,9 +18,9 @@ namespace Limbo.Umbraco.Feedback.Models.Entries {
         // ReSharper disable once InconsistentNaming
         internal FeedbackEntryDto _entry;
 
-        private IFeedbackUser _responsible;
-        private FeedbackRating _rating;
-        private FeedbackStatus _status;
+        private IFeedbackUser? _responsible;
+        private FeedbackRating _rating = null!;
+        private FeedbackStatus _status = null!;
 
         #endregion
 
@@ -66,7 +68,7 @@ namespace Limbo.Umbraco.Feedback.Models.Entries {
         /// Gets or sets the name the user who submitted the entry.
         /// </summary>
         [JsonProperty("name")]
-        public string Name {
+        public string? Name {
             get => _entry.Name;
             set => _entry.Name = value;
         }
@@ -75,7 +77,7 @@ namespace Limbo.Umbraco.Feedback.Models.Entries {
         /// Gets or sets the email address the user who submitted the entry.
         /// </summary>
         [JsonProperty("email")]
-        public string Email {
+        public string? Email {
             get => _entry.Email;
             set => _entry.Email = value;
         }
@@ -102,7 +104,7 @@ namespace Limbo.Umbraco.Feedback.Models.Entries {
         /// Gets or sets the comment of the entry.
         /// </summary>
         [JsonProperty("comment")]
-        public string Comment {
+        public string? Comment {
             get => _entry.Comment;
             set => _entry.Comment = value;
         }
@@ -129,13 +131,13 @@ namespace Limbo.Umbraco.Feedback.Models.Entries {
         /// Gets or sets the user to which the entry should be assigned.
         /// </summary>
         [JsonProperty("assignedTo")]
-        public IFeedbackUser AssignedTo {
+        public IFeedbackUser? AssignedTo {
             get => _responsible;
             set { _responsible = value; _entry.AssignedTo = value?.Key ?? Guid.Empty; }
         }
 
         /// <summary>
-        /// 
+        /// Gets or sets whether the entry has been archived.
         /// </summary>
         [JsonProperty("archived")]
         public bool IsArchived {
@@ -183,7 +185,7 @@ namespace Limbo.Umbraco.Feedback.Models.Entries {
             _entry = entry;
         }
 
-        internal FeedbackEntry(FeedbackEntryDto entry, FeedbackRating rating, FeedbackStatus status, IFeedbackUser responsible) {
+        internal FeedbackEntry(FeedbackEntryDto entry, FeedbackRating rating, FeedbackStatus status, IFeedbackUser? responsible) {
             _entry = entry;
             _rating = rating;
             _status = status;

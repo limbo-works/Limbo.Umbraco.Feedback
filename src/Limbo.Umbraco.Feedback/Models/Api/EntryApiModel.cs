@@ -21,25 +21,25 @@ namespace Limbo.Umbraco.Feedback.Models.Api {
         public SiteApiModel Site { get; }
 
         [JsonProperty("page")]
-        public PageApiModel Page { get; }
+        public PageApiModel? Page { get; }
 
         [JsonProperty("name")]
-        public string Name => Entry.Name;
+        public string? Name => Entry.Name;
 
         [JsonProperty("email")]
-        public string Email => Entry.Email;
+        public string? Email => Entry.Email;
 
         [JsonProperty("comment")]
-        public string Comment => Entry.Comment;
+        public string? Comment => Entry.Comment;
 
         [JsonProperty("status")]
-        public StatusApiModel Status { get; }
+        public StatusApiModel? Status { get; }
 
         [JsonProperty("rating")]
-        public RatingApiModel Rating { get; }
+        public RatingApiModel? Rating { get; }
 
         [JsonProperty("assignedTo")]
-        public IFeedbackUser AssignedTo { get; }
+        public IFeedbackUser? AssignedTo { get; }
 
         [JsonProperty("createDate")]
         public DateTime CreateDate => Entry.CreateDate;
@@ -50,7 +50,7 @@ namespace Limbo.Umbraco.Feedback.Models.Api {
         [JsonProperty("archived")]
         public bool IsArchived => Entry.IsArchived;
 
-        public EntryApiModel(FeedbackEntry entry, SiteApiModel site, PageApiModel page, StatusApiModel status, RatingApiModel rating, IFeedbackUser assignedTo) {
+        public EntryApiModel(FeedbackEntry entry, SiteApiModel site, PageApiModel? page, StatusApiModel? status, RatingApiModel? rating, IFeedbackUser? assignedTo) {
             Entry = entry;
             Site = site;
             Page = page;

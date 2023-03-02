@@ -16,7 +16,7 @@ namespace Limbo.Umbraco.Feedback.Constants {
         /// <summary>
         /// Gets the alias of the feedback datatabe table.
         /// </summary>
-        public const string TableName = "SkybrudFeedback";
+        public const string TableName = "LimboFeedback";
 
         public static class Ratings {
 

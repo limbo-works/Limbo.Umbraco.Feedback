@@ -28,9 +28,9 @@ namespace Limbo.Umbraco.Feedback.ContentApps {
         /// <param name="source">The source - eg. an instance of <see cref="IContent"/>.</param>
         /// <param name="userGroups">A collection of all user groups.</param>
         /// <returns></returns>
-        public ContentApp GetContentAppFor(object source, IEnumerable<IReadOnlyUserGroup> userGroups) {
+        public ContentApp? GetContentAppFor(object source, IEnumerable<IReadOnlyUserGroup> userGroups) {
             if (source is not IContent content) return null;
-            return _pluginCollection.TryGetContentApp(content, userGroups, out ContentApp contentApp) ? contentApp : null;
+            return _pluginCollection.TryGetContentApp(content, userGroups, out ContentApp? contentApp) ? contentApp : null;
 
         }
 

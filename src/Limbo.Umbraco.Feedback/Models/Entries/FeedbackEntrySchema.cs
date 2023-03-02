@@ -26,16 +26,16 @@ namespace Limbo.Umbraco.Feedback.Models.Entries {
 
         [Column("Name")]
         [NullSetting(NullSetting = NullSettings.Null)]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         [Column("Email")]
         [NullSetting(NullSetting = NullSettings.Null)]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         [Column("Comment")]
         [NullSetting(NullSetting = NullSettings.Null)]
         [SpecialDbType(SpecialDbTypes.NTEXT)]
-        public string Comment { get; set; }
+        public string? Comment { get; set; }
 
         [Column("Rating")]
         public Guid Rating { get; set; }

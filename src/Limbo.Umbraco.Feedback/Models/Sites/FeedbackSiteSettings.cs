@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Limbo.Umbraco.Feedback.Constants;
 using Limbo.Umbraco.Feedback.Models.Fields;
@@ -57,7 +58,7 @@ namespace Limbo.Umbraco.Feedback.Models.Sites {
 
             Id = site.Id;
             Key = site.Key;
-            Name = site.Name;
+            Name = site.Name!;
 
             Ratings = new[] { FeedbackConstants.Ratings.Positive, FeedbackConstants.Ratings.Negative };
 
@@ -77,7 +78,7 @@ namespace Limbo.Umbraco.Feedback.Models.Sites {
         /// <param name="key">The key (GUID) of the rating.</param>
         /// <param name="rating">When this method returns, holds an instance of <see cref="FeedbackRating"/> if successful; otherwise, <c>null</c>.</param>
         /// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
-        public virtual bool TryGetRating(Guid key, out FeedbackRating rating) {
+        public virtual bool TryGetRating(Guid key, [NotNullWhen(true)] out FeedbackRating? rating) {
             rating = Ratings.FirstOrDefault(x => x.Key == key);
             return rating != null;
         }
@@ -88,7 +89,7 @@ namespace Limbo.Umbraco.Feedback.Models.Sites {
         /// <param name="key">The key (GUID) of the status.</param>
         /// <param name="status">When this method returns, holds an instance of <see cref="FeedbackStatus"/> if successful; otherwise, <c>null</c>.</param>
         /// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
-        public virtual bool TryGetStatus(Guid key, out FeedbackStatus status) {
+        public virtual bool TryGetStatus(Guid key, [NotNullWhen(true)] out FeedbackStatus? status) {
             status = Statuses.FirstOrDefault(x => x.Key == key);
             return status != null;
         }

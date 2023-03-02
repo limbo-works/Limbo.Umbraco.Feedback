@@ -17,12 +17,12 @@ namespace Limbo.Umbraco.Feedback.Models.Results {
         /// <summary>
         /// Gets a reference to the entry.
         /// </summary>
-        public FeedbackEntry Entry { get; }
+        public FeedbackEntry? Entry { get; }
 
         /// <summary>
         /// Gets the message of the result - eg. an error message.
         /// </summary>
-        public string Message { get; }
+        public string? Message { get; }
 
         #endregion
 
@@ -34,7 +34,7 @@ namespace Limbo.Umbraco.Feedback.Models.Results {
         /// <param name="status">The status of the result.</param>
         /// <param name="entry">The entry.</param>
         /// <param name="message">The message of the result - eg. an error message.</param>
-        public UpdateEntryResult(AddRatingStatus status, FeedbackEntry entry, string message) {
+        public UpdateEntryResult(AddRatingStatus status, FeedbackEntry? entry, string? message) {
             Status = status;
             Entry = entry;
             Message = message;

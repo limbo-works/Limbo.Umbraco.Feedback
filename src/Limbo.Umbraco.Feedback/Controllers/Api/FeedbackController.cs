@@ -40,19 +40,19 @@ namespace Limbo.Umbraco.Feedback.Controllers.Api {
         public object AddRating([FromBody] AddRatingModel model) {
 
             // Get site site
-            if (!_feedbackPluginCollection.TryGetSite(model.SiteKey, out FeedbackSiteSettings site)) {
+            if (!_feedbackPluginCollection.TryGetSite(model.SiteKey, out FeedbackSiteSettings? site)) {
                 return NotFound("A site with the specified key could not be found.");
             }
 
             // Get the page
             _umbracoContextAccessor.TryGetUmbracoContext(out var umbracoContext);
-            IPublishedContent page = umbracoContext.Content.GetById(model.PageKey);
+            IPublishedContent? page = umbracoContext?.Content?.GetById(model.PageKey);
             if (page == null) {
                 return NotFound("A page with the specified key could not be found.");
             }
 
             // Get the rating
-            if (!site.TryGetRating(model.Rating, out FeedbackRating rating)) {
+            if (!site.TryGetRating(model.Rating, out FeedbackRating? rating)) {
                 return BadRequest("A rating with the specified name does not exist.");
             }
 
@@ -63,7 +63,7 @@ namespace Limbo.Umbraco.Feedback.Controllers.Api {
             switch (result.Status) {
 
                 case AddRatingStatus.Success:
-                    return new { key = result.Entry.Key };
+                    return new { key = result.Entry!.Key };
 
                 case AddRatingStatus.Cancelled:
                     return BadRequest(result.Message);
@@ -80,19 +80,19 @@ namespace Limbo.Umbraco.Feedback.Controllers.Api {
         public object AddComment([FromBody] AddCommentModel model) {
 
             // Get site site
-            if (!_feedbackPluginCollection.TryGetSite(model.SiteKey, out FeedbackSiteSettings site)) {
+            if (!_feedbackPluginCollection.TryGetSite(model.SiteKey, out FeedbackSiteSettings? site)) {
                 return NotFound("A site with the specified key could not be found.");
             }
 
             // Get the page
             _umbracoContextAccessor.TryGetUmbracoContext(out var umbracoContext);
-            IPublishedContent page = umbracoContext.Content.GetById(model.PageKey);
+            IPublishedContent? page = umbracoContext?.Content?.GetById(model.PageKey);
             if (page == null) {
                 return NotFound("A page with the specified key could not be found.");
             }
 
             // Get the rating
-            if (!site.TryGetRating(model.Rating, out FeedbackRating rating)) {
+            if (!site.TryGetRating(model.Rating, out FeedbackRating? rating)) {
                 return BadRequest("A rating with the specified name does not exist.");
             }
 
@@ -103,7 +103,7 @@ namespace Limbo.Umbraco.Feedback.Controllers.Api {
             switch (result.Status) {
 
                 case AddCommentStatus.Success:
-                    return new { key = result.Entry.Key };
+                    return new { key = result.Entry!.Key };
 
                 case AddCommentStatus.Cancelled:
                     return BadRequest(result.Message);
@@ -126,13 +126,13 @@ namespace Limbo.Umbraco.Feedback.Controllers.Api {
 
             // Get the page
             _umbracoContextAccessor.TryGetUmbracoContext(out var umbracoContext);
-            IPublishedContent page = umbracoContext.Content.GetById(model.PageKey);
+            IPublishedContent? page = umbracoContext?.Content?.GetById(model.PageKey);
             if (page == null) {
                 return NotFound("A page with the specified key could not be found.");
             }
 
             // Get a reference to the entry
-            FeedbackEntry entry = _feedbackService.GetEntryByKey(key);
+            FeedbackEntry? entry = _feedbackService.GetEntryByKey(key);
             if (entry == null) {
                 return NotFound("An entry with the specified key could not be found.");
             }
@@ -151,7 +151,7 @@ namespace Limbo.Umbraco.Feedback.Controllers.Api {
             switch (result.Status) {
 
                 case AddRatingStatus.Success:
-                    return new { key = result.Entry.Key };
+                    return new { key = result.Entry!.Key };
 
                 case AddRatingStatus.Cancelled:
                     return BadRequest(result.Message);

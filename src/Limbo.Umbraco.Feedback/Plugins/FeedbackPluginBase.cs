@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Limbo.Umbraco.Feedback.Models.Entries;
 using Limbo.Umbraco.Feedback.Models.Sites;
@@ -95,7 +96,7 @@ namespace Limbo.Umbraco.Feedback.Plugins {
         /// <param name="entry">The feedback entry.</param>
         /// <param name="newUser">A reference to the new user. If the entry is updated to not be assigned to anyone, this value will be <c>null</c>.</param>
         /// <returns><c>true</c> if the feedback plugin handled the entry; otherwise, <c>false</c>.</returns>
-        public virtual bool OnUserAssigning(FeedbackService service, FeedbackEntry entry, IFeedbackUser newUser) {
+        public virtual bool OnUserAssigning(FeedbackService service, FeedbackEntry entry, IFeedbackUser? newUser) {
             return true;
         }
 
@@ -106,7 +107,7 @@ namespace Limbo.Umbraco.Feedback.Plugins {
         /// <param name="entry">The feedback entry.</param>
         /// <param name="oldUser">The assigned user prior the update.</param>
         /// <param name="newUser">The assigned user after the update.</param>
-        public virtual void OnUserAssigned(FeedbackService service, FeedbackEntry entry, IFeedbackUser oldUser, IFeedbackUser newUser) { }
+        public virtual void OnUserAssigned(FeedbackService service, FeedbackEntry entry, IFeedbackUser? oldUser, IFeedbackUser? newUser) { }
 
         /// <summary>
         /// Gets the site with the specified <paramref name="key"/>, or <c>null</c> if not found.
@@ -114,7 +115,7 @@ namespace Limbo.Umbraco.Feedback.Plugins {
         /// <param name="key">The key (GUID) of the site.</param>
         /// <param name="site">When this method returns, holds the information about the site if successful; otherwise, <c>null</c>.</param>
         /// <returns><c>true</c> if a site was found; otherwise, <c>false</c>.</returns>
-        public virtual bool TryGetSite(Guid key, out FeedbackSiteSettings site) {
+        public virtual bool TryGetSite(Guid key, [NotNullWhen(true)] out FeedbackSiteSettings? site) {
             site = null;
             return false;
         }
@@ -125,7 +126,7 @@ namespace Limbo.Umbraco.Feedback.Plugins {
         /// <param name="content">The content representing a page under the site.</param>
         /// <param name="site">When this method returns, holds an instance of <see cref="FeedbackSiteSettings"/> representing the parent site if successful; otherwise, <see langword="null"/>.</param>
         /// <returns><see langword="true"/> if successful; otherwise, <see langword="false"/>.</returns>
-        public virtual bool TryGetSite(IContent content, out FeedbackSiteSettings site) {
+        public virtual bool TryGetSite(IContent content, [NotNullWhen(true)] out FeedbackSiteSettings? site) {
             site = null;
             return false;
         }
@@ -135,7 +136,7 @@ namespace Limbo.Umbraco.Feedback.Plugins {
         /// </summary>
         /// <param name="userId">The ID of the user.</param>
         /// <returns>An instance of <see cref="IFeedbackUser"/> if successful; otherwise, <c>null</c>.</returns>
-        public virtual IFeedbackUser GetUser(int userId) {
+        public virtual IFeedbackUser? GetUser(int userId) {
             return GetUsers().FirstOrDefault(x => x.Id == userId);
         }
 
@@ -145,7 +146,7 @@ namespace Limbo.Umbraco.Feedback.Plugins {
         /// <param name="key">The key (GUID) of the user.</param>
         /// <param name="user">When this method returns, holds an instance of <see cref="IFeedbackUser"/> if successful; otherwise <c>false</c>.</param>
         /// <returns><c>true</c> if a user was found; otherwise, <c>false</c>.</returns>
-        public virtual bool TryGetUser(Guid key, out IFeedbackUser user) {
+        public virtual bool TryGetUser(Guid key, [NotNullWhen(true)] out IFeedbackUser? user) {
             user = GetUsers().FirstOrDefault(x => x.Key == key);
             return user != null;
         }
@@ -167,7 +168,7 @@ namespace Limbo.Umbraco.Feedback.Plugins {
         /// <param name="userGroups">The user groups of the current user.</param>
         /// <param name="result">The content app, or <c>null</c> if a content app shouldn't be sown for <paramref name="content"/>.</param>
         /// <returns><c>true</c> if a content app was configured; otherwise <c>false</c>.</returns>
-        public virtual bool TryGetContentApp(IContent content, IEnumerable<IReadOnlyUserGroup> userGroups, out ContentApp result) {
+        public virtual bool TryGetContentApp(IContent content, IEnumerable<IReadOnlyUserGroup> userGroups, [NotNullWhen(true)] out ContentApp? result) {
             result = null;
             return false;
         }
@@ -178,7 +179,7 @@ namespace Limbo.Umbraco.Feedback.Plugins {
         /// <param name="site">The site.</param>
         /// <returns>An instance of <see cref="ContentApp"/>.</returns>
         /// <remarks>Override the method and return <c>null</c> for a given site if the content app shouldn't beshown.</remarks>
-        protected virtual ContentApp GetContentAppForSite(IContent site) {
+        protected virtual ContentApp? GetContentAppForSite(IContent site) {
 
             return new ContentApp {
                 Alias = "skybrud-feedback",
@@ -199,7 +200,7 @@ namespace Limbo.Umbraco.Feedback.Plugins {
         /// <param name="page">The page.</param>
         /// <returns>An instance of <see cref="ContentApp"/>.</returns>
         /// <remarks>Override the method and return <c>null</c> for a given site if the content app shouldn't beshown.</remarks>
-        protected virtual ContentApp GetContentAppForPage(IContent site, IContent page) {
+        protected virtual ContentApp? GetContentAppForPage(IContent site, IContent page) {
 
             return new ContentApp {
                 Alias = "skybrud-feedback",

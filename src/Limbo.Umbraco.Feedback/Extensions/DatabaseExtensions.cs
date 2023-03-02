@@ -42,7 +42,7 @@ namespace Limbo.Umbraco.Feedback.Extensions {
         /// <param name="sortOrder">The sort order.</param>
         /// <returns>An instance of <see cref="Sql{ISqlContext}"/> representing the updated SQL command.</returns>
         public static Sql<ISqlContext> OrderBy<TDto>(this Sql<ISqlContext> sql, Expression<Func<TDto, object>> field, SortOrder sortOrder) {
-            return sortOrder == SortOrder.Descending ? sql.OrderByDescending(field) : sql.OrderBy(field);
+            return sortOrder == SortOrder.Descending ? sql.OrderByDescending(field!) : sql.OrderBy(field);
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace Limbo.Umbraco.Feedback.Extensions {
         /// <param name="sortOrder">The sort order.</param>
         /// <returns>An instance of <see cref="Sql{ISqlContext}"/> representing the updated SQL command.</returns>
         public static Sql<ISqlContext> OrderBy<TDto>(this Sql<ISqlContext> sql, Expression<Func<TDto, object>> field, EntriesSortOrder sortOrder) {
-            return sortOrder == EntriesSortOrder.Desc ? sql.OrderByDescending(field) : sql.OrderBy(field);
+            return sortOrder == EntriesSortOrder.Desc ? sql.OrderByDescending(field!) : sql.OrderBy(field);
         }
 
     }

@@ -14,9 +14,9 @@ namespace Limbo.Umbraco.Feedback.Migrations {
 
             if (!TableExists(FeedbackConstants.TableName)) return;
 
-            int affected1 = Context.Database.Execute("UPDATE [SkybrudFeedback] SET [Name] = null WHERE [Name] LIKE '';");
-            int affected2 = Context.Database.Execute("UPDATE [SkybrudFeedback] SET [Email] = null WHERE [Email] LIKE '';");
-            int affected3 = Context.Database.Execute("UPDATE [SkybrudFeedback] SET [Comment] = null WHERE [Comment] LIKE '';");
+            int affected1 = Context.Database.Execute("UPDATE [LimboFeedback] SET [Name] = null WHERE [Name] LIKE '';");
+            int affected2 = Context.Database.Execute("UPDATE [LimboFeedback] SET [Email] = null WHERE [Email] LIKE '';");
+            int affected3 = Context.Database.Execute("UPDATE [LimboFeedback] SET [Comment] = null WHERE [Comment] LIKE '';");
 
             Logger.LogInformation($"Fixed empty string values for name column in {affected1} rows.");
             Logger.LogInformation($"Fixed empty string values for email column in {affected2} rows.");
