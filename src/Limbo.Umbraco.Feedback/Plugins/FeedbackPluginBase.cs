@@ -185,7 +185,7 @@ namespace Limbo.Umbraco.Feedback.Plugins {
                 Alias = "skybrud-feedback",
                 Name = "Feedback",
                 Icon = "icon-chat",
-                View = "/App_Plugins/Skybrud.Umbraco.Feedback/Views/ContentApp.html",
+                View = "/App_Plugins/Limbo.Umbraco.Feedback/Views/ContentApp.html",
                 ViewModel = new {
                     siteKey = site.Key
                 }
@@ -206,7 +206,7 @@ namespace Limbo.Umbraco.Feedback.Plugins {
                 Alias = "skybrud-feedback",
                 Name = "Feedback",
                 Icon = "icon-chat",
-                View = "/App_Plugins/Skybrud.Umbraco.Feedback/Views/ContentAppPage.html",
+                View = "/App_Plugins/Limbo.Umbraco.Feedback/Views/ContentAppPage.html",
                 ViewModel = new {
                     siteKey = site.Key,
                     pageKey = page.Key

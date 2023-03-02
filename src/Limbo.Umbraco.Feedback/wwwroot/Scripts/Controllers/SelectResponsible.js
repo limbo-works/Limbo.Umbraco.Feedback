@@ -1,4 +1,4 @@
-﻿angular.module("umbraco").controller("Limbo.Feedback.SelectResponsibleController", function ($scope, $http) {
+﻿angular.module("umbraco").controller("Limbo.Umbraco.Feedback.SelectResponsibleController", function ($scope, $http) {
 
     $scope.loading = false;
     $scope.submitButtonState = "init";

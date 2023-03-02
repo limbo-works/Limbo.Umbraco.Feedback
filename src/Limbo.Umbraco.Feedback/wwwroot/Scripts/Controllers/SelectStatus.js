@@ -1,4 +1,4 @@
-﻿angular.module("umbraco").controller("Limbo.Feedback.SelectStatusController", function ($scope, $http, editorService, editorState, localizationService, notificationsService, userService) {
+﻿angular.module("umbraco").controller("Limbo.Umbraco.Feedback.SelectStatusController", function ($scope, $http, editorService, editorState, localizationService, notificationsService, userService) {
 
     $scope.loading = false;
     $scope.submitButtonState = "init";

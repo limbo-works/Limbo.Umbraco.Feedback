@@ -1,4 +1,4 @@
-﻿angular.module("umbraco").controller("Limbo.Feedback.ContentAppController", function ($scope, $http, editorService, editorState, localizationService, notificationsService, userService) {
+﻿angular.module("umbraco").controller("Limbo.Umbraco.Feedback.ContentAppController", function ($scope, $http, editorService, editorState, localizationService, notificationsService, userService) {
 
     $scope.current = editorState.current;
 
