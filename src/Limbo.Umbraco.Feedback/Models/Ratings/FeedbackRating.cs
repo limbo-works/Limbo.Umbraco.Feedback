@@ -26,7 +26,7 @@ namespace Limbo.Umbraco.Feedback.Models.Ratings {
         /// Gets the name of the rating.
         /// </summary>
         [JsonProperty("name")]
-        public string Name { get; }
+        public string? Name { get; }
 
         /// <summary>
         /// Gets whether the rating is active.
@@ -46,7 +46,6 @@ namespace Limbo.Umbraco.Feedback.Models.Ratings {
         public FeedbackRating(Guid key, string alias) {
             Key = key;
             Alias = alias;
-            Name = alias;
             IsActive = true;
         }
 

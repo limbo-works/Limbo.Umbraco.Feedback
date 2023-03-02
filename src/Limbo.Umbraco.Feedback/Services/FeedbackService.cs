@@ -152,8 +152,8 @@ namespace Limbo.Umbraco.Feedback.Services {
             // Normally "rating" and "status" will never be null, but if a configured rating or status is removed with
             // existing feedback still referencing them, we have a null reference, so we ensure to set some fallback
             // values should this be the case
-            rating ??= new FeedbackRating(dto.Rating, dto.Rating.ToString(), "Rating not found");
-            status ??= new FeedbackStatus(dto.Status, dto.Status.ToString(), "Status not found");
+            rating ??= new FeedbackRating(dto.Rating, "notFound");
+            status ??= new FeedbackStatus(dto.Status, "notFound");
 
             TryGetUser(dto.AssignedTo, out IFeedbackUser? user);
 

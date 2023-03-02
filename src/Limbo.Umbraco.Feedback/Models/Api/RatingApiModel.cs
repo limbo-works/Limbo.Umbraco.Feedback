@@ -30,16 +30,10 @@ namespace Limbo.Umbraco.Feedback.Models.Api {
         #region Constructors
 
         public RatingApiModel(FeedbackRating rating, ILocalizedTextService localizedTextService, CultureInfo culture) {
-
             Alias = rating.Alias;
             Key = rating.Key;
-            Name = rating.Name;
+            Name = string.IsNullOrWhiteSpace(rating.Name) ? localizedTextService.Localize("feedback", $"rating{Alias.ToPascalCase()}", culture) : rating.Name;
             IsActive = rating.IsActive;
-
-            if (string.IsNullOrWhiteSpace(rating.Name)) {
-                Name += localizedTextService.Localize("feedback", $"rating{Alias.ToPascalCase()}", culture);
-            }
-
         }
 
         #endregion

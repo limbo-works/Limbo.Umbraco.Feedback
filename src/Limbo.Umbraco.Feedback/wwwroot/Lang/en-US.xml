@@ -6,8 +6,10 @@
     <key alias="statusInprogress">In progress</key>
     <key alias="statusInProgress">In progress</key>
     <key alias="statusClosed">Closed</key>
+    <key alias="statusNotFound">Status not found</key>
     <key alias="ratingPositive">Positive</key>
     <key alias="ratingNegative">Negative</key>
+    <key alias="ratingNotFound">Rating not found</key>
   </area>
   <area alias="feedback">
     <key alias="labelId">ID</key>

@@ -26,7 +26,7 @@ namespace Limbo.Umbraco.Feedback.Models.Statuses {
         /// Gets the name of the status.
         /// </summary>
         [JsonProperty("name")]
-        public string Name { get; }
+        public string? Name { get; }
 
         /// <summary>
         /// Gets whether the status is active.
@@ -46,7 +46,6 @@ namespace Limbo.Umbraco.Feedback.Models.Statuses {
         public FeedbackStatus(Guid key, string alias) {
             Key = key;
             Alias = alias;
-            Name = alias;
             IsActive = true;
         }
 
