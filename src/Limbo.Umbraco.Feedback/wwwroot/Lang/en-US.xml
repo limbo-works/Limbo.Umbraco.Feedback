@@ -51,4 +51,14 @@
     <key alias="labelOnlyWithRating">Only with rating</key>
     <key alias="labelRatingAndComment">Rating and comment</key>
   </area>
+  <area alias="feedback">
+    <key alias="x_days_ago">%days% days ago</key>
+    <key alias="a_day_ago">a day ago</key>
+    <key alias="x_hours_ago">%hours% hours ago</key>
+    <key alias="an_hour_ago">an hour ago</key>
+    <key alias="x_minutes_ago">%minutes% minutes ago</key>
+    <key alias="a_minute_ago">a minute ago</key>
+    <key alias="now">now</key>
+    <key alias="x_seconds_ago">%seconds% seconds ago</key>
+  </area>
 </language>

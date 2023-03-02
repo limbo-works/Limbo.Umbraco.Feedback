@@ -36,6 +36,14 @@
                 </th>
             </tr>
         </thead>
+        <tbody ng-if="entries.length == 0">
+            <tr>
+                <td colspan="6" class="empty">
+                    <span ng-if="filterCount == 0">Denne side har i øjeblikket ingen feedback-besvarelser.</span>
+                    <span ng-if="filterCount > 0">Din søgning matcher ingen feedback-besvarelser.</span>
+                </td>
+            </tr>
+        </tbody>
         <tbody ng-repeat="entry in entries" ng-class="{expanded: entry.expanded}">
             <tr ng-click="entry.expanded = !entry.expanded">
                 <td class="col col-rating">
@@ -121,11 +129,17 @@
                         </tr>
                         <tr>
                             <th><localize key="feedback_labelAdded">Added</localize></th>
-                            <td>{{entry.createDate | date: 'dd-MM-yyyy HH:mm'}}</td>
+                            <td>
+                                {{entry.createDate | date: 'dd-MM-yyyy HH:mm'}}
+                                <small>({{entry.createDateDiff}})</small>
+                            </td>
                         </tr>
                         <tr>
                             <th><localize key="feedback_labelUpdateDate">Updated</localize></th>
-                            <td>{{entry.updateDate | date: 'dd-MM-yyyy HH:mm'}}</td>
+                            <td>
+                                {{entry.updateDate | date: 'dd-MM-yyyy HH:mm'}}
+                                <small>({{entry.updateDateDiff}})</small>
+                            </td>
                         </tr>
                         <tr>
                             <th><localize key="feedback_labelStatus">Status</localize></th>
@@ -158,7 +172,7 @@
                 </td>
             </tr>
         </tbody>
-        <tfoot>
+        <tfoot ng-if="entries.length > 0">
             <tr>
                 <th colspan="7">
                     <div class="pull-left pagination pagination-left" style="margin: 0;">
@@ -166,7 +180,7 @@
                             Viser {{pagination.offset + 1}}-{{pagination.offset + entries.length}} af {{pagination.total}} &ndash; Side {{pagination.page}} af {{pagination.pages}}
                         </div>
                     </div>
-                    <div class="pagination pagination-right" style="margin: 0;">
+                    <div class="pagination pagination-right" style="margin: 0;" ng-if="pagination.pages > 1">
                         <ul>
                             <li ng-class="{disabled:pagination.page <= 1}">
                                 <button type="button" href="#" ng-click="prev()">

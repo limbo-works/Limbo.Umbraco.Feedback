@@ -27,7 +27,7 @@
                 <th>
                     <localize key="feedback_labelPage">Page</localize>
                     <!--<a href="#" prevent-default="" ng-click="sort('pagename', 'asc');"><localize key="feedback_labelPage">Page</localize></a>
-                    <i class="icon" ng-class="{'icon-navigation-down': isSortDirection('pagename', 'asc'), 'icon-navigation-up': isSortDirection('pagename', 'desc')}"></i>-->
+                <i class="icon" ng-class="{'icon-navigation-down': isSortDirection('pagename', 'asc'), 'icon-navigation-up': isSortDirection('pagename', 'desc')}"></i>-->
                 </th>
                 <th><localize key="feedback_labelResponsible">Responsible</localize></th>
                 <th><localize key="feedback_labelComment">Comment</localize></th>
@@ -41,6 +41,14 @@
                 </th>
             </tr>
         </thead>
+        <tbody ng-if="entries.length == 0">
+            <tr>
+                <td colspan="6" class="empty">
+                    <span ng-if="filterCount == 0">Dette site har i øjeblikket ingen feedback-besvarelser.</span>
+                    <span ng-if="filterCount > 0">Din søgning matcher ingen feedback-besvarelser.</span>
+                </td>
+            </tr>
+        </tbody>
         <tbody ng-repeat="entry in entries" ng-class="{expanded: entry.expanded}">
             <tr ng-click="entry.expanded = !entry.expanded">
                 <td class="col col-rating">
@@ -129,11 +137,17 @@
                         </tr>
                         <tr>
                             <th><localize key="feedback_labelAdded">Added</localize></th>
-                            <td>{{entry.createDate | date: 'dd-MM-yyyy HH:mm'}}</td>
+                            <td>
+                                {{entry.createDate | date: 'dd-MM-yyyy HH:mm'}}
+                                <small>({{entry.createDateDiff}})</small>
+                            </td>
                         </tr>
                         <tr>
                             <th><localize key="feedback_labelUpdateDate">Updated</localize></th>
-                            <td>{{entry.updateDate | date: 'dd-MM-yyyy HH:mm'}}</td>
+                            <td>
+                                {{entry.updateDate | date: 'dd-MM-yyyy HH:mm'}}
+                                <small>({{entry.updateDateDiff}})</small>
+                            </td>
                         </tr>
                         <tr>
                             <th><localize key="feedback_labelStatus">Status</localize></th>
@@ -172,7 +186,7 @@
                 </td>
             </tr>
         </tbody>
-        <tfoot>
+        <tfoot ng-if="entries.length > 0">
             <tr>
                 <th colspan="7">
                     <div class="pull-left pagination pagination-left" style="margin: 0;">

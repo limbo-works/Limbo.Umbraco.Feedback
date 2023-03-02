@@ -161,3 +161,11 @@
 .limbo-feedback .pagination ul > li.disabled > a:hover {
   color: #d9d9d9;
 }
+.limbo-feedback .btn-group > umb-button:first-child > .umb-button {
+  margin-left: 0;
+}
+.limbo-feedback td.empty {
+  padding: 35px 0;
+  font-size: 15px;
+  text-align: center;
+}

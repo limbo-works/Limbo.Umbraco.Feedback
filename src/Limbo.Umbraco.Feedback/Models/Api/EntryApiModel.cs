@@ -44,8 +44,14 @@ namespace Limbo.Umbraco.Feedback.Models.Api {
         [JsonProperty("createDate")]
         public DateTime CreateDate => Entry.CreateDate;
 
+        [JsonProperty("createDateDiff")]
+        public string? CreateDateDiff { get; set; }
+
         [JsonProperty("updateDate")]
         public DateTime UpdateDate => Entry.UpdateDate;
+
+        [JsonProperty("updateDateDiff")]
+        public string? UpdateDateDiff { get; set; }
 
         [JsonProperty("archived")]
         public bool IsArchived => Entry.IsArchived;

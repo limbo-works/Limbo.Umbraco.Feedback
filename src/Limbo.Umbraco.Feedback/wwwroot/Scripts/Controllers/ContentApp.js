@@ -287,6 +287,12 @@
         if ($scope.selected.status.value) params.status = $scope.selected.status.value;
         if ($scope.selected.type.value) params.type = $scope.selected.type.value;
 
+        $scope.filterCount = 0;
+        if (params.rating) $scope.filterCount++;
+        if (params.responsible) $scope.filterCount++;
+        if (params.status) $scope.filterCount++;
+        if (params.type) $scope.filterCount++;
+
         $http.get("/umbraco/backoffice/Limbo/FeedbackAdmin/GetEntriesForSite", { params: params }).then(function (res) {
 
             setSite(res.data.site);

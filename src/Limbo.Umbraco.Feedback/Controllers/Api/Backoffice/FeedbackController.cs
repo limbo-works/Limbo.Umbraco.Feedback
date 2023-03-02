@@ -159,7 +159,7 @@ namespace Limbo.Umbraco.Feedback.Controllers.Api.Backoffice {
                 }
 
                 if (!pages.TryGetValue(entry.PageKey, out PageApiModel? pageModel) && _umbracoContextAccessor.TryGetUmbracoContext(out var umbracoContext)) {
-                    var c1 = umbracoContext?.Content?.GetById(entry.PageKey);
+                    var c1 = umbracoContext.Content?.GetById(entry.PageKey);
                     if (c1 != null) {
                         pages.Add(entry.PageKey, pageModel = new PageApiModel(c1));
                     } else {
@@ -179,7 +179,12 @@ namespace Limbo.Umbraco.Feedback.Controllers.Api.Backoffice {
                 var r = new RatingApiModel(er, _localizedTextService, culture);
                 var s = new StatusApiModel(es, _localizedTextService, culture);
 
-                entries.Add(new EntryApiModel(entry, siteModel, pageModel, s, r, user));
+                var em = new EntryApiModel(entry, siteModel, pageModel, s, r, user);
+
+                em.CreateDateDiff = GetDiff(em.CreateDate, culture);
+                em.UpdateDateDiff = GetDiff(em.UpdateDate, culture);
+
+                entries.Add(em);
 
             }
 
@@ -253,57 +258,20 @@ namespace Limbo.Umbraco.Feedback.Controllers.Api.Backoffice {
 
             options.Type = EnumUtils.ParseEnum(type, FeedbackEntryType.All);
 
-
-
-
-
-
-
-
-
-
-
-
             var result = _feedbackService.GetEntries(options);
 
             var siteModel = new SiteApiModel(site, _localizedTextService, culture);
 
             List<EntryApiModel> entries = new();
 
-            Dictionary<Guid, PageApiModel> pages = new();
-
             foreach (var entry in result.Entries) {
-
-                if (!site.TryGetRating(entry.Dto.Rating, out var er)) {
-                    er = new FeedbackRating(entry.Dto.Rating, "not-found");
-                }
-
-                if (!site.TryGetStatus(entry.Dto.Status, out var es)) {
-                    es = new FeedbackStatus(entry.Dto.Status, "not-found");
-                }
-
-                if (!pages.TryGetValue(entry.PageKey, out PageApiModel? pageModel) && _umbracoContextAccessor.TryGetUmbracoContext(out var umbracoContext)) {
-                    var c1 = umbracoContext.Content?.GetById(entry.PageKey);
-                    if (c1 != null) {
-                        pages.Add(entry.PageKey, pageModel = new PageApiModel(c1));
-                    } else {
-                        var c2 = _contentService.GetById(entry.PageKey);
-                        if (c2 != null) {
-                            pages.Add(entry.PageKey, pageModel = new PageApiModel(c2));
-
-                        }
-                    }
-                }
 
                 IFeedbackUser? user = null;
                 if (entry.Dto.AssignedTo != Guid.Empty) {
                     _feedbackService.TryGetUser(entry.Dto.AssignedTo, out user);
                 }
 
-                var r = new RatingApiModel(er, _localizedTextService, culture);
-                var s = new StatusApiModel(es, _localizedTextService, culture);
-
-                entries.Add(new EntryApiModel(entry, siteModel, pageModel, s, r, user));
+                entries.Add(MapEntry(entry, site, user, culture));
 
             }
 
@@ -356,9 +324,6 @@ namespace Limbo.Umbraco.Feedback.Controllers.Api.Backoffice {
                 throw new Exception();
             }
 
-
-            site.TryGetRating(entry.Dto.Rating, out FeedbackRating? rating);
-
             // Get the status
             if (site.TryGetStatus(statusKey, out FeedbackStatus? status) == false) {
                 throw new Exception();
@@ -366,17 +331,12 @@ namespace Limbo.Umbraco.Feedback.Controllers.Api.Backoffice {
 
             _feedbackService.SetStatus(entry, status);
 
-            var r = rating == null ? null : new RatingApiModel(rating, _localizedTextService, culture);
-            var s = new StatusApiModel(entry.Status, _localizedTextService, culture);
-
-            var siteModel = new SiteApiModel(site, _localizedTextService, culture);
-
             IFeedbackUser? user = null;
             if (entry.Dto.AssignedTo != Guid.Empty) {
                 _feedbackService.TryGetUser(entry.Dto.AssignedTo, out user);
             }
 
-            return new EntryApiModel(entry, siteModel, TryGetPage(entry.PageKey, out var page) ? page : null, s, r, user);
+            return MapEntry(entry, site, user, culture);
 
         }
 
@@ -413,18 +373,37 @@ namespace Limbo.Umbraco.Feedback.Controllers.Api.Backoffice {
                 _feedbackService.SetAssignedTo(entry, user);
             }
 
-            var r = entry.Rating is null ? null : new RatingApiModel(entry.Rating, _localizedTextService, culture);
-            var s = entry.Status is null ? null : new StatusApiModel(entry.Status, _localizedTextService, culture);
-
-            var siteModel = new SiteApiModel(site, _localizedTextService, culture);
-
-            return new EntryApiModel(entry, siteModel, TryGetPage(entry.PageKey, out var page) ? page : null, s, r, user);
+            return MapEntry(entry, site, user, culture);
 
         }
 
         #endregion
 
         #region Private helper methods
+
+        private EntryApiModel MapEntry(FeedbackEntry entry, FeedbackSiteSettings site, IFeedbackUser? user, CultureInfo culture) {
+
+            if (!site.TryGetRating(entry.Dto.Rating, out FeedbackRating? rating)) {
+                rating = new FeedbackRating(entry.Dto.Rating, "not-found");
+            }
+
+            if (!site.TryGetStatus(entry.Dto.Status, out FeedbackStatus? status)) {
+                status = new FeedbackStatus(entry.Dto.Status, "not-found");
+            }
+
+            var r = new RatingApiModel(rating, _localizedTextService, culture);
+            var s = new StatusApiModel(status, _localizedTextService, culture);
+
+            var siteModel = new SiteApiModel(site, _localizedTextService, culture);
+
+            var em =  new EntryApiModel(entry, siteModel, TryGetPage(entry.PageKey, out var page) ? page : null, s, r, user);
+
+            em.CreateDateDiff = GetDiff(em.CreateDate, culture);
+            em.UpdateDateDiff = GetDiff(em.UpdateDate, culture);
+
+            return em;
+
+        }
 
         private bool TryGetPage(Guid key, [NotNullWhen(true)] out PageApiModel? result) {
 
@@ -443,6 +422,36 @@ namespace Limbo.Umbraco.Feedback.Controllers.Api.Backoffice {
 
             result = null;
             return false;
+
+        }
+
+        private string GetDiff(DateTime date, CultureInfo culture) {
+
+            TimeSpan diff = DateTime.UtcNow.Subtract(date);
+
+            int totalSeconds = (int) diff.TotalSeconds;
+
+            return totalSeconds switch {
+                >= 60 * 60 * 24 * 2 => Localize("x_days_ago", culture, new Dictionary<string, string?> { { "days", (totalSeconds / 24 / 60 / 60).ToString("N0") } }),
+                >= 60 * 60 * 24 => Localize("a_day_ago", culture),
+                >= 60 * 60 * 2 => Localize("x_hours_ago", culture, new Dictionary<string, string?> { { "hours", (totalSeconds / 60 / 60).ToString("N0") } }),
+                >= 60 * 60 => Localize("an_hour_ago", culture),
+                >= 60 * 2 => Localize("x_minutes_ago", culture, new Dictionary<string, string?> { { "minutes", (totalSeconds / 60).ToString("N0") } }),
+                >= 60 => Localize("a_minute_ago", culture),
+                >= 5 => Localize("x_seconds_ago", culture, new Dictionary<string, string?> { { "seconds", totalSeconds.ToString("N0") } }),
+                _ => Localize("now", culture)
+            };
+        }
+
+        private string Localize(string alias, CultureInfo culture) {
+
+            return _localizedTextService.Localize("feedback", alias, culture);
+
+        }
+
+        private string Localize(string alias, CultureInfo culture, Dictionary<string, string?> tokens) {
+
+            return _localizedTextService.Localize("feedback", alias, culture, tokens);
 
         }
 

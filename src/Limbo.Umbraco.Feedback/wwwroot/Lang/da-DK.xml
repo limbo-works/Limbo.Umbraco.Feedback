@@ -51,4 +51,26 @@
     <key alias="labelOnlyWithRating">Kun med bedømmelse</key>
     <key alias="labelRatingAndComment">Bedømmelse og kommentar</key>
   </area>
+  <area alias="feedback">
+    <key alias="in">om</key>
+    <key alias="ago">siden</key>
+    <key alias="x_days">%0% dage</key>
+    <key alias="a_day">en dag</key>
+    <key alias="x_hours">%0% timer</key>
+    <key alias="an_hours">en time</key>
+    <key alias="x_minutes">%0% minutter</key>
+    <key alias="a_minute">et minut</key>
+    <key alias="now">nu</key>
+    <key alias="x_seconds">%0% sekunder</key>
+  </area>
+  <area alias="feedback">
+    <key alias="x_days_ago">%days% dage siden</key>
+    <key alias="a_day_ago">én dag siden</key>
+    <key alias="x_hours_ago">%hours% timer siden</key>
+    <key alias="an_hour_ago">én time siden</key>
+    <key alias="x_minutes_ago">%minutes% minutter siden</key>
+    <key alias="a_minute_ago">ét minut siden</key>
+    <key alias="now">nu</key>
+    <key alias="x_seconds_ago">%seconds% sekunder siden</key>
+  </area>
 </language>
