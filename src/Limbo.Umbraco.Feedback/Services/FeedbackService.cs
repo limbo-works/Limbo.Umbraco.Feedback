@@ -72,13 +72,29 @@ namespace Limbo.Umbraco.Feedback.Services {
         }
 
         /// <summary>
+        /// Gets the user with the specified <paramref name="id"/>.
+        /// </summary>
+        /// <param name="id">The numeric ID of the user.</param>
+        /// <param name="user">When this method returns, holds an instance of <see cref="IFeedbackUser"/> if successful; otherwise <c>null</c>.</param>
+        /// <returns><c>true</c> if a user was found; otherwise, <c>false</c>.</returns>
+        public bool TryGetUser(int id, [NotNullWhen(true)] out IFeedbackUser? user) {
+            foreach (IFeedbackPlugin plugin in Plugins) {
+                if (plugin.TryGetUser(id, out user)) {
+                    return true;
+                }
+            }
+            user = null;
+            return false;
+        }
+
+        /// <summary>
         /// Gets the user with the specified <paramref name="key"/>.
         /// </summary>
         /// <param name="key">The key (GUID) of the user.</param>
         /// <param name="user">When this method returns, holds an instance of <see cref="IFeedbackUser"/> if successful; otherwise <c>null</c>.</param>
         /// <returns><c>true</c> if a user was found; otherwise, <c>false</c>.</returns>
         public bool TryGetUser(Guid key, [NotNullWhen(true)] out IFeedbackUser? user) {
-            foreach (var plugin in Plugins) {
+            foreach (IFeedbackPlugin plugin in Plugins) {
                 if (plugin.TryGetUser(key, out user)) {
                     return true;
                 }

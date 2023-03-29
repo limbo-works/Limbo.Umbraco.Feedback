@@ -132,12 +132,32 @@ namespace Limbo.Umbraco.Feedback.Plugins {
         }
 
         /// <summary>
-        /// Returns the user with the specified <paramref name="userId"/>, or <c>null</c> if not found.
+        /// Returns the user with the specified <paramref name="id"/>, or <c>null</c> if not found.
         /// </summary>
-        /// <param name="userId">The ID of the user.</param>
+        /// <param name="id">The numeric ID of the user.</param>
         /// <returns>An instance of <see cref="IFeedbackUser"/> if successful; otherwise, <c>null</c>.</returns>
-        public virtual IFeedbackUser? GetUser(int userId) {
-            return GetUsers().FirstOrDefault(x => x.Id == userId);
+        public virtual IFeedbackUser? GetUser(int id) {
+            return GetUsers().FirstOrDefault(x => x.Id == id);
+        }
+
+        /// <summary>
+        /// Returns the user with the specified <paramref name="key"/>, or <c>null</c> if not found.
+        /// </summary>
+        /// <param name="key">The GUID key of the user.</param>
+        /// <returns>An instance of <see cref="IFeedbackUser"/> if successful; otherwise, <c>null</c>.</returns>
+        public virtual IFeedbackUser? GetUser(Guid key) {
+            return GetUsers().FirstOrDefault(x => x.Key == key);
+        }
+
+        /// <summary>
+        /// Gets the user with the specified <paramref name="id"/>.
+        /// </summary>
+        /// <param name="id">The numeric ID of the user.</param>
+        /// <param name="user">When this method returns, holds an instance of <see cref="IFeedbackUser"/> if successful; otherwise <c>false</c>.</param>
+        /// <returns><c>true</c> if a user was found; otherwise, <c>false</c>.</returns>
+        public virtual bool TryGetUser(int id, [NotNullWhen(true)] out IFeedbackUser? user) {
+            user = GetUsers().FirstOrDefault(x => x.Id == id);
+            return user != null;
         }
 
         /// <summary>

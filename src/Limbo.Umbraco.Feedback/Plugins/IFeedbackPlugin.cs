@@ -122,6 +122,14 @@ namespace Limbo.Umbraco.Feedback.Plugins {
         IFeedbackUser? GetUser(int userId);
 
         /// <summary>
+        /// Gets the user with the specified <paramref name="id"/>.
+        /// </summary>
+        /// <param name="id">The numeric of the user.</param>
+        /// <param name="user">When this method returns, holds an instance of <see cref="IFeedbackUser"/> if successful; otherwise <c>null</c>.</param>
+        /// <returns><c>true</c> if a user was found; otherwise, <c>false</c>.</returns>
+        bool TryGetUser(int id, [NotNullWhen(true)] out IFeedbackUser? user);
+
+        /// <summary>
         /// Gets the user with the specified <paramref name="key"/>.
         /// </summary>
         /// <param name="key">The key (GUID) of the user.</param>
