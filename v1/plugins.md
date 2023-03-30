@@ -210,7 +210,7 @@ public override void OnRatingSubmitted(RatingSubmittedEventArgs args) {
 
 ## Update an existing entry
 
-If your frontend is adding entries in two steps, you may update an existing entry via the [`/api/feedback/{key}`](./endpoints.md#update-entry) endpoint. If this is the case - our you're calling the `FeedbackService.UpdateEntry` method directly, the `OnEntryUpdating` and `OnEntryUpdated` methods of your plugin are called.
+If your frontend is adding entries in two steps, you may update an existing entry via the [`/api/feedback/{key}`](./endpoints.md#update-an-entry) endpoint. If this is the case - our you're calling the `FeedbackService.UpdateEntry` method directly, the `OnEntryUpdating` and `OnEntryUpdated` methods of your plugin are called.
 
 ### OnEntryUpdating
 
