@@ -1,7 +1,7 @@
 # Endpoints
 
 
-- [Back to V1](../)
+- [Back to V1](./)
 
 
 
