@@ -9,7 +9,7 @@
 
 Adds a new feedback entry with the details from the request body.
 
-If you have implemented a custom feedback plugin, this will trigger the [`OnRatingSubmitting`](./plugins#onratingsubmitting) method to be called while the feedback entry is still being processed, and the [`OnRatingSubmitted`](./plugins#onratingsubmitted) method after the entry has been processed and added to the database.
+If you have implemented a custom feedback plugin, this will trigger the [`OnRatingSubmitting`](./plugins.md#onratingsubmitting) method to be called while the feedback entry is still being processed, and the [`OnRatingSubmitted`](./plugins.md#onratingsubmitted) method after the entry has been processed and added to the database.
 
 By default, the `name`, `email` and `comment` properties in the request body are optional. But your custom feedback plugin may change this behaviour - eg. by rejecting all entries that don't have a comment. Or require all three properties to be specified if the user submits a feedback entry with a negative rating. If you're doing something like this, your frontend should ideally do the same validation for a better user experience.
 
@@ -115,7 +115,7 @@ responses:
 
 The feedback module allows you to update a feedback entry after it has been created. Among other things, this is to handle a scenario where the user's choice of rating is save first, and then the entry is later updated with additional information if the user chooses to specify these as well.
 
-Similar to when adding a new entry, if you have custom feedback plugin, updating an existing entry will trigger the [`OnEntryUpdating`](./plugins#onentryupdated) method to be called while the feedback entry is still being processed, and the [`OnEntryUpdated`](./plugins#onentryupdating) method after the entry has been processed and updated in the database.
+Similar to when adding a new entry, if you have custom feedback plugin, updating an existing entry will trigger the [`OnEntryUpdating`](./plugins.md#onentryupdated) method to be called while the feedback entry is still being processed, and the [`OnEntryUpdated`](./plugins.md#onentryupdating) method after the entry has been processed and updated in the database.
 
 By default the feedback module doesn't apply any restriction to when and who can update an entry as long as the entry's GUID key is known. If you need this kind of restriction, it would be up to you to handle this through a custom feedback plugin.
 
