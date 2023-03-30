@@ -160,7 +160,7 @@ public override void OnUserAssigned(FeedbackService service, FeedbackEntry entry
 
 ## Add new entry
 
-If a new feedback entry is added via the [`/api/feedback`](./endpoints.md#update-entry) endpoint or directly via the `FeedbackService.AddEntry` method, the `OnEntryAdding` and `OnEntryAdded` methods of your plugin are called.
+If a new feedback entry is added via the [`/api/feedback`](./endpoints.md#add-en-entry) endpoint or directly via the `FeedbackService.AddEntry` method, the `OnEntryAdding` and `OnEntryAdded` methods of your plugin are called.
 
 ### OnEntryAdding
 
