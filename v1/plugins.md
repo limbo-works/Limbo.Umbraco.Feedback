@@ -160,7 +160,7 @@ public override void OnUserAssigned(FeedbackService service, FeedbackEntry entry
 
 ## Add new entry
 
-If a new feedback entry is added via the [`/api/feedback`](../endpoints.md#update-entry) endpoint or directly via the `FeedbackService.AddEntry` method, the `OnEntryAdding` and `OnEntryAdded` methods of your plugin are called.
+If a new feedback entry is added via the [`/api/feedback`](./endpoints.md#update-entry) endpoint or directly via the `FeedbackService.AddEntry` method, the `OnEntryAdding` and `OnEntryAdded` methods of your plugin are called.
 
 ### OnEntryAdding
 
@@ -210,7 +210,7 @@ public override void OnRatingSubmitted(RatingSubmittedEventArgs args) {
 
 ## Update an existing entry
 
-If your frontend is adding entries in two steps, you may update an existing entry via the [`/api/feedback/{key}`](../endpoints.md#add-new-entry) endpoint. If this is the case - our you're calling the `FeedbackService.UpdateEntry` method directly, the `OnEntryUpdating` and `OnEntryUpdated` methods of your plugin are called.
+If your frontend is adding entries in two steps, you may update an existing entry via the [`/api/feedback/{key}`](./endpoints.md#add-new-entry) endpoint. If this is the case - our you're calling the `FeedbackService.UpdateEntry` method directly, the `OnEntryUpdating` and `OnEntryUpdated` methods of your plugin are called.
 
 ### OnEntryUpdating
 
