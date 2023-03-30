@@ -13,7 +13,7 @@ If you have implemented a custom feedback plugin, this will trigger the [`OnRati
 
 By default, the `name`, `email` and `comment` properties in the request body are optional. But your custom feedback plugin may change this behaviour - eg. by rejecting all entries that don't have a comment. Or require all three properties to be specified if the user submits a feedback entry with a negative rating. If you're doing something like this, your frontend should ideally do the same validation for a better user experience.
 
-:::endpoint
+```yml endpoint
 method: POST
 url: /api/feedback
 accepts: application/json
@@ -109,7 +109,7 @@ responses:
       {
         "message": "The feedback submission could not be saved due to an error on the server."
       }
-:::
+```
 
 ## Update an entry
 
