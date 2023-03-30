@@ -115,7 +115,7 @@ responses:
 
 The feedback module allows you to update a feedback entry after it has been created. Among other things, this is to handle a scenario where the user's choice of rating is save first, and then the entry is later updated with additional information if the user chooses to specify these as well.
 
-Similar to when adding a new entry, if you have custom feedback plugin, updating an existing entry will trigger the [`OnEntryUpdating`](./plugins.md#onentryupdating) method to be called while the feedback entry is still being processed, and the [`OnEntryUpdated`](./plugins.md#onentryupdating) method after the entry has been processed and updated in the database.
+Similar to when adding a new entry, if you have custom feedback plugin, updating an existing entry will trigger the [`OnEntryUpdating`](./plugins.md#onentryupdating) method to be called while the feedback entry is still being processed, and the [`OnEntryUpdated`](./plugins.md#onentryupdated) method after the entry has been processed and updated in the database.
 
 By default the feedback module doesn't apply any restriction to when and who can update an entry as long as the entry's GUID key is known. If you need this kind of restriction, it would be up to you to handle this through a custom feedback plugin.
 
