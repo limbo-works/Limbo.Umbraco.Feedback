@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Net;
+using Limbo.Umbraco.Feedback.Events;
 using Limbo.Umbraco.Feedback.Models.Sites;
 using Limbo.Umbraco.Feedback.Plugins;
 using Umbraco.Cms.Core.Models;
@@ -13,7 +15,6 @@ namespace Limbo.Umbraco.Feedback.Extensions {
     /// Static class with various Feedback related extension methods.
     /// </summary>
     public static class FeedbackExensions {
-
 
         /// <summary>
         /// Gets the site with the specified <paramref name="key"/>, or <c>null</c> if not found.
@@ -83,6 +84,28 @@ namespace Limbo.Umbraco.Feedback.Extensions {
             result = null;
             return false;
 
+        }
+
+        /// <summary>
+        /// Sets the specified event <paramref name="args"/> as cancelled.
+        /// </summary>
+        /// <param name="args">The event args.</param>
+        /// <param name="message">The message.</param>
+        public static void Cancel(this EntryAddingEventArgs args, string? message) {
+            args.Cancel = true;
+            args.Message = message;
+        }
+
+        /// <summary>
+        /// Sets the specified event <paramref name="args"/> as cancelled.
+        /// </summary>
+        /// <param name="args">The event args.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="statusCode">The HTTP status code to be used for the response to the user.</param>
+        public static void Cancel(this EntryAddingEventArgs args, string? message, HttpStatusCode? statusCode) {
+            args.Cancel = true;
+            args.Message = message;
+            args.StatusCode = statusCode;
         }
 
     }

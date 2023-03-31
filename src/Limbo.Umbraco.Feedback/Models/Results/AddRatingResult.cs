@@ -1,79 +1,98 @@
-﻿using Limbo.Umbraco.Feedback.Models.Entries;
+﻿//using System.Net;
+//using Limbo.Umbraco.Feedback.Events;
+//using Limbo.Umbraco.Feedback.Models.Entries;
 
-namespace Limbo.Umbraco.Feedback.Models.Results {
+//namespace Limbo.Umbraco.Feedback.Models.Results {
 
-    /// <summary>
-    /// Class representing the result when adding a rating.
-    /// </summary>
-    public class AddRatingResult {
+//    /// <summary>
+//    /// Class representing the result when adding a rating.
+//    /// </summary>
+//    public class AddRatingResult {
 
-        #region Properties
+//        #region Properties
 
-        /// <summary>
-        /// Gets the status of the result.
-        /// </summary>
-        public AddRatingStatus Status { get; }
+//        /// <summary>
+//        /// Gets the status of the result.
+//        /// </summary>
+//        public UpdateEntryStatus Status { get; }
 
-        /// <summary>
-        /// Gets a reference to the entry.
-        /// </summary>
-        public FeedbackEntry? Entry { get; }
+//        /// <summary>
+//        /// Gets the HTTP status code associated with this result.
+//        /// </summary>
+//        public HttpStatusCode StatusCode { get; }
 
-        /// <summary>
-        /// Gets the message of the result - eg. an error message.
-        /// </summary>
-        public string? Message { get; }
+//        /// <summary>
+//        /// Gets a reference to the entry.
+//        /// </summary>
+//        public FeedbackEntry? Entry { get; }
 
-        #endregion
+//        /// <summary>
+//        /// Gets the message of the result - eg. an error message.
+//        /// </summary>
+//        public string? Message { get; }
 
-        #region Constructors
+//        #endregion
 
-        /// <summary>
-        /// Initializes a new instance based on the specified <paramref name="status"/>, <paramref name="entry"/> and <paramref name="message"/>.
-        /// </summary>
-        /// <param name="status">The status of the result.</param>
-        /// <param name="entry">The entry.</param>
-        /// <param name="message">The message of the result - eg. an error message.</param>
+//        #region Constructors
 
-        public AddRatingResult(AddRatingStatus status, FeedbackEntry? entry, string? message) {
-            Status = status;
-            Entry = entry;
-            Message = message;
-        }
+//        /// <summary>
+//        /// Initializes a new instance based on the specified <paramref name="status"/>, <paramref name="entry"/> and <paramref name="message"/>.
+//        /// </summary>
+//        /// <param name="status">The status of the result.</param>
+//        /// <param name="statusCode">The HTTP status code associated with the result.</param>
+//        /// <param name="entry">The entry.</param>
+//        /// <param name="message">The message of the result - eg. an error message.</param>
+//        public AddRatingResult(UpdateEntryStatus status, HttpStatusCode statusCode, FeedbackEntry? entry, string? message) {
+//            Status = status;
+//            StatusCode = statusCode;
+//            Entry = entry;
+//            Message = message;
+//        }
 
-        #endregion
+//        #endregion
 
-        #region Static methods
+//        #region Static methods
 
-        /// <summary>
-        /// Initializes a new <see cref="AddRatingStatus.Failed"/> result.
-        /// </summary>
-        /// <param name="message">An error message about why the comment could not be added.</param>
-        /// <returns>An instance of <see cref="AddRatingResult"/></returns>
-        public static AddRatingResult Failed(string message) {
-            return new AddRatingResult(AddRatingStatus.Failed, null, message);
-        }
+//        /// <summary>
+//        /// Initializes a new <see cref="UpdateEntryStatus.Failed"/> result.
+//        /// </summary>
+//        /// <param name="message">An error message about why the comment could not be added.</param>
+//        /// <returns>An instance of <see cref="AddRatingResult"/></returns>
+//        public static AddRatingResult Failed(string message) {
+//            return new AddRatingResult(UpdateEntryStatus.Failed, HttpStatusCode.InternalServerError, null, message);
+//        }
 
-        /// <summary>
-        /// Initializes a new <see cref="AddRatingStatus.Cancelled"/> result.
-        /// </summary>
-        /// <param name="message">A message about why adding the comment was cancelled.</param>
-        /// <returns>An instance of <see cref="AddRatingResult"/></returns>
-        public static AddRatingResult Cancelled(string message) {
-            return new AddRatingResult(AddRatingStatus.Cancelled, null, message);
-        }
+//        /// <summary>
+//        /// Initializes a new <see cref="UpdateEntryStatus.Cancelled"/> result.
+//        /// </summary>
+//        /// <param name="message">A message about why adding the comment was cancelled.</param>
+//        /// <returns>An instance of <see cref="AddRatingResult"/></returns>
+//        public static AddRatingResult Cancelled(string message) {
+//            return new AddRatingResult(UpdateEntryStatus.Cancelled, HttpStatusCode.BadRequest, null, message);
+//        }
 
-        /// <summary>
-        /// Initializes a new <see cref="AddRatingStatus.Success"/> result.
-        /// </summary>
-        /// <param name="entry">The entry that was added.</param>
-        /// <returns>An instance of <see cref="AddRatingResult"/></returns>
-        public static AddRatingResult Success(FeedbackEntry entry) {
-            return new AddRatingResult(AddRatingStatus.Success, entry, null);
-        }
+//        /// <summary>
+//        /// Initializes a new <see cref="UpdateEntryStatus.Cancelled"/> result.
+//        /// </summary>
+//        /// <param name="args"></param>
+//        /// <param name="message">A message about why adding the comment was cancelled.</param>
+//        /// <returns>An instance of <see cref="AddRatingResult"/></returns>
+//        public static AddRatingResult Cancelled(EntryAddingEventArgs args, string message) {
+//            if (!string.IsNullOrWhiteSpace(args.Message)) message = args.Message;
+//            return new AddRatingResult(UpdateEntryStatus.Cancelled, args.StatusCode ?? HttpStatusCode.BadRequest, null, message);
+//        }
 
-        #endregion
+//        /// <summary>
+//        /// Initializes a new <see cref="UpdateEntryStatus.Success"/> result.
+//        /// </summary>
+//        /// <param name="entry">The entry that was added.</param>
+//        /// <returns>An instance of <see cref="AddRatingResult"/></returns>
+//        public static AddRatingResult Success(FeedbackEntry entry) {
+//            return new AddRatingResult(UpdateEntryStatus.Success, HttpStatusCode.OK, entry, null);
+//        }
 
-    }
+//        #endregion
 
-}
+//    }
+
+//}

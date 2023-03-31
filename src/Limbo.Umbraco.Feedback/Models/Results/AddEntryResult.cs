@@ -1,20 +1,20 @@
-﻿using Limbo.Umbraco.Feedback.Events;
-using System.Net;
+﻿using System.Net;
+using Limbo.Umbraco.Feedback.Events;
 using Limbo.Umbraco.Feedback.Models.Entries;
 
 namespace Limbo.Umbraco.Feedback.Models.Results {
 
     /// <summary>
-    /// Class representing the result when updating a feedback comment.
+    /// Class representing the result when adding a new feedback comment.
     /// </summary>
-    public class UpdateEntryResult {
+    public class AddEntryResult {
 
         #region Properties
 
         /// <summary>
         /// Gets the status of the result.
         /// </summary>
-        public UpdateEntryStatus Status { get; }
+        public AddEntryStatus Status { get; }
 
         /// <summary>
         /// Gets the HTTP status code associated with this result.
@@ -42,7 +42,7 @@ namespace Limbo.Umbraco.Feedback.Models.Results {
         /// <param name="statusCode">The HTTP status code associated with the result.</param>
         /// <param name="entry">The entry.</param>
         /// <param name="message">The message of the result - eg. an error message.</param>
-        public UpdateEntryResult(UpdateEntryStatus status, HttpStatusCode statusCode, FeedbackEntry? entry, string? message) {
+        public AddEntryResult(AddEntryStatus status, HttpStatusCode statusCode, FeedbackEntry? entry, string? message) {
             Status = status;
             StatusCode = statusCode;
             Entry = entry;
@@ -54,41 +54,50 @@ namespace Limbo.Umbraco.Feedback.Models.Results {
         #region Static methods
 
         /// <summary>
-        /// Initializes a new <see cref="UpdateEntryStatus.Failed"/> result.
+        /// Initializes a new <see cref="AddEntryStatus.Failed"/> result.
         /// </summary>
         /// <param name="message">An error message about why the comment could not be added.</param>
-        /// <returns>An instance of <see cref="UpdateEntryResult"/></returns>
-        public static UpdateEntryResult Failed(string message) {
-            return new UpdateEntryResult(UpdateEntryStatus.Failed, HttpStatusCode.InternalServerError, null, message);
+        /// <returns>An instance of <see cref="AddEntryResult"/></returns>
+        public static AddEntryResult Failed(string message) {
+            return new AddEntryResult(AddEntryStatus.Failed, HttpStatusCode.InternalServerError, null, message);
         }
 
         /// <summary>
-        /// Initializes a new <see cref="UpdateEntryStatus.Cancelled"/> result.
+        /// Initializes a new <see cref="AddEntryStatus.Cancelled"/> result.
         /// </summary>
         /// <param name="message">A message about why adding the comment was cancelled.</param>
-        /// <returns>An instance of <see cref="UpdateEntryResult"/></returns>
-        public static UpdateEntryResult Cancelled(string message) {
-            return new UpdateEntryResult(UpdateEntryStatus.Cancelled, HttpStatusCode.BadRequest, null, message);
+        /// <returns>An instance of <see cref="AddEntryResult"/></returns>
+        public static AddEntryResult Cancelled(string message) {
+            return new AddEntryResult(AddEntryStatus.Cancelled, HttpStatusCode.BadRequest, null, message);
         }
 
         /// <summary>
-        /// Initializes a new <see cref="UpdateEntryStatus.Cancelled"/> result.
+        /// Initializes a new <see cref="AddEntryStatus.Cancelled"/> result.
         /// </summary>
         /// <param name="args"></param>
         /// <param name="message">A message about why adding the comment was cancelled.</param>
-        /// <returns>An instance of <see cref="UpdateEntryStatus"/></returns>
-        public static UpdateEntryResult Cancelled(EntryUpdatingEventArgs args, string message) {
+        /// <returns>An instance of <see cref="AddEntryResult"/></returns>
+        public static AddEntryResult Cancelled(EntryAddingEventArgs args, string message) {
             if (!string.IsNullOrWhiteSpace(args.Message)) message = args.Message;
-            return new UpdateEntryResult(UpdateEntryStatus.Cancelled, args.StatusCode ?? HttpStatusCode.BadRequest, null, message);
+            return new AddEntryResult(AddEntryStatus.Cancelled, args.StatusCode ?? HttpStatusCode.BadRequest, null, message);
         }
 
         /// <summary>
-        /// Initializes a new <see cref="UpdateEntryStatus.Success"/> result.
+        /// Initializes a new <see cref="AddEntryStatus.Success"/> result.
         /// </summary>
         /// <param name="entry">The entry that was added.</param>
-        /// <returns>An instance of <see cref="UpdateEntryResult"/></returns>
-        public static UpdateEntryResult Success(FeedbackEntry entry) {
-            return new UpdateEntryResult(UpdateEntryStatus.Success, HttpStatusCode.OK, entry, null);
+        /// <returns>An instance of <see cref="AddEntryResult"/></returns>
+        public static AddEntryResult Success(FeedbackEntry entry) {
+            return new AddEntryResult(AddEntryStatus.Success, HttpStatusCode.OK, entry, null);
+        }
+
+        /// <summary>
+        /// Initializes a new <see cref="AddEntryStatus.Success"/> result with a <see cref="HttpStatusCode.Created"/> status code.
+        /// </summary>
+        /// <param name="entry">The entry that was added.</param>
+        /// <returns>An instance of <see cref="AddEntryResult"/></returns>
+        public static AddEntryResult Created(FeedbackEntry entry) {
+            return new AddEntryResult(AddEntryStatus.Success, HttpStatusCode.Created, entry, null);
         }
 
         #endregion

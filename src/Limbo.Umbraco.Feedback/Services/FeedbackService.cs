@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Limbo.Umbraco.Feedback.Events;
 using Limbo.Umbraco.Feedback.Exceptions;
 using Limbo.Umbraco.Feedback.Extensions;
 using Limbo.Umbraco.Feedback.Models.Entries;
@@ -197,66 +198,6 @@ namespace Limbo.Umbraco.Feedback.Services {
         }
 
         /// <summary>
-        /// Adds a new entry with the specified <paramref name="rating"/> for <paramref name="page"/>.
-        /// </summary>
-        /// <param name="site">The parent site.</param>
-        /// <param name="page">The page for which the rating should be added.</param>
-        /// <param name="rating">The rating.</param>
-        /// <returns>An instance of <see cref="AddRatingResult"/>.</returns>
-        public AddRatingResult AddRating(FeedbackSiteSettings site, IPublishedContent page, FeedbackRating rating) {
-
-            if (site.Statuses.Count == 0) throw new FeedbackException($"Site with key {site.Key} does not specify any statuses.");
-
-            // Initialize a new entry
-            FeedbackEntry entry = new() {
-                Key = Guid.NewGuid(),
-                SiteKey = site.Key,
-                PageKey = page.Key,
-                Rating = rating,
-                Status = site.Statuses.First(),
-                CreateDate = DateTime.UtcNow,
-                UpdateDate = DateTime.UtcNow
-            };
-
-            // Attempt to add the entry to the database
-            try {
-
-                // Trigger the "OnRatingSubmitting" before adding the entry
-                foreach (IFeedbackPlugin plugin in Plugins) {
-                    try {
-                        if (!plugin.OnRatingSubmitting(this, entry)) {
-                            return AddRatingResult.Cancelled("The feedback submission was cancelled by the server.");
-                        }
-                    } catch (Exception ex) {
-                        _logger.LogError(ex, "Plugin of type {PluginType} failed for method OnRatingSubmitting.", plugin.GetType().FullName);
-                    }
-                }
-
-                // Insert the item into the database
-                _databaseService.Insert(entry.Dto);
-
-                // Trigger the "OnRatingSubmitted" after the entry has been added
-                foreach (IFeedbackPlugin plugin in Plugins) {
-                    try {
-                        plugin.OnRatingSubmitted(this, entry);
-                    } catch (Exception ex) {
-                        _logger.LogError(ex, "Plugin of type {PluginType} failed for method OnRatingSubmitted.", plugin.GetType().FullName);
-                    }
-                }
-
-                return AddRatingResult.Success(entry);
-
-            } catch (Exception ex) {
-
-                _logger.LogError(ex, "Unable to add feedback entry.");
-
-                return AddRatingResult.Cancelled("The feedback submission could not be saved due to an error on the server.");
-
-            }
-
-        }
-
-        /// <summary>
         /// Updates (saves) the specified <paramref name="entry"/>.
         /// </summary>
         /// <param name="entry">The entry.</param>
@@ -271,12 +212,14 @@ namespace Limbo.Umbraco.Feedback.Services {
             // Attempt to add the entry to the database
             try {
 
+                // Initialize the post tense event args
+                EntryUpdatingEventArgs args1 = new(this, entry);
+
                 // Trigger the "OnEntryUpdating" before adding the entry
                 foreach (IFeedbackPlugin plugin in Plugins) {
                     try {
-                        if (!plugin.OnEntryUpdating(this, entry)) {
-                            return UpdateEntryResult.Cancelled("The feedback submission was cancelled by the server.");
-                        }
+                        plugin.OnEntryUpdating(args1);
+                        if (args1.Cancel) return UpdateEntryResult.Cancelled(args1, "The feedback submission was cancelled by the server.");
                     } catch (Exception ex) {
                         _logger.LogError(ex, "Plugin of type {PluginType} failed for method OnEntryUpdating.", plugin.GetType().FullName);
                     }
@@ -285,10 +228,13 @@ namespace Limbo.Umbraco.Feedback.Services {
                 // Insert the item into the database
                 _databaseService.Update(entry.Dto);
 
+                // Initialize the past tense event args
+                EntryUpdatedEventArgs args2 = new(this, entry);
+
                 // Trigger the "OnEntryUpdated" after the entry has been added
                 foreach (IFeedbackPlugin plugin in Plugins) {
                     try {
-                        plugin.OnEntryUpdated(this, entry);
+                        plugin.OnEntryUpdated(args2);
                     } catch (Exception ex) {
                         _logger.LogError(ex, "Plugin of type {PluginType} failed for method OnEntryUpdated.", plugin.GetType().FullName);
                     }
@@ -312,11 +258,22 @@ namespace Limbo.Umbraco.Feedback.Services {
         /// <param name="site">The parent site.</param>
         /// <param name="page">The page for which the rating should be added.</param>
         /// <param name="rating">The rating.</param>
+        /// <returns>An instance of <see cref="AddEntryResult"/>.</returns>
+        public AddEntryResult AddEntry(FeedbackSiteSettings site, IPublishedContent page, FeedbackRating rating) {
+            return AddEntry(site, page, rating, null, null, null);
+        }
+
+        /// <summary>
+        /// Adds a new comment to <paramref name="page"/>.
+        /// </summary>
+        /// <param name="site">The parent site.</param>
+        /// <param name="page">The page for which the rating should be added.</param>
+        /// <param name="rating">The rating.</param>
         /// <param name="name">The name of the uset.</param>
         /// <param name="email">The email address of the user.</param>
         /// <param name="comment">The comment of the user.</param>
-        /// <returns>An instance of <see cref="AddCommentResult"/>.</returns>
-        public AddCommentResult AddComment(FeedbackSiteSettings site, IPublishedContent page, FeedbackRating rating, string? name, string? email, string? comment) {
+        /// <returns>An instance of <see cref="AddEntryResult"/>.</returns>
+        public AddEntryResult AddEntry(FeedbackSiteSettings site, IPublishedContent page, FeedbackRating rating, string? name, string? email, string? comment) {
 
             if (site.Statuses.Count == 0) throw new FeedbackException($"Site with key {site.Key} does not specify any statuses.");
 
@@ -336,12 +293,14 @@ namespace Limbo.Umbraco.Feedback.Services {
             // Attempt to add the entry to the database
             try {
 
+                // Initialize the post tense event args
+                EntryAddingEventArgs args1 = new(this, entry);
+
                 // Trigger the "OnEntrySubmitting" before adding the entry
                 foreach (IFeedbackPlugin plugin in Plugins) {
                     try {
-                        if (!plugin.OnEntrySubmitting(this, entry)) {
-                            return AddCommentResult.Cancelled("The feedback submission was cancelled by the server.");
-                        }
+                        plugin.OnEntryAdding(args1);
+                        if (args1.Cancel) return AddEntryResult.Cancelled(args1, "The feedback submission was rejected by the server.");
                     } catch (Exception ex) {
                         _logger.LogError(ex, "Plugin of type {PluginType} failed for method OnEntrySubmitting.", plugin.GetType().FullName);
                     }
@@ -350,22 +309,25 @@ namespace Limbo.Umbraco.Feedback.Services {
                 // Insert the item into the database
                 _databaseService.Insert(entry.Dto);
 
+                // Initialize the past tense event args
+                EntryAddedEventArgs args2 = new(this, entry);
+
                 // Trigger the "OnEntrySubmitted" after the entry has been added
                 foreach (IFeedbackPlugin plugin in Plugins) {
                     try {
-                        plugin.OnEntrySubmitted(this, entry);
+                        plugin.OnEntryAdded(args2);
                     } catch (Exception ex) {
                         _logger.LogError(ex, "Plugin of type {PluginType} failed for method OnEntrySubmitted.", plugin.GetType().FullName);
                     }
                 }
 
-                return AddCommentResult.Success(entry);
+                return AddEntryResult.Created(entry);
 
             } catch (Exception ex) {
 
                 _logger.LogError(ex, "Unable to add feedback entry.");
 
-                return AddCommentResult.Cancelled("The feedback submission could not be saved due to an error on the server.");
+                return AddEntryResult.Failed("The feedback submission could not be saved due to an error on the server.");
 
             }
 

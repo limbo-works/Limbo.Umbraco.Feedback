@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using Limbo.Umbraco.Feedback.Extensions;
 using Limbo.Umbraco.Feedback.Models.Api.Post;
 using Limbo.Umbraco.Feedback.Models.Entries;
@@ -36,48 +37,8 @@ namespace Limbo.Umbraco.Feedback.Controllers.Api {
         #region Public API methods
 
         [HttpPost]
-        [Route("api/feedback/rating")]
-        public object AddRating([FromBody] AddRatingModel model) {
-
-            // Get site site
-            if (!_feedbackPluginCollection.TryGetSite(model.SiteKey, out FeedbackSiteSettings? site)) {
-                return NotFound("A site with the specified key could not be found.");
-            }
-
-            // Get the page
-            _umbracoContextAccessor.TryGetUmbracoContext(out var umbracoContext);
-            IPublishedContent? page = umbracoContext?.Content?.GetById(model.PageKey);
-            if (page == null) {
-                return NotFound("A page with the specified key could not be found.");
-            }
-
-            // Get the rating
-            if (!site.TryGetRating(model.Rating, out FeedbackRating? rating)) {
-                return BadRequest("A rating with the specified name does not exist.");
-            }
-
-            // Attempt to add the rating
-            AddRatingResult result = _feedbackService.AddRating(site, page, rating);
-
-            // Return a response matching the result
-            switch (result.Status) {
-
-                case AddRatingStatus.Success:
-                    return new { key = result.Entry!.Key };
-
-                case AddRatingStatus.Cancelled:
-                    return BadRequest(result.Message);
-
-                default:
-                    throw new Exception(result.Message);
-
-            }
-
-        }
-
-        [HttpPost]
-        [Route("api/feedback/comment")]
-        public object AddComment([FromBody] AddCommentModel model) {
+        [Route("api/feedback")]
+        public object Add([FromBody] AddCommentModel model) {
 
             // Get site site
             if (!_feedbackPluginCollection.TryGetSite(model.SiteKey, out FeedbackSiteSettings? site)) {
@@ -97,27 +58,19 @@ namespace Limbo.Umbraco.Feedback.Controllers.Api {
             }
 
             // Attempt to add the comment
-            AddCommentResult result = _feedbackService.AddComment(site, page, rating, model.Name, model.Email, model.Comment);
+            AddEntryResult result = _feedbackService.AddEntry(site, page, rating, model.Name, model.Email, model.Comment);
 
             // Return a response matching the result
-            switch (result.Status) {
-
-                case AddCommentStatus.Success:
-                    return new { key = result.Entry!.Key };
-
-                case AddCommentStatus.Cancelled:
-                    return BadRequest(result.Message);
-
-                default:
-                    throw new Exception(result.Message);
-
-            }
+            return result.Status switch {
+                AddEntryStatus.Success => Json(new { key = result.Entry!.Key }, result.StatusCode),
+                _ => Json(result)
+            };
 
         }
 
         [HttpPost]
         [Route("api/feedback/{key}")]
-        public object UpdateEntry(Guid key, [FromBody] UpdateEntryModel model) {
+        public object Update(Guid key, [FromBody] UpdateEntryModel model) {
 
             // Get site site
             if (!_feedbackPluginCollection.TryGetSite(model.SiteKey, out _)) {
@@ -133,9 +86,7 @@ namespace Limbo.Umbraco.Feedback.Controllers.Api {
 
             // Get a reference to the entry
             FeedbackEntry? entry = _feedbackService.GetEntryByKey(key);
-            if (entry == null) {
-                return NotFound("An entry with the specified key could not be found.");
-            }
+            if (entry == null) return NotFound("An entry with the specified key could not be found.");
 
             // TODO: Should we validate the entry against the specified site and page?
 
@@ -148,19 +99,23 @@ namespace Limbo.Umbraco.Feedback.Controllers.Api {
             UpdateEntryResult result = _feedbackService.UpdateEntry(entry);
 
             // Return a response matching the result
-            switch (result.Status) {
+            return result.Status switch {
+                UpdateEntryStatus.Success => Json(new { key = result.Entry!.Key }, result.StatusCode),
+                _ => Json(result)
+            };
 
-                case AddRatingStatus.Success:
-                    return new { key = result.Entry!.Key };
+        }
 
-                case AddRatingStatus.Cancelled:
-                    return BadRequest(result.Message);
+        private static JsonResult Json(object data, HttpStatusCode statusCode) {
+            return new JsonResult(data) { StatusCode = (int) statusCode };
+        }
 
-                default:
-                    throw new Exception(result.Message);
+        private static JsonResult Json(AddEntryResult result) {
+            return Json(new { message = result.Message }, result.StatusCode);
+        }
 
-            }
-
+        private static JsonResult Json(UpdateEntryResult result) {
+            return Json(new { message = result.Message }, result.StatusCode);
         }
 
         #endregion

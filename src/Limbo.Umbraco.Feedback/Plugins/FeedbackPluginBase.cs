@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Limbo.Umbraco.Feedback.Events;
 using Limbo.Umbraco.Feedback.Models.Entries;
 using Limbo.Umbraco.Feedback.Models.Sites;
 using Limbo.Umbraco.Feedback.Models.Statuses;
@@ -10,6 +11,7 @@ using Limbo.Umbraco.Feedback.Services;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.ContentEditing;
 using Umbraco.Cms.Core.Models.Membership;
+using Umbraco.Cms.Core.Models.PublishedContent;
 
 namespace Limbo.Umbraco.Feedback.Plugins {
 
@@ -18,56 +20,43 @@ namespace Limbo.Umbraco.Feedback.Plugins {
     /// </summary>
     public abstract class FeedbackPluginBase : IFeedbackPlugin {
 
+        private readonly FeedbackPluginDependencies _dependencies;
+
+        #region Constructors
+
         /// <summary>
-        /// Method invoked when a new feedback entry is being submitted.
+        /// Initializes a new instance based on the specified <paramref name="dependencies"/>.
         /// </summary>
-        /// <param name="service">A reference to the current feedback service.</param>
-        /// <param name="entry">The feedback entry that is being submitted.</param>
-        /// <returns><c>true</c> if the feedback plugin handled the entry; otherwise, <c>false</c>.</returns>
-        public virtual bool OnEntrySubmitting(FeedbackService service, FeedbackEntry entry) {
-            return true;
+        /// <param name="dependencies">The dependencies.</param>
+        protected FeedbackPluginBase(FeedbackPluginDependencies dependencies) {
+            _dependencies = dependencies;
         }
 
-        /// <summary>
-        /// Method invoked when a new feedback entry has been submitted.
-        /// </summary>
-        /// <param name="service">A reference to the current feedback service.</param>
-        /// <param name="entry">The feedback entry that was submitted.</param>
-        public virtual void OnEntrySubmitted(FeedbackService service, FeedbackEntry entry) { }
+        #endregion
 
         /// <summary>
-        /// Method invoked when a new rating for a feedback entry is being submitted.
+        /// Method invoked when a new feedback entry is being added.
         /// </summary>
-        /// <param name="service">A reference to the current feedback service.</param>
-        /// <param name="entry">The feedback entry.</param>
-        /// <returns><c>true</c> if the feedback plugin handled the entry; otherwise, <c>false</c>.</returns>
-        public virtual bool OnRatingSubmitting(FeedbackService service, FeedbackEntry entry) {
-            return true;
-        }
+        /// <param name="args">The event args.</param>
+        public virtual void OnEntryAdding(EntryAddingEventArgs args) { }
 
         /// <summary>
-        /// Method invoked when a new rating for a feedback entry has been submitted.
+        /// Method invoked when a new feedback entry has been added.
         /// </summary>
-        /// <param name="service">A reference to the current feedback service.</param>
-        /// <param name="entry">The feedback entry.</param>
-        public virtual void OnRatingSubmitted(FeedbackService service, FeedbackEntry entry) { }
+        /// <param name="args">The event args.</param>
+        public virtual void OnEntryAdded(EntryAddedEventArgs args) { }
 
         /// <summary>
         /// Method invoked when a feedback entry is being updated.
         /// </summary>
-        /// <param name="service">A reference to the current feedback service.</param>
-        /// <param name="entry">The feedback entry that is being updated.</param>
-        /// <returns><c>true</c> if the feedback plugin handled the entry; otherwise, <c>false</c>.</returns>
-        public virtual bool OnEntryUpdating(FeedbackService service, FeedbackEntry entry) {
-            return true;
-        }
+        /// <param name="args">The event args.</param>
+        public virtual void OnEntryUpdating(EntryUpdatingEventArgs args) { }
 
         /// <summary>
         /// Method invoked when a feedback entry has been updated.
         /// </summary>
-        /// <param name="service">A reference to the current feedback service.</param>
-        /// <param name="entry">The feedback entry that was updated.</param>
-        public virtual void OnEntryUpdated(FeedbackService service, FeedbackEntry entry) { }
+        /// <param name="args">The event args.</param>
+        public virtual void OnEntryUpdated(EntryUpdatedEventArgs args) { }
 
         /// <summary>
         /// Method invoked when the status of a feedback entry is being updated.
@@ -116,8 +105,19 @@ namespace Limbo.Umbraco.Feedback.Plugins {
         /// <param name="site">When this method returns, holds the information about the site if successful; otherwise, <c>null</c>.</param>
         /// <returns><c>true</c> if a site was found; otherwise, <c>false</c>.</returns>
         public virtual bool TryGetSite(Guid key, [NotNullWhen(true)] out FeedbackSiteSettings? site) {
+
+            IPublishedContent? content = _dependencies.UmbracoContext?.Content?.GetById(key);
+
+            if (content is not null) {
+                if (_dependencies.DomainService.GetAssignedDomains(content.Id, false).Any()) {
+                    site = new FeedbackSiteSettings(content);
+                    return true;
+                }
+            }
+
             site = null;
             return false;
+
         }
 
         /// <summary>
@@ -127,8 +127,23 @@ namespace Limbo.Umbraco.Feedback.Plugins {
         /// <param name="site">When this method returns, holds an instance of <see cref="FeedbackSiteSettings"/> representing the parent site if successful; otherwise, <see langword="null"/>.</param>
         /// <returns><see langword="true"/> if successful; otherwise, <see langword="false"/>.</returns>
         public virtual bool TryGetSite(IContent content, [NotNullWhen(true)] out FeedbackSiteSettings? site) {
+
+            IPublishedContent? scope = _dependencies.UmbracoContext?.Content?.GetById(content.Key);
+
+            while (scope is not null) {
+
+                if (_dependencies.DomainService.GetAssignedDomains(content.Id, false).Any()) {
+                    site = new FeedbackSiteSettings(scope);
+                    return true;
+                }
+
+                scope = scope.Parent;
+
+            }
+
             site = null;
             return false;
+
         }
 
         /// <summary>

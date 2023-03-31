@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using Limbo.Umbraco.Feedback.Events;
 using Limbo.Umbraco.Feedback.Models.Entries;
 using Limbo.Umbraco.Feedback.Models.Sites;
 using Limbo.Umbraco.Feedback.Models.Statuses;
@@ -20,47 +21,26 @@ namespace Limbo.Umbraco.Feedback.Plugins {
         /// <summary>
         /// Method invoked when a new feedback entry is being submitted.
         /// </summary>
-        /// <param name="service">A reference to the current feedback service.</param>
-        /// <param name="entry">The feedback entry that is being submitted.</param>
-        /// <returns><c>true</c> if the feedback plugin handled the entry; otherwise, <c>false</c>.</returns>
-        bool OnEntrySubmitting(FeedbackService service, FeedbackEntry entry);
+        /// <param name="args">The event args.</param>
+        void OnEntryAdding(EntryAddingEventArgs args);
 
         /// <summary>
         /// Method invoked when a new feedback entry has been submitted.
         /// </summary>
-        /// <param name="service">A reference to the current feedback service.</param>
-        /// <param name="entry">The feedback entry that was submitted.</param>
-        void OnEntrySubmitted(FeedbackService service, FeedbackEntry entry);
-
-        /// <summary>
-        /// Method invoked when a new rating for a feedback entry is being submitted.
-        /// </summary>
-        /// <param name="service">A reference to the current feedback service.</param>
-        /// <param name="entry">The feedback entry.</param>
-        /// <returns><c>true</c> if the feedback plugin handled the entry; otherwise, <c>false</c>.</returns>
-        bool OnRatingSubmitting(FeedbackService service, FeedbackEntry entry);
-
-        /// <summary>
-        /// Method invoked when a new rating for a feedback entry has been submitted.
-        /// </summary>
-        /// <param name="service">A reference to the current feedback service.</param>
-        /// <param name="entry">The feedback entry.</param>
-        void OnRatingSubmitted(FeedbackService service, FeedbackEntry entry);
+        /// <param name="args">The event args.</param>
+        void OnEntryAdded(EntryAddedEventArgs args);
 
         /// <summary>
         /// Method invoked when a feedback entry is being updated.
         /// </summary>
-        /// <param name="service">A reference to the current feedback service.</param>
-        /// <param name="entry">The feedback entry that is being updated.</param>
-        /// <returns><c>true</c> if the feedback plugin handled the entry; otherwise, <c>false</c>.</returns>
-        bool OnEntryUpdating(FeedbackService service, FeedbackEntry entry);
+        /// <param name="args">The event args.</param>
+        void OnEntryUpdating(EntryUpdatingEventArgs args);
 
         /// <summary>
         /// Method invoked when a feedback entry has been updated.
         /// </summary>
-        /// <param name="service">A reference to the current feedback service.</param>
-        /// <param name="entry">The feedback entry that was updated.</param>
-        void OnEntryUpdated(FeedbackService service, FeedbackEntry entry);
+        /// <param name="args">The event args.</param>
+        void OnEntryUpdated(EntryUpdatedEventArgs args);
 
         /// <summary>
         /// Method invoked when the status of a feedback entry is being updated.

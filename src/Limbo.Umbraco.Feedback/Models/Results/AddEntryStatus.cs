@@ -1,9 +1,9 @@
 ﻿namespace Limbo.Umbraco.Feedback.Models.Results {
 
     /// <summary>
-    /// Enum class indicating the status of a <see cref="AddRatingResult"/>.
+    /// Enum class indicating the status of a <see cref="AddEntryResult"/>.
     /// </summary>
-    public enum AddRatingStatus {
+    public enum AddEntryStatus {
 
         /// <summary>
         /// Indicates that the add operation failed.
