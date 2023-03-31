@@ -132,7 +132,7 @@ namespace Limbo.Umbraco.Feedback.Plugins {
 
             while (scope is not null) {
 
-                if (_dependencies.DomainService.GetAssignedDomains(content.Id, false).Any()) {
+                if (_dependencies.FeedbackSettings.SiteContentTypes.Contains(scope.ContentType.Alias)) {
                     site = new FeedbackSiteSettings(scope);
                     return true;
                 }
@@ -191,7 +191,11 @@ namespace Limbo.Umbraco.Feedback.Plugins {
         /// </summary>
         /// <returns>An array of <see cref="IFeedbackUser"/>.</returns>
         public virtual IReadOnlyList<IFeedbackUser> GetUsers() {
-            return Array.Empty<IFeedbackUser>();
+            return _dependencies.UserService
+                .GetAll(0, int.MaxValue, out _)
+                .Where(x => x.IsApproved)
+                .Select(x => (IFeedbackUser) new FeedbackUser(x))
+                .ToArray();
         }
 
         /// <summary>
@@ -204,8 +208,21 @@ namespace Limbo.Umbraco.Feedback.Plugins {
         /// <param name="result">The content app, or <c>null</c> if a content app shouldn't be sown for <paramref name="content"/>.</param>
         /// <returns><c>true</c> if a content app was configured; otherwise <c>false</c>.</returns>
         public virtual bool TryGetContentApp(IContent content, IEnumerable<IReadOnlyUserGroup> userGroups, [NotNullWhen(true)] out ContentApp? result) {
+
+            if (_dependencies.FeedbackSettings.SiteContentTypes.Contains(content.ContentType.Alias)) {
+                result = GetContentAppForSite(content);
+                return result != null;
+            }
+
+            if (_dependencies.FeedbackSettings.PageContentTypes.Contains(content.ContentType.Alias) && TryGetSite(content, out FeedbackSiteSettings? site)) {
+                IContent? siteContent = _dependencies.ContentService.GetById(site.Id);
+                result = siteContent == null ? null : GetContentAppForPage(siteContent, content);
+                return result != null;
+            }
+
             result = null;
             return false;
+
         }
 
         /// <summary>
@@ -216,7 +233,7 @@ namespace Limbo.Umbraco.Feedback.Plugins {
         /// <remarks>Override the method and return <c>null</c> for a given site if the content app shouldn't beshown.</remarks>
         protected virtual ContentApp? GetContentAppForSite(IContent site) {
 
-            return new ContentApp {
+            return (ContentApp?) new ContentApp {
                 Alias = "skybrud-feedback",
                 Name = "Feedback",
                 Icon = "icon-chat",
@@ -237,7 +254,7 @@ namespace Limbo.Umbraco.Feedback.Plugins {
         /// <remarks>Override the method and return <c>null</c> for a given site if the content app shouldn't beshown.</remarks>
         protected virtual ContentApp? GetContentAppForPage(IContent site, IContent page) {
 
-            return new ContentApp {
+            return (ContentApp?) new ContentApp {
                 Alias = "skybrud-feedback",
                 Name = "Feedback",
                 Icon = "icon-chat",
