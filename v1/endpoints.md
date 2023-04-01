@@ -1,9 +1,6 @@
 # Endpoints
 
 
-- [Back to V1](./)
-
-
 
 ## Add a new entry
 
