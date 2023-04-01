@@ -2,14 +2,6 @@
 
 
 
-
-
-
-
-
-
-
-
 ## Add a new entry
 
 Adds a new feedback entry with the details from the request body.
