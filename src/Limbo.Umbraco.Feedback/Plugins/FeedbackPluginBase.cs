@@ -209,11 +209,21 @@ namespace Limbo.Umbraco.Feedback.Plugins {
         /// <returns><c>true</c> if a content app was configured; otherwise <c>false</c>.</returns>
         public virtual bool TryGetContentApp(IContent content, IEnumerable<IReadOnlyUserGroup> userGroups, [NotNullWhen(true)] out ContentApp? result) {
 
+            // If the ID is 0 it means that the content node is currently beeing created, in which case it doesn't
+            // really make sense to show the content app
+            if (content.Id == 0) {
+                result = null;
+                return false;
+            }
+
+            // If the content type alias matches a site type, we show the content app with site level information
             if (_dependencies.FeedbackSettings.SiteContentTypes.Contains(content.ContentType.Alias)) {
                 result = GetContentAppForSite(content);
                 return result != null;
             }
 
+            // If the content type alias matches a page type, we try to get a reference to the site the page belongs
+            // to, and then show the content app for the page
             if (_dependencies.FeedbackSettings.PageContentTypes.Contains(content.ContentType.Alias) && TryGetSite(content, out FeedbackSiteSettings? site)) {
                 IContent? siteContent = _dependencies.ContentService.GetById(site.Id);
                 result = siteContent == null ? null : GetContentAppForPage(siteContent, content);
