@@ -29,7 +29,7 @@ namespace Limbo.Umbraco.Feedback {
         /// Gets the information version of the package.
         /// </summary>
         public static readonly string InformationalVersion = FileVersionInfo
-            .GetVersionInfo(typeof(FeedbackPackage).Assembly.Location).ProductVersion!;
+            .GetVersionInfo(typeof(FeedbackPackage).Assembly.Location).ProductVersion!.Split('+')[0];
 
         /// <summary>
         /// Gets the semantic version of the package.
