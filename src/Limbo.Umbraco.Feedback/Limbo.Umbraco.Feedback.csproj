@@ -48,6 +48,8 @@
   <!-- Include package icon for NuGet -->
   <ItemGroup>
     <Content Include="../build/Limbo.png" Pack="true" PackagePath="\" />
+    <Content Include="../../LICENSE.md" Pack="false" />
+    <Content Include="../../README.md" Pack="false" />
   </ItemGroup>
 
   <!-- Exclude certain files from the NuGet package -->
