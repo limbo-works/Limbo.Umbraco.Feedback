@@ -28,7 +28,8 @@ public class MigrationComponent : IComponent {
 
         plan.From(string.Empty)
             .To<CreateTableMigration>("1.0.0-alpha001")
-            .To<FixEmptyStringValuesMigration>("1.0.0-alpha004");
+            .To<FixEmptyStringValuesMigration>("1.0.0-alpha004")
+            .To<NoopMigration>("279d64a4");
 
         var upgrader = new Upgrader(plan);
 
