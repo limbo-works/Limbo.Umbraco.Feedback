@@ -183,7 +183,7 @@ public class FeedbackService {
     /// </summary>
     /// <param name="entry">The entry to be archived.</param>
     public void Archive(FeedbackEntry entry) {
-        if (entry == null) throw new ArgumentNullException(nameof(entry));
+        ArgumentNullException.ThrowIfNull(entry);
         entry.IsArchived = true;
         _databaseService.Update(entry._entry);
     }
@@ -191,9 +191,9 @@ public class FeedbackService {
     /// <summary>
     /// Deletes the specified <paramref name="entry"/>.
     /// </summary>
-    /// <param name="entry">The entry to be delete.</param>
+    /// <param name="entry">The entry to be deleted.</param>
     public void Delete(FeedbackEntry entry) {
-        if (entry == null) throw new ArgumentNullException(nameof(entry));
+        ArgumentNullException.ThrowIfNull(entry);
         _databaseService.Delete(entry._entry);
     }
 
@@ -282,7 +282,7 @@ public class FeedbackService {
             SiteKey = site.Key,
             PageKey = page.Key,
             Rating = rating,
-            Status = site.Statuses.First(),
+            Status = site.Statuses[0],
             Name = name.NullIfWhiteSpace(),
             Email = email.NullIfWhiteSpace(),
             Comment = comment.NullIfWhiteSpace(),
@@ -342,7 +342,7 @@ public class FeedbackService {
     public bool SetAssignedTo(FeedbackEntry entry, IFeedbackUser? user) {
 
         // Some input validation
-        if (entry == null) throw new ArgumentNullException(nameof(entry));
+        ArgumentNullException.ThrowIfNull(entry);
 
         // Get the current (old) user
         IFeedbackUser? oldUser = entry.AssignedTo;
@@ -384,7 +384,7 @@ public class FeedbackService {
     public bool SetStatus(FeedbackEntry entry, FeedbackStatus status) {
 
         // Some input validation
-        if (entry == null) throw new ArgumentNullException(nameof(entry));
+        ArgumentNullException.ThrowIfNull(entry);
 
         // Get the current (old) status
         FeedbackStatus oldStatus = entry.Status;

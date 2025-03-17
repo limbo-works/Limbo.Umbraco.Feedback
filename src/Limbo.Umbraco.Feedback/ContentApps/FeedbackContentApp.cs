@@ -25,7 +25,7 @@ public class FeedbackContentApp : IContentAppFactory {
     /// <summary>
     /// Returns the content app, or <c>null</c> if the content app shouldn't be shown in the given context.
     /// </summary>
-    /// <param name="source">The source - eg. an instance of <see cref="IContent"/>.</param>
+    /// <param name="source">The source - e.g. an instance of <see cref="IContent"/>.</param>
     /// <param name="userGroups">A collection of all user groups.</param>
     /// <returns></returns>
     public ContentApp? GetContentAppFor(object source, IEnumerable<IReadOnlyUserGroup> userGroups) {

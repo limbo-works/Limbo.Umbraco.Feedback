@@ -27,7 +27,7 @@ public class AddEntryResult {
     public FeedbackEntry? Entry { get; }
 
     /// <summary>
-    /// Gets the message of the result - eg. an error message.
+    /// Gets the message of the result - e.g. an error message.
     /// </summary>
     public string? Message { get; }
 
@@ -41,7 +41,7 @@ public class AddEntryResult {
     /// <param name="status">The status of the result.</param>
     /// <param name="statusCode">The HTTP status code associated with the result.</param>
     /// <param name="entry">The entry.</param>
-    /// <param name="message">The message of the result - eg. an error message.</param>
+    /// <param name="message">The message of the result - e.g. an error message.</param>
     public AddEntryResult(AddEntryStatus status, HttpStatusCode statusCode, FeedbackEntry? entry, string? message) {
         Status = status;
         StatusCode = statusCode;

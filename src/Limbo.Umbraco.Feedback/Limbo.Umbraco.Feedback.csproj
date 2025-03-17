@@ -15,7 +15,7 @@
     <Authors>Anders Bjerner</Authors>
     <Copyright>Copyright © $([System.DateTime]::UtcNow.ToString(`yyyy`))</Copyright>
     <Title>Limbo Feedback</Title>
-    <Description>Feedback module for Umbraco 10+.</Description>
+    <Description>Feedback module for Umbraco.</Description>
   </PropertyGroup>
 
   <!-- Information for the NuGet package -->

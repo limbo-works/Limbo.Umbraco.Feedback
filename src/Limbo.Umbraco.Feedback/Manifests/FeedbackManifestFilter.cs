@@ -16,15 +16,15 @@ public class FeedbackManifestFilter : IManifestFilter {
             PackageName = FeedbackPackage.Name,
             Version = FeedbackPackage.InformationalVersion,
             BundleOptions = BundleOptions.Independent,
-            Scripts = new[] {
+            Scripts = [
                 $"/App_Plugins/{FeedbackPackage.Alias}/Scripts/Controllers/ContentApp.js",
                 $"/App_Plugins/{FeedbackPackage.Alias}/Scripts/Controllers/ContentAppPage.js",
                 $"/App_Plugins/{FeedbackPackage.Alias}/Scripts/Controllers/SelectStatus.js",
                 $"/App_Plugins/{FeedbackPackage.Alias}/Scripts/Controllers/SelectResponsible.js"
-            },
-            Stylesheets = new[] {
+            ],
+            Stylesheets = [
                 $"/App_Plugins/{FeedbackPackage.Alias}/Styles/Default.css"
-            }
+            ]
         };
 
         manifests.Add(manifest);

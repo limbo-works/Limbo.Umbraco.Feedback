@@ -35,7 +35,7 @@ public class FeedbackEntryDto {
 
     [Column("Comment")]
     [NullSetting(NullSetting = NullSettings.Null)]
-    [SpecialDbType(SpecialDbTypes.NTEXT)]
+    [SpecialDbType(SpecialDbTypes.NVARCHARMAX)]
     public string? Comment { get; set; }
 
     [Column("Rating")]

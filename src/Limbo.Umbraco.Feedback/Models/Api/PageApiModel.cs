@@ -28,7 +28,7 @@ public class PageApiModel {
     public PageApiModel(IPublishedContent content) {
         Id = content.Id;
         Key = content.Key;
-        Name = content.Name!;
+        Name = content.Name;
         IsPublished = true;
         Url = content.Url();
     }

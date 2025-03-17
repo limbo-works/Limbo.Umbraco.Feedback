@@ -59,11 +59,11 @@ public class FeedbackSiteSettings {
 
         Id = site.Id;
         Key = site.Key;
-        Name = site.Name!;
+        Name = site.Name;
 
-        Ratings = new[] { FeedbackConstants.Ratings.Positive, FeedbackConstants.Ratings.Negative };
+        Ratings = [FeedbackConstants.Ratings.Positive, FeedbackConstants.Ratings.Negative];
 
-        Statuses = new[] { FeedbackConstants.Statuses.New, FeedbackConstants.Statuses.InProgress, FeedbackConstants.Statuses.Closed };
+        Statuses = [FeedbackConstants.Statuses.New, FeedbackConstants.Statuses.InProgress, FeedbackConstants.Statuses.Closed];
 
         Fields = new FeedbackFields();
 

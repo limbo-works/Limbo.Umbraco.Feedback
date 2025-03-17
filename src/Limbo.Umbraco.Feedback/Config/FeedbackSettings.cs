@@ -18,11 +18,11 @@ public class FeedbackSettings {
     /// <summary>
     /// Gets a list of content type aliases that represent a site node.
     /// </summary>
-    public HashSet<string> SiteContentTypes { get; private set; } = new();
+    public HashSet<string> SiteContentTypes { get; private set; } = [];
 
     /// <summary>
     /// Gets a list of content type aliases that represent a page node.
     /// </summary>
-    public HashSet<string> PageContentTypes { get; private set; } = new();
+    public HashSet<string> PageContentTypes { get; private set; } = [];
 
 }

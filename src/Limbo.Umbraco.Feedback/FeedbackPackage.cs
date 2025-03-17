@@ -49,6 +49,6 @@ public static class FeedbackPackage {
     /// <summary>
     /// Gets the URL of the documentation for this package.
     /// </summary>
-    public const string DocumentationUrl = "https://packages.limbo.works/limbo.umbraco.feedback/v1/docs/";
+    public const string DocumentationUrl = "https://packages.limbo.works/limbo.umbraco.feedback/v13/docs/";
 
 }
