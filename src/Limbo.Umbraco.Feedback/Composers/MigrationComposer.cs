@@ -4,14 +4,12 @@ using Umbraco.Cms.Core.DependencyInjection;
 
 #pragma warning disable 1591
 
-namespace Limbo.Umbraco.Feedback.Composers {
+namespace Limbo.Umbraco.Feedback.Composers;
 
-    public class MigrationComposer : IComposer {
+public class MigrationComposer : IComposer {
 
-        public void Compose(IUmbracoBuilder builder) {
-            builder.Components().Append<MigrationComponent>();
-        }
-
+    public void Compose(IUmbracoBuilder builder) {
+        builder.Components().Append<MigrationComponent>();
     }
 
 }

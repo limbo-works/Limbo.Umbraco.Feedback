@@ -5,66 +5,64 @@ using Newtonsoft.Json;
 
 #pragma warning disable 1591
 
-namespace Limbo.Umbraco.Feedback.Models.Api {
+namespace Limbo.Umbraco.Feedback.Models.Api;
 
-    public class EntryApiModel {
+public class EntryApiModel {
 
-        protected FeedbackEntry Entry { get; }
+    protected FeedbackEntry Entry { get; }
 
-        [JsonProperty("id")]
-        public int Id => Entry.Id;
+    [JsonProperty("id")]
+    public int Id => Entry.Id;
 
-        [JsonProperty("key")]
-        public Guid Key => Entry.Key;
+    [JsonProperty("key")]
+    public Guid Key => Entry.Key;
 
-        [JsonProperty("site")]
-        public SiteApiModel Site { get; }
+    [JsonProperty("site")]
+    public SiteApiModel Site { get; }
 
-        [JsonProperty("page")]
-        public PageApiModel? Page { get; }
+    [JsonProperty("page")]
+    public PageApiModel? Page { get; }
 
-        [JsonProperty("name")]
-        public string? Name => Entry.Name;
+    [JsonProperty("name")]
+    public string? Name => Entry.Name;
 
-        [JsonProperty("email")]
-        public string? Email => Entry.Email;
+    [JsonProperty("email")]
+    public string? Email => Entry.Email;
 
-        [JsonProperty("comment")]
-        public string? Comment => Entry.Comment;
+    [JsonProperty("comment")]
+    public string? Comment => Entry.Comment;
 
-        [JsonProperty("status")]
-        public StatusApiModel? Status { get; }
+    [JsonProperty("status")]
+    public StatusApiModel? Status { get; }
 
-        [JsonProperty("rating")]
-        public RatingApiModel? Rating { get; }
+    [JsonProperty("rating")]
+    public RatingApiModel? Rating { get; }
 
-        [JsonProperty("assignedTo")]
-        public IFeedbackUser? AssignedTo { get; }
+    [JsonProperty("assignedTo")]
+    public IFeedbackUser? AssignedTo { get; }
 
-        [JsonProperty("createDate")]
-        public DateTime CreateDate => Entry.CreateDate;
+    [JsonProperty("createDate")]
+    public DateTime CreateDate => Entry.CreateDate;
 
-        [JsonProperty("createDateDiff")]
-        public string? CreateDateDiff { get; set; }
+    [JsonProperty("createDateDiff")]
+    public string? CreateDateDiff { get; set; }
 
-        [JsonProperty("updateDate")]
-        public DateTime UpdateDate => Entry.UpdateDate;
+    [JsonProperty("updateDate")]
+    public DateTime UpdateDate => Entry.UpdateDate;
 
-        [JsonProperty("updateDateDiff")]
-        public string? UpdateDateDiff { get; set; }
+    [JsonProperty("updateDateDiff")]
+    public string? UpdateDateDiff { get; set; }
 
-        [JsonProperty("archived")]
-        public bool IsArchived => Entry.IsArchived;
+    [JsonProperty("archived")]
+    public bool IsArchived => Entry.IsArchived;
 
-        public EntryApiModel(FeedbackEntry entry, SiteApiModel site, PageApiModel? page, StatusApiModel? status, RatingApiModel? rating, IFeedbackUser? assignedTo) {
-            Entry = entry;
-            Site = site;
-            Page = page;
-            Status = status;
-            Rating = rating;
-            AssignedTo = assignedTo;
-        }
-
+    public EntryApiModel(FeedbackEntry entry, SiteApiModel site, PageApiModel? page, StatusApiModel? status, RatingApiModel? rating, IFeedbackUser? assignedTo) {
+        Entry = entry;
+        Site = site;
+        Page = page;
+        Status = status;
+        Rating = rating;
+        AssignedTo = assignedTo;
     }
 
 }

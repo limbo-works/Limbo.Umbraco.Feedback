@@ -1,29 +1,27 @@
 ﻿using Newtonsoft.Json;
 using Skybrud.Essentials.Json.Converters.Enums;
 
-namespace Limbo.Umbraco.Feedback.Services {
+namespace Limbo.Umbraco.Feedback.Services;
+
+/// <summary>
+/// Enum class indicating the sortable fields of a feedback entry.
+/// </summary>
+[JsonConverter(typeof(EnumCamelCaseConverter))]
+public enum EntriesSortField {
 
     /// <summary>
-    /// Enum class indicating the sortable fields of a feedback entry.
+    /// Indicates that entries should be sorted by their created date.
     /// </summary>
-    [JsonConverter(typeof(EnumCamelCaseConverter))]
-    public enum EntriesSortField {
+    CreateDate,
 
-        /// <summary>
-        /// Indicates that entries should be sorted by their created date.
-        /// </summary>
-        CreateDate,
+    /// <summary>
+    /// Indicates that entries should be sorted by their rating.
+    /// </summary>
+    Rating,
 
-        /// <summary>
-        /// Indicates that entries should be sorted by their rating.
-        /// </summary>
-        Rating,
-
-        /// <summary>
-        /// Indicates that entries should be sorted by their status.
-        /// </summary>
-        Status
-
-    }
+    /// <summary>
+    /// Indicates that entries should be sorted by their status.
+    /// </summary>
+    Status
 
 }

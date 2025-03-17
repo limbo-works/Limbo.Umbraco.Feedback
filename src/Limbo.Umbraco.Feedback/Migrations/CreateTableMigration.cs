@@ -4,17 +4,15 @@ using Umbraco.Cms.Infrastructure.Migrations;
 
 #pragma warning disable 1591
 
-namespace Limbo.Umbraco.Feedback.Migrations {
+namespace Limbo.Umbraco.Feedback.Migrations;
 
-    public class CreateTableMigration : MigrationBase {
+public class CreateTableMigration : MigrationBase {
 
-        public CreateTableMigration(IMigrationContext context) : base(context) { }
+    public CreateTableMigration(IMigrationContext context) : base(context) { }
 
-        protected override void Migrate() {
-            if (TableExists(FeedbackConstants.TableName)) return;
-            Create.Table<FeedbackEntrySchema>().Do();
-        }
-
+    protected override void Migrate() {
+        if (TableExists(FeedbackConstants.TableName)) return;
+        Create.Table<FeedbackEntrySchema>().Do();
     }
 
 }

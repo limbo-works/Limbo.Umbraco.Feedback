@@ -1,25 +1,23 @@
-﻿namespace Limbo.Umbraco.Feedback.Services {
+﻿namespace Limbo.Umbraco.Feedback.Services;
+
+/// <summary>
+/// Enum class indicating the type of entries that should be returned.
+/// </summary>
+public enum FeedbackEntryType {
 
     /// <summary>
-    /// Enum class indicating the type of entries that should be returned.
+    /// Indicates that all entries should be returned.
     /// </summary>
-    public enum FeedbackEntryType {
+    All,
 
-        /// <summary>
-        /// Indicates that all entries should be returned.
-        /// </summary>
-        All,
+    /// <summary>
+    /// Indicates that only entries with a rating should be returned.
+    /// </summary>
+    Rating,
 
-        /// <summary>
-        /// Indicates that only entries with a rating should be returned.
-        /// </summary>
-        Rating,
-
-        /// <summary>
-        /// Indicates that only entries with a comment should be returned.
-        /// </summary>
-        Comment
-
-    }
+    /// <summary>
+    /// Indicates that only entries with a comment should be returned.
+    /// </summary>
+    Comment
 
 }

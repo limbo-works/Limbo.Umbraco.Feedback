@@ -1,20 +1,18 @@
-﻿namespace Limbo.Umbraco.Feedback.Models.Fields {
+﻿namespace Limbo.Umbraco.Feedback.Models.Fields;
+
+/// <summary>
+/// Enum class indicating the type of a field.
+/// </summary>
+public enum FeedbackFieldType {
 
     /// <summary>
-    /// Enum class indicating the type of a field.
+    /// Indicates that a field is required.
     /// </summary>
-    public enum FeedbackFieldType {
+    Required,
 
-        /// <summary>
-        /// Indicates that a field is required.
-        /// </summary>
-        Required,
-
-        /// <summary>
-        /// Indicates that a field is optional.
-        /// </summary>
-        Optional
-
-    }
+    /// <summary>
+    /// Indicates that a field is optional.
+    /// </summary>
+    Optional
 
 }

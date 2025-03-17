@@ -3,28 +3,26 @@ using Newtonsoft.Json;
 
 #pragma warning disable 1591
 
-namespace Limbo.Umbraco.Feedback.Models.Api.Post {
+namespace Limbo.Umbraco.Feedback.Models.Api.Post;
 
-    public class AddCommentModel {
+public class AddCommentModel {
 
-        [JsonProperty("siteKey")]
-        public Guid SiteKey { get; set; }
+    [JsonProperty("siteKey")]
+    public Guid SiteKey { get; set; }
 
-        [JsonProperty("pageKey")]
-        public Guid PageKey { get; set; }
+    [JsonProperty("pageKey")]
+    public Guid PageKey { get; set; }
 
-        [JsonProperty("rating")]
-        public Guid Rating { get; set; }
+    [JsonProperty("rating")]
+    public Guid Rating { get; set; }
 
-        [JsonProperty("name")]
-        public string? Name { get; set; }
+    [JsonProperty("name")]
+    public string? Name { get; set; }
 
-        [JsonProperty("email")]
-        public string? Email { get; set; }
+    [JsonProperty("email")]
+    public string? Email { get; set; }
 
-        [JsonProperty("comment")]
-        public string? Comment { get; set; }
-
-    }
+    [JsonProperty("comment")]
+    public string? Comment { get; set; }
 
 }

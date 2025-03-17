@@ -2,19 +2,17 @@
 using System.Collections.Generic;
 using Umbraco.Cms.Core.Composing;
 
-namespace Limbo.Umbraco.Feedback.Plugins {
+namespace Limbo.Umbraco.Feedback.Plugins;
+
+/// <summary>
+/// Class representing a collection of feedback plugins.
+/// </summary>
+public class FeedbackPluginCollection : BuilderCollectionBase<IFeedbackPlugin> {
 
     /// <summary>
-    /// Class representing a collection of feedback plugins.
+    /// Initializes a new provider collection based on the specified <paramref name="items"/>.
     /// </summary>
-    public class FeedbackPluginCollection : BuilderCollectionBase<IFeedbackPlugin> {
-
-        /// <summary>
-        /// Initializes a new provider collection based on the specified <paramref name="items"/>.
-        /// </summary>
-        /// <param name="items">The items to make up the collection.</param>
-        public FeedbackPluginCollection(Func<IEnumerable<IFeedbackPlugin>> items) : base(items) { }
-
-    }
+    /// <param name="items">The items to make up the collection.</param>
+    public FeedbackPluginCollection(Func<IEnumerable<IFeedbackPlugin>> items) : base(items) { }
 
 }

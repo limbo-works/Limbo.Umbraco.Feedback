@@ -7,37 +7,35 @@ using Umbraco.Cms.Core.Services;
 
 #pragma warning disable 1591
 
-namespace Limbo.Umbraco.Feedback.Models.Api {
+namespace Limbo.Umbraco.Feedback.Models.Api;
 
-    public class StatusApiModel {
+public class StatusApiModel {
 
-        #region Properties
+    #region Properties
 
-        [JsonProperty("alias")]
-        public string Alias { get; }
+    [JsonProperty("alias")]
+    public string Alias { get; }
 
-        [JsonProperty("key")]
-        public Guid Key { get; }
+    [JsonProperty("key")]
+    public Guid Key { get; }
 
-        [JsonProperty("name")]
-        public string Name { get; }
+    [JsonProperty("name")]
+    public string Name { get; }
 
-        [JsonProperty("active")]
-        public bool IsActive { get; }
+    [JsonProperty("active")]
+    public bool IsActive { get; }
 
-        #endregion
+    #endregion
 
-        #region Constructors
+    #region Constructors
 
-        public StatusApiModel(FeedbackStatus status, ILocalizedTextService localizedTextService, CultureInfo culture) {
-            Alias = status.Alias;
-            Key = status.Key;
-            Name = string.IsNullOrWhiteSpace(status.Name) ? localizedTextService.Localize("feedback", $"status{Alias.ToPascalCase()}", culture) : status.Name;
-            IsActive = status.IsActive;
-        }
-
-        #endregion
-
+    public StatusApiModel(FeedbackStatus status, ILocalizedTextService localizedTextService, CultureInfo culture) {
+        Alias = status.Alias;
+        Key = status.Key;
+        Name = string.IsNullOrWhiteSpace(status.Name) ? localizedTextService.Localize("feedback", $"status{Alias.ToPascalCase()}", culture) : status.Name;
+        IsActive = status.IsActive;
     }
+
+    #endregion
 
 }

@@ -8,33 +8,31 @@ using Umbraco.Cms.Core.Services;
 
 #pragma warning disable 1591
 
-namespace Limbo.Umbraco.Feedback.Models.Api {
+namespace Limbo.Umbraco.Feedback.Models.Api;
 
-    public class SiteApiModel {
+public class SiteApiModel {
 
-        [JsonProperty("id")]
-        public int Id { get; }
+    [JsonProperty("id")]
+    public int Id { get; }
 
-        [JsonProperty("key")]
-        public Guid Key { get; }
+    [JsonProperty("key")]
+    public Guid Key { get; }
 
-        [JsonProperty("name")]
-        public string Name { get; }
+    [JsonProperty("name")]
+    public string Name { get; }
 
-        [JsonProperty("ratings")]
-        public IReadOnlyList<RatingApiModel> Ratings { get; }
+    [JsonProperty("ratings")]
+    public IReadOnlyList<RatingApiModel> Ratings { get; }
 
-        [JsonProperty("statuses")]
-        public IReadOnlyList<StatusApiModel> Statuses { get; }
+    [JsonProperty("statuses")]
+    public IReadOnlyList<StatusApiModel> Statuses { get; }
 
-        public SiteApiModel(FeedbackSiteSettings site, ILocalizedTextService localizedTextService, CultureInfo culture) {
-            Id = site.Id;
-            Key = site.Key;
-            Name = site.Name;
-            Ratings = site.Ratings.Select(x => new RatingApiModel(x, localizedTextService, culture)).ToArray();
-            Statuses = site.Statuses.Select(x => new StatusApiModel(x, localizedTextService, culture)).ToArray();
-        }
-
+    public SiteApiModel(FeedbackSiteSettings site, ILocalizedTextService localizedTextService, CultureInfo culture) {
+        Id = site.Id;
+        Key = site.Key;
+        Name = site.Name;
+        Ratings = site.Ratings.Select(x => new RatingApiModel(x, localizedTextService, culture)).ToArray();
+        Statuses = site.Statuses.Select(x => new StatusApiModel(x, localizedTextService, culture)).ToArray();
     }
 
 }

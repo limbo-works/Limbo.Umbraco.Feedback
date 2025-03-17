@@ -9,37 +9,35 @@ using Skybrud.Essentials.Strings.Extensions;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
 
-namespace Limbo.Umbraco.Feedback.Composers {
+namespace Limbo.Umbraco.Feedback.Composers;
 
 #pragma warning disable 1591
 
-    public class FeedbackComposer : IComposer {
+public class FeedbackComposer : IComposer {
 
-        public void Compose(IUmbracoBuilder builder) {
+    public void Compose(IUmbracoBuilder builder) {
 
-            // Parse the raw config value since we can't use dependency injection in a composer
-            bool disableDefaultPlugin = builder.Config.GetSection("Limbo:Feedback:DisableDefaultPlugin").Value.ToBoolean();
+        // Parse the raw config value since we can't use dependency injection in a composer
+        bool disableDefaultPlugin = builder.Config.GetSection("Limbo:Feedback:DisableDefaultPlugin").Value.ToBoolean();
 
-            // Register the configuration
-            builder.Services.AddOptions<FeedbackSettings>()
-                .Bind(builder.Config.GetSection("Limbo:Feedback"), o => o.BindNonPublicProperties = true)
-                .ValidateDataAnnotations();
+        // Register the configuration
+        builder.Services.AddOptions<FeedbackSettings>()
+            .Bind(builder.Config.GetSection("Limbo:Feedback"), o => o.BindNonPublicProperties = true)
+            .ValidateDataAnnotations();
 
-            // Register services
-            builder.Services.AddSingleton<FeedbackPluginDependencies>();
-            builder.Services.AddSingleton<FeedbackDatabaseService>();
-            builder.Services.AddSingleton<FeedbackService>();
+        // Register services
+        builder.Services.AddSingleton<FeedbackPluginDependencies>();
+        builder.Services.AddSingleton<FeedbackDatabaseService>();
+        builder.Services.AddSingleton<FeedbackService>();
 
-            // Initialize a plugins collection
-            builder.FeedbackPlugins();
-            if (!disableDefaultPlugin) builder.FeedbackPlugins().Append<DefaultFeedbackPlugin>();
+        // Initialize a plugins collection
+        builder.FeedbackPlugins();
+        if (!disableDefaultPlugin) builder.FeedbackPlugins().Append<DefaultFeedbackPlugin>();
 
-            // Register the content app factory
-            builder.ContentApps().Append<FeedbackContentApp>();
+        // Register the content app factory
+        builder.ContentApps().Append<FeedbackContentApp>();
 
-            builder.ManifestFilters().Append<FeedbackManifestFilter>();
-
-        }
+        builder.ManifestFilters().Append<FeedbackManifestFilter>();
 
     }
 
