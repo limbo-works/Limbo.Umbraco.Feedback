@@ -1,12 +1,12 @@
-﻿using Newtonsoft.Json;
-using Skybrud.Essentials.Json.Newtonsoft.Converters.Enums;
+﻿using System.Text.Json.Serialization;
+using Limbo.Umbraco.Feedback.Json;
 
 namespace Limbo.Umbraco.Feedback.Services;
 
 /// <summary>
 /// Enum class indicating the sort order of a list of entries.
 /// </summary>
-[JsonConverter(typeof(EnumCamelCaseConverter))]
+[JsonConverter(typeof(CamelCaseEnumConverter<EntriesSortOrder>))]
 public enum EntriesSortOrder {
 
     /// <summary>

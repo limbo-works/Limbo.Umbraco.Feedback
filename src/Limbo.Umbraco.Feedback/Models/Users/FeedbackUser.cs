@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using Umbraco.Cms.Core.Models.Membership;
 
 namespace Limbo.Umbraco.Feedback.Models.Users;
@@ -25,31 +25,31 @@ public class FeedbackUser : IFeedbackUser {
     /// <summary>
     /// Gets or sets the name of the user.
     /// </summary>
-    [JsonProperty("name")]
+    [JsonPropertyName("name")]
     public string Name { get; set; }
 
     /// <summary>
     /// Gets or sets the email address of the user.
     /// </summary>
-    [JsonProperty("email")]
+    [JsonPropertyName("email")]
     public string Email { get; set; }
 
     /// <summary>
     /// Gets or sets the description of the user.
     /// </summary>
-    [JsonProperty("description")]
+    [JsonPropertyName("description")]
     public string? Description { get; set; }
 
     /// <summary>
     /// Gets or sets the avatar of the user.
     /// </summary>
-    [JsonProperty("avatar")]
+    [JsonPropertyName("avatar")]
     public string? Avatar { get; set; }
 
     /// <summary>
     /// Gets or sets the language of the user.
     /// </summary>
-    [JsonProperty("language")]
+    [JsonPropertyName("language")]
     public string Language { get; set; }
 
     /// <summary>

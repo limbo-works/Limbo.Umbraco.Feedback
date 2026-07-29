@@ -1,12 +1,12 @@
-﻿using Newtonsoft.Json;
-using Skybrud.Essentials.Json.Newtonsoft.Converters.Enums;
+﻿using System.Text.Json.Serialization;
+using Limbo.Umbraco.Feedback.Json;
 
 namespace Limbo.Umbraco.Feedback.Services;
 
 /// <summary>
 /// Enum class indicating the sortable fields of a feedback entry.
 /// </summary>
-[JsonConverter(typeof(EnumCamelCaseConverter))]
+[JsonConverter(typeof(CamelCaseEnumConverter<EntriesSortField>))]
 public enum EntriesSortField {
 
     /// <summary>

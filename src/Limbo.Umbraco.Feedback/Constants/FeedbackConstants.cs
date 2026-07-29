@@ -18,6 +18,16 @@ public static class FeedbackConstants {
     /// </summary>
     public const string TableName = "SkybrudFeedback";
 
+    /// <summary>
+    /// Gets the name of the OpenAPI/Swagger document of the feedback management API.
+    /// </summary>
+    public const string ApiName = "feedback";
+
+    /// <summary>
+    /// Gets the base route of the feedback management API - relative to the back office route.
+    /// </summary>
+    public const string ApiRoute = "feedback/api/v{version:apiVersion}";
+
     public static class Ratings {
 
         public static class Keys {

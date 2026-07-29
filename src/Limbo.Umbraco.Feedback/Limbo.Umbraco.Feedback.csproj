@@ -3,13 +3,14 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <StaticWebAssetBasePath>App_Plugins/$(AssemblyName)</StaticWebAssetBasePath>
+    <TargetFramework>net10.0</TargetFramework>
+    <!-- The client build emits into wwwroot/App_Plugins/Limbo.Umbraco.Feedback, so the base path is the web root -->
+    <StaticWebAssetBasePath>/</StaticWebAssetBasePath>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>13.0.0-alpha001</VersionPrefix>
+    <VersionPrefix>17.0.0-alpha000</VersionPrefix>
     <VersionSuffix Condition="'$(Configuration)'=='Debug'">build$([System.DateTime]::UtcNow.ToString(`yyyyMMddHHmm`))</VersionSuffix>
     <Company>Limbo</Company>
     <Authors>Anders Bjerner</Authors>
@@ -32,7 +33,7 @@
   <!-- Include additional metadata in the assembly -->
   <ItemGroup>
     <AssemblyMetadata Include="PackageProjectUrl" Value="https://packages.limbo.works/limbo.umbraco.feedback/" />
-    <AssemblyMetadata Include="DocumentationUrl" Value="https://packages.limbo.works/limbo.umbraco.feedback/docs/v13/" />
+    <AssemblyMetadata Include="DocumentationUrl" Value="https://packages.limbo.works/limbo.umbraco.feedback/docs/v17/" />
     <AssemblyMetadata Include="NuGetUrl" Value="https://www.nuget.org/packages/Limbo.Umbraco.Feedback" />
     <!--<AssemblyMetadata Include="UmbracoMarketplaceUrl" Value="https://marketplace.umbraco.com/package/limbo.umbraco.feedback" />-->
   </ItemGroup>
@@ -40,9 +41,11 @@
   <!-- Include NuGet dependencies -->
   <ItemGroup>
     <PackageReference Include="Skybrud.Essentials" Version="1.1.58" />
-    <PackageReference Include="Umbraco.Cms.Core" Version="[13.0.0,13.999)" />
-    <PackageReference Include="Umbraco.Cms.Web.Website" Version="[13.0.0,13.999)" />
-    <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="[13.0.0,13.999)" />
+    <PackageReference Include="Umbraco.Cms.Core" Version="[17.0.0,17.9.9)" />
+    <PackageReference Include="Umbraco.Cms.Web.Common" Version="[17.0.0,17.9.9)" />
+    <PackageReference Include="Umbraco.Cms.Web.Website" Version="[17.0.0,17.9.9)" />
+    <PackageReference Include="Umbraco.Cms.Api.Common" Version="[17.0.0,17.9.9)" />
+    <PackageReference Include="Umbraco.Cms.Api.Management" Version="[17.0.0,17.9.9)" />
   </ItemGroup>
 
   <!-- Include package icon for NuGet -->
@@ -52,17 +55,47 @@
     <Content Include="../../README.md" Pack="false" />
   </ItemGroup>
 
-  <!-- Exclude certain files from the NuGet package -->
+  <!-- The "Client" folder holds the TypeScript sources; only the built output under wwwroot is packed -->
   <ItemGroup>
-    <Content Remove="compilerconfig.json" />
-    <None Include="compilerconfig.json" />
-    <Content Remove="wwwroot\Styles\Default.less" />
-    <None Include="wwwroot\Styles\Default.less" />
+    <ClientAssetsInputs Include="Client\src\**;Client\public\**;Client\package.json;Client\tsconfig.json;Client\vite.config.ts" Exclude="$(DefaultItemExcludes)" />
+    <Content Remove="Client\**" />
+    <None Include="Client\public\umbraco-package.json" Pack="false" />
   </ItemGroup>
 
   <!-- Generate XML documentation -->
   <PropertyGroup>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
+
+  <!--
+    Set BuildClientAssets=true to have "dotnet build" run the npm build as well. It is off by default so a
+    plain "dotnet build" doesn't require Node.js. CI and "dotnet pack" should pass -p:BuildClientAssets=true.
+  -->
+  <PropertyGroup>
+    <BuildClientAssets Condition="'$(BuildClientAssets)'==''">false</BuildClientAssets>
+  </PropertyGroup>
+
+  <Target Name="RestoreClient" Condition="'$(BuildClientAssets)'=='true'" Inputs="Client\package.json" Outputs="Client\node_modules\.package-lock.json">
+    <Message Importance="high" Text="Restoring client NPM packages..." />
+    <Exec Command="npm install" WorkingDirectory="Client" />
+  </Target>
+
+  <Target Name="BuildClient" Condition="'$(BuildClientAssets)'=='true'" BeforeTargets="AssignTargetPaths" DependsOnTargets="RestoreClient" Inputs="@(ClientAssetsInputs)" Outputs="$(IntermediateOutputPath)client.complete.txt">
+    <Message Importance="high" Text="Executing client NPM build script..." />
+    <Exec Command="npm run build" WorkingDirectory="Client" />
+    <!--
+      [CHANGE: the default Content glob is evaluated before any target runs, so it never sees the files the npm
+      build produces during this same build - a clean "dotnet pack" shipped a package with no App_Plugins assets
+      at all - and it holds on to the previous build's content-hashed file names, which Vite has just deleted.
+      Re-state the whole folder here, after the build.] Related: Client/src/api/feedback.repository.ts,
+      Client/src/workspace-view/feedback-workspace-view.element.ts, Client/src/utils/format.ts
+    -->
+    <ItemGroup>
+      <Content Remove="wwwroot\App_Plugins\**" />
+      <_ClientAssetsBuildOutput Include="wwwroot\App_Plugins\**" />
+      <Content Include="@(_ClientAssetsBuildOutput)" />
+    </ItemGroup>
+    <WriteLinesToFile File="$(IntermediateOutputPath)client.complete.txt" Lines="@(_ClientAssetsBuildOutput)" Overwrite="true" />
+  </Target>
 
 </Project>

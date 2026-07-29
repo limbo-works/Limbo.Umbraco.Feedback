@@ -1,0 +1,14 @@
+{
+  "id": "Limbo.Umbraco.Feedback",
+  "name": "Limbo Feedback",
+  "version": "17.0.0-alpha000",
+  "allowTelemetry": true,
+  "extensions": [
+    {
+      "name": "Limbo Feedback Bundle",
+      "alias": "Limbo.Feedback.Bundle",
+      "type": "bundle",
+      "js": "/App_Plugins/Limbo.Umbraco.Feedback/limbo-feedback.js"
+    }
+  ]
+}

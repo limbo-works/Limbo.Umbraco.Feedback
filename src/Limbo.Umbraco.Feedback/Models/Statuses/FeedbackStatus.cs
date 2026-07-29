@@ -1,5 +1,5 @@
 ﻿using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Limbo.Umbraco.Feedback.Models.Statuses;
 
@@ -13,25 +13,25 @@ public class FeedbackStatus {
     /// <summary>
     /// Gets the alias of the status.
     /// </summary>
-    [JsonProperty("alias")]
+    [JsonPropertyName("alias")]
     public string Alias { get; }
 
     /// <summary>
     /// Gets the key (GUID) of the status.
     /// </summary>
-    [JsonProperty("key")]
+    [JsonPropertyName("key")]
     public Guid Key { get; }
 
     /// <summary>
     /// Gets the name of the status.
     /// </summary>
-    [JsonProperty("name")]
+    [JsonPropertyName("name")]
     public string? Name { get; }
 
     /// <summary>
     /// Gets whether the status is active.
     /// </summary>
-    [JsonProperty("active")]
+    [JsonPropertyName("active")]
     public bool IsActive { get; }
 
     #endregion

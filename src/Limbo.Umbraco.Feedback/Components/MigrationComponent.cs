@@ -1,4 +1,6 @@
-﻿using Limbo.Umbraco.Feedback.Migrations;
+using System.Threading;
+using System.Threading.Tasks;
+using Limbo.Umbraco.Feedback.Migrations;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.Migrations;
 using Umbraco.Cms.Core.Services;
@@ -10,7 +12,11 @@ using Umbraco.Cms.Infrastructure.Scoping;
 
 namespace Limbo.Umbraco.Feedback.Components;
 
-public class MigrationComponent : IComponent {
+/// <summary>
+/// Runs the migration plan of the package on startup.
+/// </summary>
+/// <remarks><c>IComponent</c> is obsolete in Umbraco 17, so the component is now an <see cref="IAsyncComponent"/>.</remarks>
+public class MigrationComponent : IAsyncComponent {
 
     private readonly IMigrationPlanExecutor _migrationPlanExecutor;
     private readonly IScopeProvider _scopeProvider;
@@ -22,21 +28,21 @@ public class MigrationComponent : IComponent {
         _keyValueService = keyValueService;
     }
 
-    public void Initialize() {
+    public async Task InitializeAsync(bool isRestarting, CancellationToken cancellationToken) {
 
-        var plan = new MigrationPlan("Limbo.Umbraco.Feedback");
+        MigrationPlan plan = new("Limbo.Umbraco.Feedback");
 
         plan.From(string.Empty)
             .To<CreateTableMigration>("1.0.0-alpha001")
             .To<FixEmptyStringValuesMigration>("1.0.0-alpha004")
             .To<NoopMigration>("279d64a4");
 
-        var upgrader = new Upgrader(plan);
+        Upgrader upgrader = new(plan);
 
-        upgrader.Execute(_migrationPlanExecutor, _scopeProvider, _keyValueService);
+        await upgrader.ExecuteAsync(_migrationPlanExecutor, _scopeProvider, _keyValueService);
 
     }
 
-    public void Terminate() { }
+    public Task TerminateAsync(bool isRestarting, CancellationToken cancellationToken) => Task.CompletedTask;
 
 }
