@@ -2,7 +2,7 @@
 using Limbo.Umbraco.Feedback.Models.Ratings;
 using Limbo.Umbraco.Feedback.Models.Statuses;
 using Limbo.Umbraco.Feedback.Models.Users;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 // ReSharper disable ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
 
@@ -34,13 +34,13 @@ public class FeedbackEntry {
     /// <summary>
     /// Gets or sets the numeric ID of the entry.
     /// </summary>
-    [JsonProperty("id")]
+    [JsonPropertyName("id")]
     public int Id => _entry.Id;
 
     /// <summary>
     /// Gets or sets the key of the entry.
     /// </summary>
-    [JsonProperty("key")]
+    [JsonPropertyName("key")]
     public Guid Key {
         get => _entry.Key;
         internal set => _entry.Key = value;
@@ -49,7 +49,7 @@ public class FeedbackEntry {
     /// <summary>
     /// Gets or sets the key of the site the issue was submitted for.
     /// </summary>
-    [JsonProperty("siteKey")]
+    [JsonPropertyName("siteKey")]
     public Guid SiteKey {
         get => _entry.SiteKey;
         set => _entry.SiteKey = value;
@@ -58,7 +58,7 @@ public class FeedbackEntry {
     /// <summary>
     /// Gets or sets the key of the page the issue was submitted for.
     /// </summary>
-    [JsonProperty("pageKey")]
+    [JsonPropertyName("pageKey")]
     public Guid PageKey {
         get => _entry.PageKey;
         set => _entry.PageKey = value;
@@ -67,7 +67,7 @@ public class FeedbackEntry {
     /// <summary>
     /// Gets or sets the name the user who submitted the entry.
     /// </summary>
-    [JsonProperty("name")]
+    [JsonPropertyName("name")]
     public string? Name {
         get => _entry.Name;
         set => _entry.Name = value;
@@ -76,7 +76,7 @@ public class FeedbackEntry {
     /// <summary>
     /// Gets or sets the email address the user who submitted the entry.
     /// </summary>
-    [JsonProperty("email")]
+    [JsonPropertyName("email")]
     public string? Email {
         get => _entry.Email;
         set => _entry.Email = value;
@@ -85,7 +85,7 @@ public class FeedbackEntry {
     /// <summary>
     /// Gets or sets the rating of the entry.
     /// </summary>
-    [JsonProperty("rating")]
+    [JsonPropertyName("rating")]
     public FeedbackRating Rating {
         get => _rating;
         set { _rating = value; _entry.Rating = value?.Key ?? Guid.Empty; }
@@ -94,7 +94,7 @@ public class FeedbackEntry {
     /// <summary>
     /// Gets or sets the status of the entry.
     /// </summary>
-    [JsonProperty("status")]
+    [JsonPropertyName("status")]
     public FeedbackStatus Status {
         get => _status;
         set { _status = value; _entry.Status = value?.Key ?? Guid.Empty; }
@@ -103,7 +103,7 @@ public class FeedbackEntry {
     /// <summary>
     /// Gets or sets the comment of the entry.
     /// </summary>
-    [JsonProperty("comment")]
+    [JsonPropertyName("comment")]
     public string? Comment {
         get => _entry.Comment;
         set => _entry.Comment = value;
@@ -112,7 +112,7 @@ public class FeedbackEntry {
     /// <summary>
     /// Gets or sets a timestamp for when the entry was created.
     /// </summary>
-    [JsonProperty("createDate")]
+    [JsonPropertyName("createDate")]
     public DateTime CreateDate {
         get => _entry.CreateDate;
         internal set => _entry.CreateDate = value;
@@ -121,7 +121,7 @@ public class FeedbackEntry {
     /// <summary>
     /// Gets or sets a timestamp for when the entry was last updated.
     /// </summary>
-    [JsonProperty("updateDate")]
+    [JsonPropertyName("updateDate")]
     public DateTime UpdateDate {
         get => _entry.UpdateDate;
         set => _entry.UpdateDate = value;
@@ -130,7 +130,7 @@ public class FeedbackEntry {
     /// <summary>
     /// Gets or sets the user to which the entry should be assigned.
     /// </summary>
-    [JsonProperty("assignedTo")]
+    [JsonPropertyName("assignedTo")]
     public IFeedbackUser? AssignedTo {
         get => _responsible;
         set { _responsible = value; _entry.AssignedTo = value?.Key ?? Guid.Empty; }
@@ -139,7 +139,7 @@ public class FeedbackEntry {
     /// <summary>
     /// Gets or sets whether the entry has been archived.
     /// </summary>
-    [JsonProperty("archived")]
+    [JsonPropertyName("archived")]
     public bool IsArchived {
         get => _entry.IsArchived;
         set => _entry.IsArchived = value;

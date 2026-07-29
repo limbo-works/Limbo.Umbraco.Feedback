@@ -1,4 +1,5 @@
-﻿using Limbo.Umbraco.Feedback.Constants;
+using System.Threading.Tasks;
+using Limbo.Umbraco.Feedback.Constants;
 using Limbo.Umbraco.Feedback.Models.Entries;
 using Umbraco.Cms.Infrastructure.Migrations;
 
@@ -6,13 +7,14 @@ using Umbraco.Cms.Infrastructure.Migrations;
 
 namespace Limbo.Umbraco.Feedback.Migrations;
 
-public class CreateTableMigration : MigrationBase {
+public class CreateTableMigration : AsyncMigrationBase {
 
     public CreateTableMigration(IMigrationContext context) : base(context) { }
 
-    protected override void Migrate() {
-        if (TableExists(FeedbackConstants.TableName)) return;
+    protected override Task MigrateAsync() {
+        if (TableExists(FeedbackConstants.TableName)) return Task.CompletedTask;
         Create.Table<FeedbackEntrySchema>().Do();
+        return Task.CompletedTask;
     }
 
 }

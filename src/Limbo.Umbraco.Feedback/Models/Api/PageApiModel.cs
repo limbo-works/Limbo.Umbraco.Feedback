@@ -1,8 +1,7 @@
-﻿using System;
-using Newtonsoft.Json;
+using System;
+using System.Text.Json.Serialization;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
-using Umbraco.Extensions;
 
 #pragma warning disable 1591
 
@@ -10,27 +9,27 @@ namespace Limbo.Umbraco.Feedback.Models.Api;
 
 public class PageApiModel {
 
-    [JsonProperty("id")]
+    [JsonPropertyName("id")]
     public int Id { get; }
 
-    [JsonProperty("key")]
+    [JsonPropertyName("key")]
     public Guid Key { get; }
 
-    [JsonProperty("name")]
+    [JsonPropertyName("name")]
     public string Name { get; }
 
-    [JsonProperty("published")]
+    [JsonPropertyName("published")]
     public bool IsPublished { get; }
 
-    [JsonProperty("url")]
+    [JsonPropertyName("url")]
     public string? Url { get; }
 
-    public PageApiModel(IPublishedContent content) {
+    public PageApiModel(IPublishedContent content, string? url) {
         Id = content.Id;
         Key = content.Key;
         Name = content.Name;
         IsPublished = true;
-        Url = content.Url();
+        Url = url;
     }
 
     public PageApiModel(IContent content) {

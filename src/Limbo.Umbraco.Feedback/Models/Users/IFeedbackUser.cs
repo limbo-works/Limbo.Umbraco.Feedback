@@ -1,5 +1,5 @@
 ﻿using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Limbo.Umbraco.Feedback.Models.Users;
 
@@ -11,43 +11,43 @@ public interface IFeedbackUser {
     /// <summary>
     /// Gets the ID of the user.
     /// </summary>
-    [JsonProperty("id")]
+    [JsonPropertyName("id")]
     int Id { get; }
 
     /// <summary>
     /// Gets the key (GUID) of the user.
     /// </summary>
-    [JsonProperty("key")]
+    [JsonPropertyName("key")]
     Guid Key { get; }
 
     /// <summary>
     /// Gets the name of the user.
     /// </summary>
-    [JsonProperty("name")]
+    [JsonPropertyName("name")]
     string Name { get; }
 
     /// <summary>
     /// Gets the email address of the user.
     /// </summary>
-    [JsonProperty("email")]
+    [JsonPropertyName("email")]
     string Email { get; }
 
     /// <summary>
     /// Gets the description of the user.
     /// </summary>
-    [JsonProperty("description")]
+    [JsonPropertyName("description")]
     string? Description { get; }
 
     /// <summary>
     /// Gets the avatar of the user.
     /// </summary>
-    [JsonProperty("avatar")]
+    [JsonPropertyName("avatar")]
     string? Avatar { get; }
 
     /// <summary>
     /// Gets the language of the user.
     /// </summary>
-    [JsonProperty("language")]
+    [JsonPropertyName("language")]
     string Language { get; }
 
 }

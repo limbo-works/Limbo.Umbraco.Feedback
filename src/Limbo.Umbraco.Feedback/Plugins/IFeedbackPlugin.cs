@@ -6,10 +6,9 @@ using Limbo.Umbraco.Feedback.Models.Entries;
 using Limbo.Umbraco.Feedback.Models.Sites;
 using Limbo.Umbraco.Feedback.Models.Statuses;
 using Limbo.Umbraco.Feedback.Models.Users;
+using Limbo.Umbraco.Feedback.Models.Workspaces;
 using Limbo.Umbraco.Feedback.Services;
 using Umbraco.Cms.Core.Models;
-using Umbraco.Cms.Core.Models.ContentEditing;
-using Umbraco.Cms.Core.Models.Membership;
 
 namespace Limbo.Umbraco.Feedback.Plugins;
 
@@ -124,13 +123,13 @@ public interface IFeedbackPlugin {
     IReadOnlyList<IFeedbackUser> GetUsers();
 
     /// <summary>
-    /// Gets the content app for the specified <paramref name="content"/> item, or <c>null</c> if no feedback
-    /// plugins provide a content app for <paramref name="content"/>.
+    /// Gets the feedback workspace view for the specified <paramref name="content"/> item, or <c>false</c> if the
+    /// feedback view shouldn't be shown for <paramref name="content"/>.
     /// </summary>
-    /// <param name="content">The <see cref="IContent"/> to show the content app for.</param>
-    /// <param name="userGroups">A list of user groups.</param>
-    /// <param name="result">When this method returns, holds the content app if successful; otherwise, <c>null</c>.</param>
-    /// <returns><c>true</c> if a content app was found; otherwise, <c>false</c>.</returns>
-    bool TryGetContentApp(IContent content, IEnumerable<IReadOnlyUserGroup> userGroups, [NotNullWhen(true)] out ContentApp? result);
+    /// <param name="content">The <see cref="IContent"/> to show the workspace view for.</param>
+    /// <param name="result">When this method returns, holds the workspace view if successful; otherwise, <c>null</c>.</param>
+    /// <returns><c>true</c> if a workspace view was found; otherwise, <c>false</c>.</returns>
+    /// <remarks>Replaces <c>TryGetContentApp</c>, as content apps were removed in Umbraco 14.</remarks>
+    bool TryGetWorkspaceView(IContent content, [NotNullWhen(true)] out FeedbackWorkspaceView? result);
 
 }

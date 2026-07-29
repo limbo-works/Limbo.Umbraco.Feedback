@@ -1,7 +1,5 @@
 ﻿using Limbo.Umbraco.Feedback.Config;
-using Limbo.Umbraco.Feedback.ContentApps;
 using Limbo.Umbraco.Feedback.Extensions;
-using Limbo.Umbraco.Feedback.Manifests;
 using Limbo.Umbraco.Feedback.Plugins;
 using Limbo.Umbraco.Feedback.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,15 +27,11 @@ public class FeedbackComposer : IComposer {
         builder.Services.AddSingleton<FeedbackPluginDependencies>();
         builder.Services.AddSingleton<FeedbackDatabaseService>();
         builder.Services.AddSingleton<FeedbackService>();
+        builder.Services.AddSingleton<FeedbackApiModelFactory>();
 
         // Initialize a plugins collection
         builder.FeedbackPlugins();
         if (!disableDefaultPlugin) builder.FeedbackPlugins().Append<DefaultFeedbackPlugin>();
-
-        // Register the content app factory
-        builder.ContentApps().Append<FeedbackContentApp>();
-
-        builder.ManifestFilters().Append<FeedbackManifestFilter>();
 
     }
 

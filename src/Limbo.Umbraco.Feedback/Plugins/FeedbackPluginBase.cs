@@ -7,11 +7,11 @@ using Limbo.Umbraco.Feedback.Models.Entries;
 using Limbo.Umbraco.Feedback.Models.Sites;
 using Limbo.Umbraco.Feedback.Models.Statuses;
 using Limbo.Umbraco.Feedback.Models.Users;
+using Limbo.Umbraco.Feedback.Models.Workspaces;
 using Limbo.Umbraco.Feedback.Services;
 using Umbraco.Cms.Core.Models;
-using Umbraco.Cms.Core.Models.ContentEditing;
-using Umbraco.Cms.Core.Models.Membership;
 using Umbraco.Cms.Core.Models.PublishedContent;
+using Umbraco.Extensions;
 
 namespace Limbo.Umbraco.Feedback.Plugins;
 
@@ -106,10 +106,10 @@ public abstract class FeedbackPluginBase : IFeedbackPlugin {
     /// <returns><c>true</c> if a site was found; otherwise, <c>false</c>.</returns>
     public virtual bool TryGetSite(Guid key, [NotNullWhen(true)] out FeedbackSiteSettings? site) {
 
-        IPublishedContent? content = _dependencies.UmbracoContext?.Content?.GetById(key);
+        IPublishedContent? content = _dependencies.PublishedContentCache.GetById(key);
 
         if (content is not null) {
-            if (_dependencies.DomainService.GetAssignedDomains(content.Id, false).Any()) {
+            if (_dependencies.DomainCache.HasAssigned(content.Id, false)) {
                 site = new FeedbackSiteSettings(content);
                 return true;
             }
@@ -128,7 +128,7 @@ public abstract class FeedbackPluginBase : IFeedbackPlugin {
     /// <returns><see langword="true"/> if successful; otherwise, <see langword="false"/>.</returns>
     public virtual bool TryGetSite(IContent content, [NotNullWhen(true)] out FeedbackSiteSettings? site) {
 
-        IPublishedContent? scope = _dependencies.UmbracoContext?.Content?.GetById(content.Key);
+        IPublishedContent? scope = _dependencies.PublishedContentCache.GetById(content.Key);
 
         while (scope is not null) {
 
@@ -137,7 +137,7 @@ public abstract class FeedbackPluginBase : IFeedbackPlugin {
                 return true;
             }
 
-            scope = scope.Parent;
+            scope = scope.Parent<IPublishedContent>(_dependencies.DocumentNavigationQueryService, _dependencies.PublishedContentStatusFilteringService);
 
         }
 
@@ -199,34 +199,34 @@ public abstract class FeedbackPluginBase : IFeedbackPlugin {
     }
 
     /// <summary>
-    /// Virtual method for getting a feedback content app for the specified <paramref name="content"/>.
+    /// Virtual method for getting the feedback workspace view for the specified <paramref name="content"/>.
     ///
-    /// In the default implementation, this method will return <c>false</c> and <paramref name="result"/> will be <c>null</c>.
+    /// The view is shown for content items whose content type alias matches one of the configured site content
+    /// types, and for content items whose alias matches one of the configured page content types - provided a
+    /// parent site can be resolved.
     /// </summary>
     /// <param name="content">The content item being rendered.</param>
-    /// <param name="userGroups">The user groups of the current user.</param>
-    /// <param name="result">The content app, or <c>null</c> if a content app shouldn't be sown for <paramref name="content"/>.</param>
-    /// <returns><c>true</c> if a content app was configured; otherwise <c>false</c>.</returns>
-    public virtual bool TryGetContentApp(IContent content, IEnumerable<IReadOnlyUserGroup> userGroups, [NotNullWhen(true)] out ContentApp? result) {
+    /// <param name="result">The workspace view, or <c>null</c> if the view shouldn't be shown for <paramref name="content"/>.</param>
+    /// <returns><c>true</c> if a workspace view was configured; otherwise <c>false</c>.</returns>
+    public virtual bool TryGetWorkspaceView(IContent content, [NotNullWhen(true)] out FeedbackWorkspaceView? result) {
 
-        // If the ID is 0 it means that the content node is currently beeing created, in which case it doesn't
-        // really make sense to show the content app
+        // If the ID is 0 it means that the content node is currently being created, in which case it doesn't
+        // really make sense to show the workspace view
         if (content.Id == 0) {
             result = null;
             return false;
         }
 
-        // If the content type alias matches a site type, we show the content app with site level information
+        // If the content type alias matches a site type, we show the view with site level information
         if (_dependencies.FeedbackSettings.SiteContentTypes.Contains(content.ContentType.Alias)) {
-            result = GetContentAppForSite(content);
+            result = GetWorkspaceViewForSite(content);
             return result != null;
         }
 
         // If the content type alias matches a page type, we try to get a reference to the site the page belongs
-        // to, and then show the content app for the page
+        // to, and then show the view for the page
         if (_dependencies.FeedbackSettings.PageContentTypes.Contains(content.ContentType.Alias) && TryGetSite(content, out FeedbackSiteSettings? site)) {
-            IContent? siteContent = _dependencies.ContentService.GetById(site.Id);
-            result = siteContent == null ? null : GetContentAppForPage(siteContent, content);
+            result = GetWorkspaceViewForPage(site, content);
             return result != null;
         }
 
@@ -236,45 +236,24 @@ public abstract class FeedbackPluginBase : IFeedbackPlugin {
     }
 
     /// <summary>
-    /// Returns a content app for the specified <paramref name="site"/>.
+    /// Returns the workspace view for the specified <paramref name="site"/>.
     /// </summary>
     /// <param name="site">The site.</param>
-    /// <returns>An instance of <see cref="ContentApp"/>.</returns>
-    /// <remarks>Override the method and return <c>null</c> for a given site if the content app shouldn't beshown.</remarks>
-    protected virtual ContentApp? GetContentAppForSite(IContent site) {
-
-        return (ContentApp?) new ContentApp {
-            Alias = "skybrud-feedback",
-            Name = "Feedback",
-            Icon = "icon-chat",
-            View = "/App_Plugins/Limbo.Umbraco.Feedback/Views/ContentApp.html",
-            ViewModel = new {
-                siteKey = site.Key
-            }
-        };
-
+    /// <returns>An instance of <see cref="FeedbackWorkspaceView"/>.</returns>
+    /// <remarks>Override the method and return <c>null</c> for a given site if the view shouldn't be shown.</remarks>
+    protected virtual FeedbackWorkspaceView? GetWorkspaceViewForSite(IContent site) {
+        return new FeedbackWorkspaceView(site.Key);
     }
 
     /// <summary>
-    /// Returns a content app for the specified <paramref name="page"/>.
+    /// Returns the workspace view for the specified <paramref name="page"/>.
     /// </summary>
     /// <param name="site">The site.</param>
     /// <param name="page">The page.</param>
-    /// <returns>An instance of <see cref="ContentApp"/>.</returns>
-    /// <remarks>Override the method and return <c>null</c> for a given site if the content app shouldn't beshown.</remarks>
-    protected virtual ContentApp? GetContentAppForPage(IContent site, IContent page) {
-
-        return (ContentApp?) new ContentApp {
-            Alias = "skybrud-feedback",
-            Name = "Feedback",
-            Icon = "icon-chat",
-            View = "/App_Plugins/Limbo.Umbraco.Feedback/Views/ContentAppPage.html",
-            ViewModel = new {
-                siteKey = site.Key,
-                pageKey = page.Key
-            }
-        };
-
+    /// <returns>An instance of <see cref="FeedbackWorkspaceView"/>.</returns>
+    /// <remarks>Override the method and return <c>null</c> for a given page if the view shouldn't be shown.</remarks>
+    protected virtual FeedbackWorkspaceView? GetWorkspaceViewForPage(FeedbackSiteSettings site, IContent page) {
+        return new FeedbackWorkspaceView(site.Key, page.Key);
     }
 
 }

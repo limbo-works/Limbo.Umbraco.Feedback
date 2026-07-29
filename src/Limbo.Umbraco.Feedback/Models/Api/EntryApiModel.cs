@@ -1,7 +1,7 @@
 ﻿using System;
 using Limbo.Umbraco.Feedback.Models.Entries;
 using Limbo.Umbraco.Feedback.Models.Users;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 #pragma warning disable 1591
 
@@ -11,49 +11,43 @@ public class EntryApiModel {
 
     protected FeedbackEntry Entry { get; }
 
-    [JsonProperty("id")]
+    [JsonPropertyName("id")]
     public int Id => Entry.Id;
 
-    [JsonProperty("key")]
+    [JsonPropertyName("key")]
     public Guid Key => Entry.Key;
 
-    [JsonProperty("site")]
+    [JsonPropertyName("site")]
     public SiteApiModel Site { get; }
 
-    [JsonProperty("page")]
+    [JsonPropertyName("page")]
     public PageApiModel? Page { get; }
 
-    [JsonProperty("name")]
+    [JsonPropertyName("name")]
     public string? Name => Entry.Name;
 
-    [JsonProperty("email")]
+    [JsonPropertyName("email")]
     public string? Email => Entry.Email;
 
-    [JsonProperty("comment")]
+    [JsonPropertyName("comment")]
     public string? Comment => Entry.Comment;
 
-    [JsonProperty("status")]
+    [JsonPropertyName("status")]
     public StatusApiModel? Status { get; }
 
-    [JsonProperty("rating")]
+    [JsonPropertyName("rating")]
     public RatingApiModel? Rating { get; }
 
-    [JsonProperty("assignedTo")]
+    [JsonPropertyName("assignedTo")]
     public IFeedbackUser? AssignedTo { get; }
 
-    [JsonProperty("createDate")]
+    [JsonPropertyName("createDate")]
     public DateTime CreateDate => Entry.CreateDate;
 
-    [JsonProperty("createDateDiff")]
-    public string? CreateDateDiff { get; set; }
-
-    [JsonProperty("updateDate")]
+    [JsonPropertyName("updateDate")]
     public DateTime UpdateDate => Entry.UpdateDate;
 
-    [JsonProperty("updateDateDiff")]
-    public string? UpdateDateDiff { get; set; }
-
-    [JsonProperty("archived")]
+    [JsonPropertyName("archived")]
     public bool IsArchived => Entry.IsArchived;
 
     public EntryApiModel(FeedbackEntry entry, SiteApiModel site, PageApiModel? page, StatusApiModel? status, RatingApiModel? rating, IFeedbackUser? assignedTo) {
