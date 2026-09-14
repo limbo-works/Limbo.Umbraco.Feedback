@@ -318,7 +318,7 @@
         $scope.hasFilter = (
             $scope.selected.rating || $scope.selected.responsible || $scope.selected.status || $scope.selected.type
         );
-        $scope.update();
+        $scope.update(1);
     }, true);
 
 });
