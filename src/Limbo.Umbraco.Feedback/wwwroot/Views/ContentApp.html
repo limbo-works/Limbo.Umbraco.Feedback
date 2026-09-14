@@ -16,10 +16,26 @@
                 <localize key="feedback_labelRefresh">Refresh</localize>
             </button>
         </div>
+        <div class="limbo-feedback-selection-actions" ng-if="selectedCount > 0">
+            <span class="limbo-feedback-selection-count">{{selectedCount}} <localize key="feedback_labelSelected">selected</localize></span>
+            <div>
+                <button type="button" class="btn btn-default" ng-click="bulkAction('archive')">
+                    <i class="icon icon-box"></i>
+                    <localize key="feedback_btnArchive">Archive</localize>
+                </button>
+                <button type="button" class="btn btn-danger" ng-click="bulkAction('delete')">
+                    <i class="icon icon-trash"></i>
+                    <localize key="feedback_btnDelete">Delete</localize>
+                </button>
+            </div>
+        </div>
     </div>
     <table class="table list" ng-class="{loading: loading}">
         <thead>
             <tr>
+                <th class="col col-selection">
+                    <input type="checkbox" aria-label="{{labels.labelSelectAllRows}}" ng-checked="isPageSelected()" ng-click="togglePageSelection($event)" />
+                </th>
                 <th>
                     <a href="#" prevent-default="" ng-click="sort('rating', 'asc');"><localize key="feedback_labelRating">Rating</localize></a>
                     <i class="icon" ng-class="{'icon-navigation-up': isSortDirection('rating', 'asc'), 'icon-navigation-down': isSortDirection('rating', 'desc')}"></i>
@@ -43,14 +59,17 @@
         </thead>
         <tbody ng-if="entries.length == 0">
             <tr>
-                <td colspan="6" class="empty">
-                    <span ng-if="filterCount == 0">Dette site har i øjeblikket ingen feedback-besvarelser.</span>
-                    <span ng-if="filterCount > 0">Din søgning matcher ingen feedback-besvarelser.</span>
+                <td colspan="7" class="empty">
+                    <span ng-if="filterCount == 0"><localize key="feedback_labelNoEntries">This site currently has no feedback responses.</localize></span>
+                    <span ng-if="filterCount > 0"><localize key="feedback_labelNoMatchingEntries">Your search did not match any feedback responses.</localize></span>
                 </td>
             </tr>
         </tbody>
         <tbody ng-repeat="entry in entries" ng-class="{expanded: entry.expanded}">
-            <tr ng-click="entry.expanded = !entry.expanded">
+            <tr ng-click="entry.expanded = !entry.expanded" ng-class="{selected: entry.selected}">
+                <td class="col col-selection" ng-click="$event.stopPropagation()">
+                    <input type="checkbox" aria-label="{{labels.labelSelectRow}}" ng-checked="entry.selected" ng-click="toggleEntrySelection(entry, $event)" />
+                </td>
                 <td class="col col-rating">
                     <div class="rating rating-{{entry.rating.alias}}">
                         <span>{{entry.rating.name}}</span>
@@ -77,21 +96,21 @@
                 </td>
             </tr>
             <tr ng-show="entry.expanded">
-                <td colspan="6">
+                <td colspan="7">
                     <table class="table details">
                         <tr>
-                            <th>ID</th>
+                            <th><localize key="feedback_labelId">ID</localize></th>
                             <td>{{entry.id}}</td>
                         </tr>
                         <tr>
-                            <th>Key</th>
+                            <th><localize key="feedback_labelKey">Key</localize></th>
                             <td><code>{{entry.key}}</code></td>
                         </tr>
                         <tr>
                             <th><localize key="feedback_labelPageTitle">Page Title</localize></th>
                             <td>
                                 <span ng-show="entry.page">{{entry.page.name}}</span>
-                                <span ng-show="!entry.page"><em>The page no longer exists</em></span>
+                                <span ng-show="!entry.page"><em><localize key="feedback_labelPageNoLongerExists">The page no longer exists</localize></em></span>
                             </td>
                         </tr>
                         <tr>
@@ -100,7 +119,7 @@
                                 <span ng-show="entry.page">
                                     {{entry.page.url}}
                                 </span>
-                                <span ng-show="!entry.page"><em>The page no longer exists</em></span>
+                                <span ng-show="!entry.page"><em><localize key="feedback_labelPageNoLongerExists">The page no longer exists</localize></em></span>
                             </td>
                         </tr>
                         <tr>
@@ -191,7 +210,7 @@
                 <th colspan="7">
                     <div class="pull-left pagination pagination-left" style="margin: 0;">
                         <div ng-show="pagination.page > 0 && pagination.total > 0">
-                            Viser {{pagination.offset + 1}}-{{pagination.offset + entries.length}} af {{pagination.total}} &ndash; Side {{pagination.page}} af {{pagination.pages}}
+                                {{labels.labelShowing}} {{pagination.offset + 1}}-{{pagination.offset + entries.length}} {{labels.labelOf}} {{pagination.total}} &ndash; {{labels.labelPage}} {{pagination.page}} {{labels.labelOf}} {{pagination.pages}}
                         </div>
                     </div>
                     <div class="pagination pagination-right" style="margin: 0;">

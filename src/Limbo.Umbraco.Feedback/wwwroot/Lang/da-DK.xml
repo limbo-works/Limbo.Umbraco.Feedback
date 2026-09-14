@@ -18,6 +18,8 @@
     <key alias="labelPageId">Sidens ID</key>
     <key alias="labelPageTitle">Sidens navn</key>
     <key alias="labelPageUrl">URL</key>
+    <key alias="labelKey">Nøgle</key>
+    <key alias="labelPageNoLongerExists">Siden findes ikke længere</key>
     <key alias="labelAssignedTo">Tildelt til</key>
     <key alias="labelResponsible">Ansvarlig</key>
     <key alias="labelRating">Bedømmelse</key>
@@ -32,6 +34,13 @@
     <key alias="labelYes">Ja</key>
     <key alias="labelNo">Nej</key>
     <key alias="labelRefresh">Genindlæs</key>
+    <key alias="labelSelected">valgt</key>
+    <key alias="labelSelectAllRows">Vælg alle rækker på denne side</key>
+    <key alias="labelSelectRow">Vælg række</key>
+    <key alias="labelNoEntries">Dette site har i øjeblikket ingen feedback-besvarelser.</key>
+    <key alias="labelNoMatchingEntries">Din søgning matcher ingen feedback-besvarelser.</key>
+    <key alias="labelShowing">Viser</key>
+    <key alias="labelOf">af</key>
   </area>
   <area alias="feedback">
     <key alias="btnArchive">Arkivér</key>
@@ -41,6 +50,20 @@
     <key alias="btnSelectResponsible">Vælg ansvarlig</key>
     <key alias="btnShowInUmbraco">Vis i Umbraco</key>
     <key alias="btnShowAtWebsite">Vis på hjemmesiden</key>
+    <key alias="confirmArchive">Er du sikker på, at du vil arkivere den valgte feedback-besvarelse?</key>
+    <key alias="confirmDelete">Er du sikker på, at du vil slette den valgte feedback-besvarelse?</key>
+    <key alias="confirmBulkArchive">Er du sikker på, at du vil arkivere de valgte feedback-besvarelser?</key>
+    <key alias="confirmBulkDelete">Er du sikker på, at du vil slette de valgte feedback-besvarelser?</key>
+    <key alias="archiveSuccess">Besvarelsen blev arkiveret.</key>
+    <key alias="deleteSuccess">Besvarelsen blev slettet.</key>
+    <key alias="archiveError">Besvarelsen kunne ikke arkiveres</key>
+    <key alias="deleteError">Besvarelsen kunne ikke slettes</key>
+    <key alias="bulkArchiveSuccess">De valgte feedback-besvarelser blev arkiveret.</key>
+    <key alias="bulkDeleteSuccess">De valgte feedback-besvarelser blev slettet.</key>
+    <key alias="bulkArchiveError">De valgte feedback-besvarelser kunne ikke arkiveres</key>
+    <key alias="bulkDeleteError">De valgte feedback-besvarelser kunne ikke slettes</key>
+    <key alias="selectStatus">Vælg status</key>
+    <key alias="selectResponsible">Vælg ansvarlig</key>
   </area>
   <area alias="feedback">
     <key alias="labelAllRatings">Alle bedømmelser</key>

@@ -2,6 +2,47 @@
 
     $scope.current = editorState.current;
 
+    $scope.selectedCount = 0;
+
+    $scope.toggleEntrySelection = function (entry, event) {
+        event.stopPropagation();
+        entry.selected = !entry.selected;
+        updateSelectionCount();
+    };
+
+    $scope.isPageSelected = function () {
+        return $scope.entries && $scope.entries.length > 0 &&
+            $scope.entries.every(function (entry) { return entry.selected; });
+    };
+
+    $scope.togglePageSelection = function (event) {
+        event.stopPropagation();
+
+        var selected = !$scope.isPageSelected();
+        ($scope.entries || []).forEach(function (entry) {
+            entry.selected = selected;
+        });
+
+        updateSelectionCount();
+    };
+
+    $scope.bulkAction = function (action) {
+        var entries = ($scope.entries || []).filter(function (entry) { return entry.selected; });
+        if (!entries.length) return;
+
+        if (!confirm(action === "archive" ? $scope.labels.confirmBulkArchive : $scope.labels.confirmBulkDelete)) return;
+
+        $scope.loading = true;
+        runBulkAction(entries, action, 0, function () {
+            notificationsService.success(action === "archive" ? $scope.labels.bulkArchiveSuccess : $scope.labels.bulkDeleteSuccess);
+            $scope.update();
+        }, function (res) {
+            $scope.loading = false;
+            notificationsService.error((action === "archive" ? $scope.labels.bulkArchiveError : $scope.labels.bulkDeleteError) +
+                (res.data && res.data.meta && res.data.meta.error ? ": " + res.data.meta.error : ""));
+        });
+    };
+
     // Get information about the current user
     userService.getCurrentUser().then(function (user) {
         $scope.user = user;
@@ -9,24 +50,24 @@
     });
 
     $scope.archive = function (entry, success, error) {
-        if (!confirm("Are you sure you want to archive the selected feedback entry?")) return;
+        if (!confirm($scope.labels.confirmArchive)) return;
         $http.get("/umbraco/backoffice/Limbo/FeedbackAdmin/Archive?key=" + entry.key).then(function (res) {
-            notificationsService.success("The entry was successfully archived.");
+            notificationsService.success($scope.labels.archiveSuccess);
             success(res.data);
         }, function (res) {
-            notificationsService.error("Unable to archive entry" + (res.data && res.data.meta && res.data.meta.error ? ": " + res.data.meta.error : ""));
+            notificationsService.error($scope.labels.archiveError + (res.data && res.data.meta && res.data.meta.error ? ": " + res.data.meta.error : ""));
             error(entry);
         });
 
     };
 
     $scope.delete = function (entry, success, error) {
-        if (!confirm("Are you sure you want to delete the selected feedback entry?")) return;
+        if (!confirm($scope.labels.confirmDelete)) return;
         $http.get("/umbraco/backoffice/Limbo/FeedbackAdmin/Delete?key=" + entry.key, { umbIgnoreErrors: true }).then(function (res) {
-            notificationsService.success("The entry was successfully deleted.");
+            notificationsService.success($scope.labels.deleteSuccess);
             success(res.data);
         }, function (res) {
-            notificationsService.error("Unable to delete entry" + (res.data && res.data.meta && res.data.meta.error ? ": " + res.data.meta.error : ""));
+            notificationsService.error($scope.labels.deleteError + (res.data && res.data.meta && res.data.meta.error ? ": " + res.data.meta.error : ""));
             error(entry);
         });
     };
@@ -64,7 +105,7 @@
 
     $scope.openSelectStatus = function(entry) {
         editorService.open({
-            title: "Vælg status",
+            title: $scope.labels.selectStatus,
             size: "medium",
             view: "/App_Plugins/Limbo.Umbraco.Feedback/Views/SelectStatus.html",
             entry: entry,
@@ -82,7 +123,7 @@
 
     $scope.openSelectResponsible = function (entry) {
         editorService.open({
-            title: "Vælg ansvarlig",
+            title: $scope.labels.selectResponsible,
             size: "medium",
             view: "/App_Plugins/Limbo.Umbraco.Feedback/Views/SelectResponsible.html",
             entry: entry,
@@ -168,6 +209,27 @@
 
     }
 
+    function updateSelectionCount() {
+        $scope.selectedCount = ($scope.entries || []).filter(function (entry) {
+            return entry.selected;
+        }).length;
+    }
+
+    function runBulkAction(entries, action, index, success, error) {
+        if (index >= entries.length) {
+            success();
+            return;
+        }
+
+        var endpoint = action === "archive" ? "Archive" : "Delete";
+        return $http.get("/umbraco/backoffice/Limbo/FeedbackAdmin/" + endpoint, {
+            params: { key: entries[index].key },
+            umbIgnoreErrors: action === "delete"
+        }).then(function () {
+            runBulkAction(entries, action, index + 1, success, error);
+        }, error);
+    }
+
     function setSite(site) {
 
         if ($scope.site) return;
@@ -226,6 +288,20 @@
 
         // Initialize all labels with their default, English values
         $scope.labels = {
+            confirmArchive: "Are you sure you want to archive the selected feedback entry?",
+            confirmDelete: "Are you sure you want to delete the selected feedback entry?",
+            confirmBulkArchive: "Are you sure you want to archive the selected feedback entries?",
+            confirmBulkDelete: "Are you sure you want to delete the selected feedback entries?",
+            archiveSuccess: "The entry was successfully archived.",
+            deleteSuccess: "The entry was successfully deleted.",
+            archiveError: "Unable to archive entry",
+            deleteError: "Unable to delete entry",
+            bulkArchiveSuccess: "The selected feedback entries were successfully archived.",
+            bulkDeleteSuccess: "The selected feedback entries were successfully deleted.",
+            bulkArchiveError: "Unable to archive the selected feedback entries",
+            bulkDeleteError: "Unable to delete the selected feedback entries",
+            selectStatus: "Select status",
+            selectResponsible: "Select responsible",
             labelAllRatings: "All ratings",
             labelAllUsers: "All users",
             labelNoResponsible: "No responsible",
@@ -233,7 +309,16 @@
             labelAllTypes: "All types",
             labelOnlyWithRating: "Only with rating",
             labelRatingAndComment: "Rating and comment",
-            labelMe: "Me"
+            labelMe: "Me",
+            labelSelected: "selected",
+            labelSelectAllRows: "Select all rows on this page",
+            labelSelectRow: "Select row",
+            labelNoEntries: "This site currently has no feedback responses.",
+            labelNoMatchingEntries: "Your search did not match any feedback responses.",
+            labelKey: "Key",
+            labelPageNoLongerExists: "The page no longer exists",
+            labelShowing: "Showing",
+            labelOf: "of"
         };
 
         // Get all keys of the "$scope.labels" object
@@ -298,6 +383,11 @@
             setSite(res.data.site);
 
             $scope.entries = res.data.entries.data;
+
+            $scope.entries.forEach(function (e) {
+                e.selected = false;
+            });
+            updateSelectionCount();
 
             updateBadge(res.data.entries);
             updatePagination(res.data.entries);

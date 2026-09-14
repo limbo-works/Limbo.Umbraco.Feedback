@@ -18,6 +18,8 @@
     <key alias="labelPageId">Page ID</key>
     <key alias="labelPageTitle">Page Title</key>
     <key alias="labelPageUrl">URL</key>
+    <key alias="labelKey">Key</key>
+    <key alias="labelPageNoLongerExists">The page no longer exists</key>
     <key alias="labelAssignedTo">Assigned to</key>
     <key alias="labelResponsible">Responsible</key>
     <key alias="labelRating">Rating</key>
@@ -32,6 +34,13 @@
     <key alias="labelYes">Yes</key>
     <key alias="labelNo">No</key>
     <key alias="labelRefresh">Refresh</key>
+    <key alias="labelSelected">selected</key>
+    <key alias="labelSelectAllRows">Select all rows on this page</key>
+    <key alias="labelSelectRow">Select row</key>
+    <key alias="labelNoEntries">This site currently has no feedback responses.</key>
+    <key alias="labelNoMatchingEntries">Your search did not match any feedback responses.</key>
+    <key alias="labelShowing">Showing</key>
+    <key alias="labelOf">of</key>
   </area>
   <area alias="feedback">
     <key alias="btnArchive">Archive</key>
@@ -41,6 +50,20 @@
     <key alias="btnSelectResponsible">Select responsible</key>
     <key alias="btnShowInUmbraco">Show in Umbraco</key>
     <key alias="btnShowAtWebsite">Show at website</key>
+    <key alias="confirmArchive">Are you sure you want to archive the selected feedback entry?</key>
+    <key alias="confirmDelete">Are you sure you want to delete the selected feedback entry?</key>
+    <key alias="confirmBulkArchive">Are you sure you want to archive the selected feedback entries?</key>
+    <key alias="confirmBulkDelete">Are you sure you want to delete the selected feedback entries?</key>
+    <key alias="archiveSuccess">The entry was successfully archived.</key>
+    <key alias="deleteSuccess">The entry was successfully deleted.</key>
+    <key alias="archiveError">Unable to archive entry</key>
+    <key alias="deleteError">Unable to delete entry</key>
+    <key alias="bulkArchiveSuccess">The selected feedback entries were successfully archived.</key>
+    <key alias="bulkDeleteSuccess">The selected feedback entries were successfully deleted.</key>
+    <key alias="bulkArchiveError">Unable to archive the selected feedback entries</key>
+    <key alias="bulkDeleteError">Unable to delete the selected feedback entries</key>
+    <key alias="selectStatus">Select status</key>
+    <key alias="selectResponsible">Select responsible</key>
   </area>
   <area alias="feedback">
     <key alias="labelAllRatings">All ratings</key>

@@ -159,6 +159,7 @@
 
     &-options {
         display: flex;
+        position: relative;
         margin-bottom: 20px;
     }
 
@@ -168,6 +169,42 @@
         select {
             width: initial;
         }
+    }
+
+    &-selection-actions {
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 10px;
+        background: white;
+
+        .btn + .btn {
+            margin-left: 5px;
+        }
+    }
+
+    &-selection-count {
+        font-weight: bold;
+    }
+
+    .col.col-selection {
+        width: 38px;
+        padding: 0;
+        text-align: center;
+
+        input[type="checkbox"] {
+            margin: 0;
+        }
+    }
+
+    table.table.list > tbody > tr.selected > td {
+        background-color: #f5f5f5;
     }
 
 
