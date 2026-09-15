@@ -78,7 +78,7 @@ public class FeedbackAdminController : UmbracoAuthorizedApiController {
 
     }
 
-    public object GetEntriesForSite(Guid key, int page = 1, string? sort = null, string? order = null, string? rating = null, string? responsible = null, string? status = null, string? type = null) {
+    public object GetEntriesForSite(Guid key, int page = 1, int perPage = 20, string? sort = null, string? order = null, string? rating = null, string? responsible = null, string? status = null, string? type = null) {
 
         CultureInfo culture = new(_backOfficeSecurityAccessor.BackOfficeSecurity!.CurrentUser!.Language!);
 
@@ -88,7 +88,7 @@ public class FeedbackAdminController : UmbracoAuthorizedApiController {
 
         FeedbackGetEntriesOptions options = new() {
             Page = page,
-            PerPage = 10,
+            PerPage = perPage,
             SiteKey = key
         };
 
@@ -205,7 +205,7 @@ public class FeedbackAdminController : UmbracoAuthorizedApiController {
 
     }
 
-    public object GetEntriesForPage(Guid key, int page = 1, string? sort = null, string? order = null, string? rating = null, string? responsible = null, string? status = null, string? type = null) {
+    public object GetEntriesForPage(Guid key, int page = 1, int perPage = 20, string? sort = null, string? order = null, string? rating = null, string? responsible = null, string? status = null, string? type = null) {
 
         CultureInfo culture = new(_backOfficeSecurityAccessor.BackOfficeSecurity!.CurrentUser!.Language!);
 
@@ -218,7 +218,7 @@ public class FeedbackAdminController : UmbracoAuthorizedApiController {
 
         FeedbackGetEntriesOptions options = new() {
             Page = page,
-            PerPage = 10,
+            PerPage = perPage,
             PageKey = content.Key
         };
 
