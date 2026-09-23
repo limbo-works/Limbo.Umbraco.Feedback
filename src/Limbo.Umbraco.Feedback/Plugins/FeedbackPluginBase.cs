@@ -240,14 +240,14 @@ public abstract class FeedbackPluginBase : IFeedbackPlugin {
     /// </summary>
     /// <param name="site">The site.</param>
     /// <returns>An instance of <see cref="ContentApp"/>.</returns>
-    /// <remarks>Override the method and return <c>null</c> for a given site if the content app shouldn't beshown.</remarks>
+    /// <remarks>Override the method and return <c>null</c> for a given site if the content app shouldn't be shown.</remarks>
     protected virtual ContentApp? GetContentAppForSite(IContent site) {
 
         return (ContentApp?) new ContentApp {
             Alias = "skybrud-feedback",
             Name = "Feedback",
             Icon = "icon-chat",
-            View = "/App_Plugins/Limbo.Umbraco.Feedback/Views/ContentApp.html",
+            View = $"/App_Plugins/Limbo.Umbraco.Feedback/Views/ContentApp.html?v={FeedbackPackage.InformationalVersion}",
             ViewModel = new {
                 siteKey = site.Key
             }
@@ -261,14 +261,14 @@ public abstract class FeedbackPluginBase : IFeedbackPlugin {
     /// <param name="site">The site.</param>
     /// <param name="page">The page.</param>
     /// <returns>An instance of <see cref="ContentApp"/>.</returns>
-    /// <remarks>Override the method and return <c>null</c> for a given site if the content app shouldn't beshown.</remarks>
+    /// <remarks>Override the method and return <c>null</c> for a given site if the content app shouldn't be shown.</remarks>
     protected virtual ContentApp? GetContentAppForPage(IContent site, IContent page) {
 
         return (ContentApp?) new ContentApp {
             Alias = "skybrud-feedback",
             Name = "Feedback",
             Icon = "icon-chat",
-            View = "/App_Plugins/Limbo.Umbraco.Feedback/Views/ContentAppPage.html",
+            View = $"/App_Plugins/Limbo.Umbraco.Feedback/Views/ContentAppPage.html?v={FeedbackPackage.InformationalVersion}",
             ViewModel = new {
                 siteKey = site.Key,
                 pageKey = page.Key
