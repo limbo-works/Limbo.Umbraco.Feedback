@@ -33,16 +33,16 @@
 
 ## Installation
 
-The Umbraco 13 version of this package is only available via [NuGet](https://www.nuget.org/packages/Limbo.Umbraco.Feedback/13.0.0-alpha001). To install the package, you can use either .NET CLI:
+The Umbraco 13 version of this package is only available via [NuGet](https://www.nuget.org/packages/Limbo.Umbraco.Feedback/13.0.0). To install the package, you can use either .NET CLI:
 
 ```
-dotnet add package Limbo.Umbraco.Feedback --version 13.0.0-alpha001
+dotnet add package Limbo.Umbraco.Feedback --version 13.0.1
 ```
 
 or the NuGet Package Manager:
 
 ```
-Install-Package Limbo.Umbraco.Feedback -Version 13.0.0-alpha001
+Install-Package Limbo.Umbraco.Feedback -Version 13.0.1
 ```
 
 For older versions of Umbraco, see our [Skybrud.Umbraco.Feedback](https://github.com/skybrud/Skybrud.Umbraco.Feedback) package.
