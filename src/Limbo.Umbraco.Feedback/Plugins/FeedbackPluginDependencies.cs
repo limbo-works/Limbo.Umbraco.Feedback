@@ -82,4 +82,19 @@ public class FeedbackPluginDependencies {
         PublishedContentStatusFilteringService = publishedContentStatusFilteringService;
     }
 
+    /// <summary>
+    /// Initializes a new instance based on the specified <paramref name="existing"/> dependencies.
+    /// </summary>
+    /// <param name="existing">The existing dependencies to copy.</param>
+    protected FeedbackPluginDependencies(FeedbackPluginDependencies existing) {
+        _feedbackSettings = existing._feedbackSettings;
+        ContentService = existing.ContentService;
+        DomainService = existing.DomainService;
+        UserService = existing.UserService;
+        PublishedContentCache = existing.PublishedContentCache;
+        DomainCache = existing.DomainCache;
+        DocumentNavigationQueryService = existing.DocumentNavigationQueryService;
+        PublishedContentStatusFilteringService = existing.PublishedContentStatusFilteringService;
+    }
+
 }
