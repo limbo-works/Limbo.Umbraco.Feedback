@@ -1,5 +1,5 @@
 ﻿using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Limbo.Umbraco.Feedback.Models.Ratings;
 
@@ -13,25 +13,25 @@ public class FeedbackRating {
     /// <summary>
     /// Gets the alias of the rating.
     /// </summary>
-    [JsonProperty("alias")]
+    [JsonPropertyName("alias")]
     public string Alias { get; }
 
     /// <summary>
     /// Gets the key (GUID) of the rating.
     /// </summary>
-    [JsonProperty("key")]
+    [JsonPropertyName("key")]
     public Guid Key { get; }
 
     /// <summary>
     /// Gets the name of the rating.
     /// </summary>
-    [JsonProperty("name")]
+    [JsonPropertyName("name")]
     public string? Name { get; }
 
     /// <summary>
     /// Gets whether the rating is active.
     /// </summary>
-    [JsonProperty("active")]
+    [JsonPropertyName("active")]
     public bool IsActive { get; }
 
     #endregion

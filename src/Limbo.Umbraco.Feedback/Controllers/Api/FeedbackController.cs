@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net;
 using Limbo.Umbraco.Feedback.Extensions;
 using Limbo.Umbraco.Feedback.Models.Api.Post;
@@ -10,44 +10,52 @@ using Limbo.Umbraco.Feedback.Plugins;
 using Limbo.Umbraco.Feedback.Services;
 using Microsoft.AspNetCore.Mvc;
 using Umbraco.Cms.Core.Models.PublishedContent;
-using Umbraco.Cms.Core.Web;
-using Umbraco.Cms.Web.Common.Controllers;
+using Umbraco.Cms.Core.PublishedCache;
 
 #pragma warning disable 1591
 
 namespace Limbo.Umbraco.Feedback.Controllers.Api;
 
-public class FeedbackController : UmbracoApiController {
+/// <summary>
+/// Public API for submitting and updating feedback entries.
+/// </summary>
+/// <remarks>
+/// <c>UmbracoApiController</c> was obsoleted in Umbraco 15 and removed in later versions, along with the
+/// convention based routing that supported it. The controller is now a plain ASP.NET Core controller with an
+/// explicit route - the two endpoints keep the exact same URLs as before (<c>/api/feedback</c> and
+/// <c>/api/feedback/{key}</c>), so front-end implementations do not need to change.
+/// </remarks>
+[ApiController]
+[Route("api/feedback")]
+public class FeedbackController : Controller {
 
     private readonly FeedbackService _feedbackService;
 
     private readonly FeedbackPluginCollection _feedbackPluginCollection;
-    private readonly IUmbracoContextAccessor _umbracoContextAccessor;
+    private readonly IPublishedContentCache _publishedContentCache;
 
     #region Constructors
 
-    public FeedbackController(FeedbackService feedbackService, FeedbackPluginCollection feedbackPluginCollection, IUmbracoContextAccessor umbracoContextAccessor) {
+    public FeedbackController(FeedbackService feedbackService, FeedbackPluginCollection feedbackPluginCollection, IPublishedContentCache publishedContentCache) {
         _feedbackService = feedbackService;
         _feedbackPluginCollection = feedbackPluginCollection;
-        _umbracoContextAccessor = umbracoContextAccessor;
+        _publishedContentCache = publishedContentCache;
     }
 
     #endregion
 
     #region Public API methods
 
-    [HttpPost]
-    [Route("api/feedback")]
-    public object Add([FromBody] AddCommentModel model) {
+    [HttpPost("")]
+    public IActionResult Add([FromBody] AddCommentModel model) {
 
-        // Get site site
+        // Get the site
         if (!_feedbackPluginCollection.TryGetSite(model.SiteKey, out FeedbackSiteSettings? site)) {
             return NotFound("A site with the specified key could not be found.");
         }
 
         // Get the page
-        _umbracoContextAccessor.TryGetUmbracoContext(out var umbracoContext);
-        IPublishedContent? page = umbracoContext?.Content?.GetById(model.PageKey);
+        IPublishedContent? page = _publishedContentCache.GetById(model.PageKey);
         if (page == null) {
             return NotFound("A page with the specified key could not be found.");
         }
@@ -68,18 +76,16 @@ public class FeedbackController : UmbracoApiController {
 
     }
 
-    [HttpPost]
-    [Route("api/feedback/{key}")]
-    public object Update(Guid key, [FromBody] UpdateEntryModel model) {
+    [HttpPost("{key:guid}")]
+    public IActionResult Update(Guid key, [FromBody] UpdateEntryModel model) {
 
-        // Get site site
+        // Get the site
         if (!_feedbackPluginCollection.TryGetSite(model.SiteKey, out _)) {
             return NotFound("A site with the specified key could not be found.");
         }
 
         // Get the page
-        _umbracoContextAccessor.TryGetUmbracoContext(out var umbracoContext);
-        IPublishedContent? page = umbracoContext?.Content?.GetById(model.PageKey);
+        IPublishedContent? page = _publishedContentCache.GetById(model.PageKey);
         if (page == null) {
             return NotFound("A page with the specified key could not be found.");
         }

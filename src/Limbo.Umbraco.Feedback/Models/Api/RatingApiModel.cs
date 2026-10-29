@@ -1,9 +1,6 @@
-﻿using System;
-using System.Globalization;
+using System;
+using System.Text.Json.Serialization;
 using Limbo.Umbraco.Feedback.Models.Ratings;
-using Newtonsoft.Json;
-using Skybrud.Essentials.Strings.Extensions;
-using Umbraco.Cms.Core.Services;
 
 #pragma warning disable 1591
 
@@ -13,26 +10,35 @@ public class RatingApiModel {
 
     #region Properties
 
-    [JsonProperty("alias")]
+    [JsonPropertyName("alias")]
     public string Alias { get; }
 
-    [JsonProperty("key")]
+    [JsonPropertyName("key")]
     public Guid Key { get; }
 
-    [JsonProperty("name")]
-    public string Name { get; }
+    /// <summary>
+    /// Gets the explicit name of the rating, or <c>null</c> if the rating doesn't specify one - in which case the
+    /// back office falls back to the localized <c>feedback_rating{Alias}</c> key.
+    /// </summary>
+    /// <remarks>
+    /// Prior to Umbraco 14, the name was localized server side through <c>ILocalizedTextService</c>. Package
+    /// language files (<c>~/App_Plugins/*/Lang/*.xml</c>) are no longer loaded by Umbraco, so localization has
+    /// moved to the client, where it is registered through a <c>localization</c> extension manifest.
+    /// </remarks>
+    [JsonPropertyName("name")]
+    public string? Name { get; }
 
-    [JsonProperty("active")]
+    [JsonPropertyName("active")]
     public bool IsActive { get; }
 
     #endregion
 
     #region Constructors
 
-    public RatingApiModel(FeedbackRating rating, ILocalizedTextService localizedTextService, CultureInfo culture) {
+    public RatingApiModel(FeedbackRating rating) {
         Alias = rating.Alias;
         Key = rating.Key;
-        Name = string.IsNullOrWhiteSpace(rating.Name) ? localizedTextService.Localize("feedback", $"rating{Alias.ToPascalCase()}", culture) : rating.Name;
+        Name = string.IsNullOrWhiteSpace(rating.Name) ? null : rating.Name;
         IsActive = rating.IsActive;
     }
 

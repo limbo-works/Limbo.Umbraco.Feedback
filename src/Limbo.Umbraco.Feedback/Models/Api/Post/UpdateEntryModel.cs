@@ -1,5 +1,5 @@
 ﻿using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 #pragma warning disable 1591
 
@@ -7,19 +7,19 @@ namespace Limbo.Umbraco.Feedback.Models.Api.Post;
 
 public class UpdateEntryModel {
 
-    [JsonProperty("siteKey")]
+    [JsonPropertyName("siteKey")]
     public Guid SiteKey { get; set; }
 
-    [JsonProperty("pageKey")]
+    [JsonPropertyName("pageKey")]
     public Guid PageKey { get; set; }
 
-    [JsonProperty("name")]
+    [JsonPropertyName("name")]
     public string? Name { get; set; }
 
-    [JsonProperty("email")]
+    [JsonPropertyName("email")]
     public string? Email { get; set; }
 
-    [JsonProperty("comment")]
+    [JsonPropertyName("comment")]
     public string? Comment { get; set; }
 
 }

@@ -4,10 +4,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using Limbo.Umbraco.Feedback.Events;
 using Limbo.Umbraco.Feedback.Models.Sites;
+using Limbo.Umbraco.Feedback.Models.Workspaces;
 using Limbo.Umbraco.Feedback.Plugins;
 using Umbraco.Cms.Core.Models;
-using Umbraco.Cms.Core.Models.ContentEditing;
-using Umbraco.Cms.Core.Models.Membership;
 
 namespace Limbo.Umbraco.Feedback.Extensions;
 
@@ -61,22 +60,20 @@ public static class FeedbackExensions {
     }
 
     /// <summary>
-    /// Gets the content app for the specified <paramref name="content"/> item, or <c>null</c> if no feedback
-    /// plugins provide a content app for <paramref name="content"/>.
+    /// Gets the feedback workspace view for the specified <paramref name="content"/> item, or <c>false</c> if no
+    /// feedback plugins provide a view for <paramref name="content"/>.
     ///
-    /// The content app is found by asking each registered feedback plugin whether they provide a content app for
-    /// <paramref name="content"/>. The method will return once it's finds the first provider that returns a
-    /// content app.
+    /// The view is found by asking each registered feedback plugin whether they provide a view for
+    /// <paramref name="content"/>. The method will return once it finds the first plugin that returns a view.
     /// </summary>
     /// <param name="collection">A collection with the registered feedback plugins.</param>
-    /// <param name="content">The <see cref="IContent"/> to show the content app for.</param>
-    /// <param name="userGroups">A list of user groups.</param>
-    /// <param name="result">When this method returns, holds the content app if successful; otherwise, <c>null</c>.</param>
-    /// <returns><c>true</c> if a content app was found; otherwise, <c>false</c>.</returns>
-    public static bool TryGetContentApp(this FeedbackPluginCollection collection, IContent content, IEnumerable<IReadOnlyUserGroup> userGroups, out ContentApp? result) {
+    /// <param name="content">The <see cref="IContent"/> to show the workspace view for.</param>
+    /// <param name="result">When this method returns, holds the workspace view if successful; otherwise, <c>null</c>.</param>
+    /// <returns><c>true</c> if a workspace view was found; otherwise, <c>false</c>.</returns>
+    public static bool TryGetWorkspaceView(this FeedbackPluginCollection collection, IContent content, [NotNullWhen(true)] out FeedbackWorkspaceView? result) {
 
         foreach (IFeedbackPlugin plugin in collection) {
-            if (plugin.TryGetContentApp(content, userGroups, out result)) {
+            if (plugin.TryGetWorkspaceView(content, out result)) {
                 return true;
             }
         }
