@@ -1,14 +1,11 @@
 using System;
 using Asp.Versioning;
-using Limbo.Umbraco.Feedback.Constants;
+using Limbo.Umbraco.Feedback.Api;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Microsoft.OpenApi;
-using Swashbuckle.AspNetCore.SwaggerGen;
 using Umbraco.Cms.Api.Common.OpenApi;
-using Umbraco.Cms.Api.Management.OpenApi;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
 
@@ -29,25 +26,8 @@ public class FeedbackApiComposer : IComposer {
 
         builder.Services.AddSingleton<IOperationIdHandler, FeedbackOperationIdHandler>();
 
-        builder.Services.Configure<SwaggerGenOptions>(options => {
+        builder.Services.ConfigureOptions<FeedbackSwaggerGenOptions>();
 
-            options.SwaggerDoc(FeedbackConstants.ApiName, new OpenApiInfo {
-                Title = "Limbo Feedback Management API",
-                Version = "1.0",
-                Description = "API used by the feedback workspace view in the Umbraco back office."
-            });
-
-            options.OperationFilter<FeedbackSecurityFilter>();
-
-        });
-
-    }
-
-    /// <summary>
-    /// Applies the back office security requirements to the endpoints of the feedback API.
-    /// </summary>
-    public class FeedbackSecurityFilter : BackOfficeSecurityRequirementsOperationFilterBase {
-        protected override string ApiName => FeedbackConstants.ApiName;
     }
 
     /// <summary>

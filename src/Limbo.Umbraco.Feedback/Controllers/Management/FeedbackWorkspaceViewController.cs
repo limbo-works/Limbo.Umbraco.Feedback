@@ -1,6 +1,5 @@
 using System;
 using Asp.Versioning;
-using Limbo.Umbraco.Feedback.Constants;
 using Limbo.Umbraco.Feedback.Extensions;
 using Limbo.Umbraco.Feedback.Models.Workspaces;
 using Limbo.Umbraco.Feedback.Plugins;
@@ -22,7 +21,7 @@ namespace Limbo.Umbraco.Feedback.Controllers.Management;
 /// condition that calls it, and only then shows the workspace view.
 /// </remarks>
 [ApiVersion("1.0")]
-[ApiExplorerSettings(GroupName = FeedbackConstants.ApiName)]
+[ApiExplorerSettings(GroupName = "Other")]
 public class FeedbackWorkspaceViewController : FeedbackManagementControllerBase {
 
     private readonly FeedbackPluginCollection _plugins;

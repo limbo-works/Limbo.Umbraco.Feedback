@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Asp.Versioning;
-using Limbo.Umbraco.Feedback.Constants;
 using Limbo.Umbraco.Feedback.Models.Users;
 using Limbo.Umbraco.Feedback.Services;
 using Microsoft.AspNetCore.Http;
@@ -14,7 +13,7 @@ namespace Limbo.Umbraco.Feedback.Controllers.Management;
 /// Endpoint returning the users a feedback entry may be assigned to.
 /// </summary>
 [ApiVersion("1.0")]
-[ApiExplorerSettings(GroupName = FeedbackConstants.ApiName)]
+[ApiExplorerSettings(GroupName = "users")]
 public class FeedbackUsersController : FeedbackManagementControllerBase {
 
     private readonly FeedbackService _feedbackService;

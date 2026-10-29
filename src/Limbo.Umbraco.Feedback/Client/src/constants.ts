@@ -8,7 +8,7 @@
  * Matches `FeedbackConstants.ApiRoute` on the server, prefixed with Umbraco's back office path. Change both if
  * the back office path is customised through `Umbraco:CMS:Global:UmbracoPath`.
  */
-export const FEEDBACK_API_BASE = "/umbraco/feedback/api/v1";
+export const FEEDBACK_API_BASE = "/umbraco/management/api/v1/limbo/feedback";
 
 export const FEEDBACK_WORKSPACE_VIEW_ALIAS = "Limbo.Feedback.WorkspaceView";
 export const FEEDBACK_CONDITION_ALIAS = "Limbo.Feedback.Condition.HasFeedback";

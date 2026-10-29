@@ -1,6 +1,5 @@
 using System;
 using Asp.Versioning;
-using Limbo.Umbraco.Feedback.Constants;
 using Limbo.Umbraco.Feedback.Models.Api;
 using Limbo.Umbraco.Feedback.Models.Api.Post;
 using Limbo.Umbraco.Feedback.Models.Entries;
@@ -22,7 +21,7 @@ namespace Limbo.Umbraco.Feedback.Controllers.Management;
 /// Endpoints for listing and maintaining feedback entries from the back office.
 /// </summary>
 [ApiVersion("1.0")]
-[ApiExplorerSettings(GroupName = FeedbackConstants.ApiName)]
+[ApiExplorerSettings(GroupName = "Entries")]
 public class FeedbackEntriesController : FeedbackManagementControllerBase {
 
     private const int DefaultPerPage = 10;
