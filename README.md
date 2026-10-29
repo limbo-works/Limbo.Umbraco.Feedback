@@ -3,7 +3,7 @@
 <table>
   <tr>
     <td><strong>License:</strong></td>
-    <td><a href="./LICENSE.md"><strong>MIT License</strong></a></td>
+    <td><a href="https://github.com/limbo-works/Limbo.Umbraco.Feedback/blob/v17/main/LICENSE.md"><strong>MIT License</strong></a></td>
   </tr>
   <tr>
     <td><strong>Umbraco:</strong></td>
@@ -27,16 +27,16 @@
 
 ## Installation
 
-The Umbraco 17 version of this package is only available via [NuGet](https://www.nuget.org/packages/Limbo.Umbraco.Feedback/17.0.0-alpha000). To install the package, you can use either .NET CLI:
+The Umbraco 17 version of this package is only available via [NuGet](https://www.nuget.org/packages/Limbo.Umbraco.Feedback). To install the package, you can use either .NET CLI:
 
 ```
-dotnet add package Limbo.Umbraco.Feedback --version 17.0.0-alpha000
+dotnet add package Limbo.Umbraco.Feedback --version 17.0.0-alpha001
 ```
 
 or the NuGet Package Manager:
 
 ```
-Install-Package Limbo.Umbraco.Feedback -Version 17.0.0-alpha000
+Install-Package Limbo.Umbraco.Feedback -Version 17.0.0-alpha001
 ```
 
 For Umbraco 13, see the [`v13/main`](https://github.com/limbo-works/Limbo.Umbraco.Feedback/tree/v13/main) branch. For older versions of Umbraco, see our [Skybrud.Umbraco.Feedback](https://github.com/skybrud/Skybrud.Umbraco.Feedback) package.
