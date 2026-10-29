@@ -1,11 +1,13 @@
 ﻿using Limbo.Umbraco.Feedback.Config;
 using Limbo.Umbraco.Feedback.Extensions;
+using Limbo.Umbraco.Feedback.Manifests;
 using Limbo.Umbraco.Feedback.Plugins;
 using Limbo.Umbraco.Feedback.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Skybrud.Essentials.Strings.Extensions;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
+using Umbraco.Cms.Infrastructure.Manifest;
 
 namespace Limbo.Umbraco.Feedback.Composers;
 
@@ -14,6 +16,9 @@ namespace Limbo.Umbraco.Feedback.Composers;
 public class FeedbackComposer : IComposer {
 
     public void Compose(IUmbracoBuilder builder) {
+
+        // Register the package manifest reader
+        builder.Services.AddSingleton<IPackageManifestReader, FeedbackPackageManifestReader>();
 
         // Parse the raw config value since we can't use dependency injection in a composer
         bool disableDefaultPlugin = builder.Config.GetSection("Limbo:Feedback:DisableDefaultPlugin").Value.ToBoolean();

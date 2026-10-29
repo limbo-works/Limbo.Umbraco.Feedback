@@ -65,7 +65,6 @@
   <ItemGroup>
     <ClientAssetsInputs Include="Client\src\**;Client\public\**;Client\package.json;Client\tsconfig.json;Client\vite.config.ts" Exclude="$(DefaultItemExcludes)" />
     <Content Remove="Client\**" />
-    <None Include="Client\public\umbraco-package.json" Pack="false" />
   </ItemGroup>
 
   <!-- Generate XML documentation -->
